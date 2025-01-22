@@ -1,5 +1,5 @@
 <x-sidebar-layout>
-    <h1 class="text-2xl font-semibold font-heading laptop:text-gray-500 mobile:text-red-500 tablet:text-blue-700">Input Barang Masuk</h1>
+    <h1 class="text-2xl font-semibold font-heading laptop:text-gray-500 mobile:text-red-500 tablet:text-blue-700">Memek</h1>
     <hr class="my-2">
 
 
