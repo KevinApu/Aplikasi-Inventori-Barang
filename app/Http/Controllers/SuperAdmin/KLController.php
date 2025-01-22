@@ -1,0 +1,108 @@
+<?php
+
+namespace App\Http\Controllers\SuperAdmin;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\KLRequest;
+use App\Models\KLModel;
+use App\Models\KLUsers;
+use App\Models\Login;
+use App\Models\RequestBarangModel;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
+class KLController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $kantorlayanan = KLModel::where('lokasi', '!=', 'pusat')->get();
+        return view('SuperAdmin.Tabelbarangmasuk', ['kantorlayanan' => $kantorlayanan]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(KLRequest $request)
+    {
+        KLModel::create([
+            'pop' => $request->kodepop,
+            'lokasi' => $request->lokasikantor,
+            'alamat' => $request->alamatkantor,
+            'kepalakantor' => $request->kepalakantor,
+        ]);
+
+        return redirect()->back()
+            ->with('success', 'Penambahan Kantor berhasil dilakukan!')
+            ->with('activeTab', 'tambahpop');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(Request $request)
+    {
+        $query = DB::table('barang_masuk');
+
+        // Filter berdasarkan kategori, nama barang, dan seri
+        if ($request->pop) {
+            $query->where('pop', 'like', '%' . $request->pop . '%');
+        }
+
+        $results = $query->get();
+        return response()->json($results);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, $id)
+    {
+        KLModel::where('id', $id)->update([
+            'kepalakantor' => $request->kepalakantor,
+            'lokasi' => $request->lokasi,
+            'alamat' => $request->alamat,   
+        ]);
+
+        return redirect()->back()
+        ->with('success', 'Penggantian data Kantor berhasil dilakukan!')
+        ->with('activeTab', 'daftarpop');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        $kantorlayanan = KLModel::find($id);
+        KLUsers::where('pop', $kantorlayanan->pop)->delete();
+        Login::where('pop', $kantorlayanan->pop)->delete();
+        $kantorlayanan->delete();
+    
+        // Mengalihkan kembali ke halaman sebelumnya dengan pesan sukses
+        return redirect()->back()
+            ->with('success', 'Penghapusan Kantor beserta user terkait berhasil dilakukan!')
+            ->with('activeTab', 'daftarpop');
+    }
+    
+}

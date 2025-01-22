@@ -1,0 +1,41 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('riwayat_pengiriman', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama_barang', 50);
+            $table->string('seri', 70);
+            $table->integer('jumlah');
+            $table->enum('satuan', ['Pcs', 'Roll', 'Pack', 'Unit']);
+            $table->integer('rasio')->nullable();
+            $table->string('catatan', 50)->nullable();
+            $table->string('tujuan', 12);
+            $table->string('nama_pengaju', 20);
+            $table->enum('status', ['Menunggu Pengiriman','Sedang Dikirim', 'Terkirim', 'Dibatalkan'])->default('Menunggu Pengiriman');
+            $table->datetime('tanggal_terima')->nullable();
+            $table->datetime('tanggal_estimasi')->nullable();
+            $table->string('resi', 30)->nullable();
+            $table->string('namakurir', 20)->nullable();
+            $table->string('pengirim', 20);
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('riwayat_pengiriman');
+    }
+};
