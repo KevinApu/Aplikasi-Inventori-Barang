@@ -379,7 +379,7 @@
                         </template>
                     </tbody>
                 </table>
-                <div class="absolute z-50 flex justify-end left-auto right-16 bottom-0">
+                <div class="absolute z-50 flex justify-end left-auto right-16 mobile:right-8 bottom-0">
                     <!-- Modal Pop-up -->
                     <div x-show="showPrintPopup" x-cloak
                         x-transition:enter="transition transform duration-300"

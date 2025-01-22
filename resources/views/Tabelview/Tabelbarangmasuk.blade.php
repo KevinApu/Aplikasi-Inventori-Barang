@@ -575,7 +575,7 @@
                         </template>
                     </tbody>
                 </table>
-                <div class="absolute z-50 flex justify-end left-auto right-16 bottom-0">
+                <div class="absolute z-50 flex justify-end left-auto right-16 mobile:right-8 bottom-0">
                     <!-- Modal Pop-up -->
                     <div x-show="showPrintPopup" x-cloak
                         x-transition:enter="transition transform duration-300"
@@ -585,17 +585,17 @@
                         x-transition:leave-start="translate-y-0 scale-100 opacity-100"
                         x-transition:leave-end="translate-y-full scale-50 opacity-0"
                         class="flex items-center space-x-6 p-4 w-[25rem] mobile:w-[15rem] h-10 bg-white shadow-md rounded-md">
-                        <div class="flex items-center space-x-2 mobile:space-x-1 border-2 border-green-400">
-                            <input type="checkbox" class="w-5 h-5 mobile:w-4 mobile:h-4 cursor-pointer rounded-md mr-2 hover:border-indigo-500 hover:bg-indigo-100 checked:bg-indigo-500 checked:border-indigo-500 checked:text-indigo-500 focus:ring-0 focus:border-0" checked disabled>
-                            <span class="text-gray-700 mobile:text-[10px]" x-text="`${checkedItems.length} Items`"></span>
+                        <div class="flex items-center space-x-2 mobile:space-x-1 mobile:w-full">
+                            <input type="checkbox" class="w-5 h-5 mobile:w-4 mobile:h-4 cursor-pointer rounded-md mr-2 checked:bg-indigo-500 focus:ring-0 focus:border-0" checked disabled>
+                            <span class="text-gray-700" x-text="`${checkedItems.length} Items`"></span>
                         </div>
                         <div x-data="{ isLoading: false }">
                             <!-- Tombol untuk memulai proses -->
-                            <div class="flex items-center space-x-2 cursor-pointer" @click="startPrint">
+                            <div class="flex items-center space-x-2 cursor-pointer hover:scale-110 duration-300" @click="startPrint" title="Print Barcode">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2V10a2 2 0 012-2h16a2 2 0 012 2v6a2 2 0 01-2 2h-2M6 14h0M10 14h0M14 14h0M14 18h6v4H4v-4h2" />
                                 </svg>
-                                <span class="text-gray-700">Print Qr Code</span>
+                                <span class="text-gray-700 mobile:hidden">Print Qr Code</span>
                             </div>
 
                             <!-- Overlay Loading -->
@@ -618,11 +618,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="flex items-center space-x-2 cursor-pointer" @click="deleteSelectedItems">
+                        <div class="flex items-center space-x-2 cursor-pointer hover:scale-110 duration-300" @click="deleteSelectedItems" title="Remove Items">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7L5 7M10 11V17M14 11V17M7 7L7 19A2 2 0 009 21H15A2 2 0 0017 19V7M9 7V4A2 2 0 0111 2H13A2 2 0 0115 4V7" />
                             </svg>
-                            <span class="text-gray-700">Remove</span>
+                            <span class="text-gray-700 mobile:hidden">Remove</span>
                         </div>
                     </div>
                 </div>

@@ -325,7 +325,7 @@
         </div>
     </nav>
 
-    <aside x-data="{ isSidebarOpen: false}" :class="{'w-60': isSidebarOpen, 'w-20': !isSidebarOpen}" class="fixed top-0 -left-2 z-50 h-screen transition-transform duration-300 translate-x-0 text-sm flex flex-col justify-between" aria-label="Sidebar">
+    <aside x-data="{ isSidebarOpen: false}" :class="{'w-60': isSidebarOpen, 'w-20': !isSidebarOpen}" class="fixed top-0 -left-2 z-50 h-screen transition-all duration-300 ease-in-out translate-x-0 text-sm flex flex-col justify-between" aria-label="Sidebar">
         <div class="h-full px-3 py-2 overflow-y-auto bg-zinc-900 flex-grow">
 
             <div @click="isSidebarOpen = !isSidebarOpen" class="flex items-center py-2.5 px-2">
@@ -336,7 +336,7 @@
                     <path fill-rule="evenodd" d="M12 20a7.966 7.966 0 0 1-5.002-1.756l.002.001v-.683c0-1.794 1.492-3.25 3.333-3.25h3.334c1.84 0 3.333 1.456 3.333 3.25v.683A7.966 7.966 0 0 1 12 20ZM2 12C2 6.477 6.477 2 12 2s10 4.477 10 10c0 5.5-4.44 9.963-9.932 10h-.138C6.438 21.962 2 17.5 2 12Zm10-5c-1.84 0-3.333 1.455-3.333 3.25S10.159 13.5 12 13.5c1.84 0 3.333-1.455 3.333-3.25S13.841 7 12 7Z" clip-rule="evenodd" />
                 </svg>
                 @endif
-                <div :class="{'hidden': !isSidebarOpen}" class="text-white absolute mx-9 align-middle px-3">{{ Auth::user()->username }}</div>
+                <div :class="{'hidden': !isSidebarOpen}" class="text-white absolute mx-9 align-middle px-3 whitespace-nowrap">{{ Auth::user()->username }}</div>
             </div>
 
 
@@ -351,7 +351,7 @@
                             xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                             <path fill-rule="evenodd" d="M11.293 3.293a1 1 0 0 1 1.414 0l6 6 2 2a1 1 0 0 1-1.414 1.414L19 12.414V19a2 2 0 0 1-2 2h-3a1 1 0 0 1-1-1v-3h-2v3a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2v-6.586l-.293.293a1 1 0 0 1-1.414-1.414l2-2 6-6Z" clip-rule="evenodd" />
                         </svg>
-                        <span :class="{'hidden': !isSidebarOpen}" class="ms-3">Dashboard</span>
+                        <span :class="{'hidden': !isSidebarOpen}" class="ms-3 whitespace-nowrap">Dashboard</span>
                     </a>
                 </li>
                 <div x-data="{ openDropdown1: false, openDropdown2: false }">
@@ -362,12 +362,12 @@
                                 <svg class="flex-shrink-0 w-10 h-10 mobile:h-8 mobile:w-8 text-blue-800 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M5.027 10.9a8.729 8.729 0 0 1 6.422-3.62v-1.2A2.061 2.061 0 0 1 12.61 4.2a1.986 1.986 0 0 1 2.104.23l5.491 4.308a2.11 2.11 0 0 1 .588 2.566 2.109 2.109 0 0 1-.588.734l-5.489 4.308a1.983 1.983 0 0 1-2.104.228 2.065 2.065 0 0 1-1.16-1.876v-.942c-5.33 1.284-6.212 5.251-6.25 5.441a1 1 0 0 1-.923.806h-.06a1.003 1.003 0 0 1-.955-.7A10.221 10.221 0 0 1 5.027 10.9Z" />
                                 </svg>
-                                <span :class="{'hidden': !isSidebarOpen}" class="ms-1">Barang Masuk</span>
+                                <span :class="{'hidden': !isSidebarOpen}" class="ms-1 whitespace-nowrap">Barang Masuk</span>
                                 <svg :class="{'rotate-180': openDropdown1}, {'hidden': !isSidebarOpen}" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ms-10 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 15l-7-7-7 7" />
                                 </svg>
                             </button>
-                            <ul x-show="openDropdown1" @click.away="openDropdown1 = false" class="left-0 top-full mt-2 rounded-md shadow-lg w-full">
+                            <ul x-show="openDropdown1" @click.away="openDropdown1 = false" class="left-0 top-full mt-2 rounded-md shadow-lg w-full transition-all duration-300 ease-in-out transform origin-top">
                                 <li><a href="{{ route('input_barang_masuk.view') }}" @click="isSidebarOpen = false" class="block px-4 py-2 text-white hover:bg-gray-600 rounded-md">Input</a></li>
                                 <li><a href="{{ route('tabel_barang_masuk') }}" @click="isSidebarOpen = false" class="block px-4 py-2 text-white hover:bg-gray-600 rounded-md">Data</a></li>
                             </ul>
@@ -393,7 +393,7 @@
                                 <svg class="flex-shrink-0 w-10 h-10 mobile:w-8 mobile:h-8 text-blue-800 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M14.502 7.046h-2.5v-.928a2.122 2.122 0 0 0-1.199-1.954 1.827 1.827 0 0 0-1.984.311L3.71 8.965a2.2 2.2 0 0 0 0 3.24L8.82 16.7a1.829 1.829 0 0 0 1.985.31 2.121 2.121 0 0 0 1.199-1.959v-.928h1a2.025 2.025 0 0 1 1.999 2.047V19a1 1 0 0 0 1.275.961 6.59 6.59 0 0 0 4.662-7.22 6.593 6.593 0 0 0-6.437-5.695Z" />
                                 </svg>
-                                <span :class="{'hidden': !isSidebarOpen}" class="ms-1">Barang Keluar</span>
+                                <span :class="{'hidden': !isSidebarOpen}" class="ms-1 whitespace-nowrap">Barang Keluar</span>
                                 <svg :class="{'rotate-180': openDropdown2}, {'hidden': !isSidebarOpen}" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ms-10 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 15l-7-7-7 7" />
                                 </svg>
@@ -452,7 +452,7 @@
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4" />
                             </svg>
-                            <span :class="{'hidden': !isSidebarOpen}" class="ms-1">Pengiriman</span>
+                            <span :class="{'hidden': !isSidebarOpen}" class="ms-1 whitespace-nowrap">Pengiriman</span>
                             <svg :class="{'rotate-180': openDropdown2}, {'hidden': !isSidebarOpen}" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ms-10 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 15l-7-7-7 7" />
                             </svg>

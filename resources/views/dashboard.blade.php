@@ -8,8 +8,7 @@
 
         <!-- <a href="{{ route('update_rekap_stok') }}" class="block p-4 rounded-md bg-red-600">refresh</a> -->
 
-        <div>
-            <div class="grid grid-cols-3 gap-8 font-roboto p-4 lg:grid-cols-2 xl:grid-cols-4">
+            <div class="grid grid-cols-3 gap-8 font-roboto p-4 mobile:grid-cols-2 xl:grid-cols-4">
                 <!-- Barang Masuk -->
                 <div
                     class="flex items-center justify-between p-2 bg-white rounded-md border-r-4 border-b-4 border-green-500 border-opacity-80 bg-darker h-15 md:h-full">
@@ -73,7 +72,6 @@
                     </div>
                 </div>
             </div>
-        </div>
 
         <div x-data="searchApp()" x-init="search()" class="relative mt-12 bottom-8">
             <div class="flex justify-start h-12">
