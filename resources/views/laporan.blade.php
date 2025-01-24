@@ -192,38 +192,6 @@
             </table>
         </div>
     </div>
-
-    @if(request()->has('is_printing'))
-        <table class="signature-table">
-            <tr>
-                <td>
-                    <p class="signature-header">Dibuat oleh</p>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <p class="signature-name">{{ auth()->user()->username }}</p>
-                    <hr class="signature-hr">
-                </td>
-                <td>
-                    <p class="signature-header">Pacitan, {{ \Carbon\Carbon::now()->format('d F Y') }}</p>
-                    <p class="signature-header">Diketahui oleh</p>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <p class="signature-name">{{ $kepalaKantor }}</p>
-                    <hr class="signature-hr">
-                    <p>Kepala Kantor</p>
-                </td>
-            </tr>
-        </table>
-        @endif
-
     @if(!request()->has('is_printing'))
     <a class="print-button" href="{{ route('print.laporan') }}?is_printing=true">🖨️ Print Laporan</a>
     @endif

@@ -179,7 +179,7 @@
 <body>
     <div class="kertas">
         <header>
-            <h1>PT SANDYA SISTEM INDONESIA</h1>
+            <h1>SURAT JALAN</h1>
         </header>
         <section class="info">
             <div class="left">
@@ -226,7 +226,7 @@
                 <p>Penerima</p>
                 <p>{{ $kepalakantor }}</p>
                 <hr>
-                <p>Kepala Kantor Layanan</p>
+                <p>Kepala Kantor</p>
             </div>
 
             <!-- Signature 2 -->

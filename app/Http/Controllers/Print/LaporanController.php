@@ -52,13 +52,13 @@ class LaporanController extends Controller
 
         $headerHTML = '
     <div style="text-align: center;">
-        <h1>PT SANDYA SISTEM INDONESIA</h1>
+        <h1>LAPORAN BARANG MASUK</h1>
         <p>Periode: ' . ($firstDate === $lastDate ? $firstDate : "$firstDate - $lastDate") . '</p>
     </div>';
         $pdf->SetHTMLHeader($headerHTML);
         $pdf->SetHTMLFooter('<div style="text-align: center;">{PAGENO}</div>');
 
-        $htmlContent = view('laporan', compact('barangmasuk', 'firstDate', 'lastDate'))->render();
+        $htmlContent = view('laporan', compact('barangmasuk', 'firstDate', 'lastDate', 'kepalaKantor'))->render();
         $pdf->WriteHTML($htmlContent);
 
         $availableHeight = $pdf->y; // Posisi Y terakhir yang digunakan untuk konten
@@ -66,26 +66,27 @@ class LaporanController extends Controller
         $requiredHeight = 50; // Tinggi yang dibutuhkan untuk footer dan tanda tangan
 
         $footerHTML = '
-    <div style="text-align: center; margin-top: 50px;">
-        <table style="width: 100%; text-align: center;">
-            <tr>
-                <td style="width: 50%; text-align: center;">
-                    <p class="signature-header">Dibuat oleh</p>
-                    <br><br><br><br>
-                    <p class="signature-name">' . $availableHeight . '</p>
-                    <hr style="width: 70%;">
-                </td>
-                <td style="width: 50%; text-align: center;">
-                    <p class="signature-header">Pacitan, ' . Carbon::now()->format('d F Y') . '</p>
-                    <p class="signature-header">Diketahui oleh</p>
-                    <br><br><br><br>
-                    <p class="signature-name">' . $kepalaKantor . '</p>
-                    <hr style="width: 70%;">
-                    <p>Kepala Kantor</p>
-                </td>
-            </tr>
-        </table>
-    </div>';
+        <div style="text-align: center; margin-top: 50px;">
+            <table style="width: 100%; text-align: center;">
+                <tr>
+                    <td style="width: 50%; text-align: center;">
+                        <p class="signature-header">Dibuat oleh</p>
+                        <br><br><br><br>
+                        <p class="signature-name" style="font-weight: bold;">' . Auth::user()->username . '</p>
+                        <hr style="width: 70%;">
+                    </td>
+                    <td style="width: 50%; text-align: center;">
+                        <p class="signature-header">Pacitan, ' . Carbon::now()->format('d F Y') . '</p>
+                        <p class="signature-header">Diketahui oleh</p>
+                        <br><br><br><br>
+                        <p class="signature-name" style="font-weight: bold;">' . $kepalaKantor . '</p>
+                        <hr style="width: 70%;">
+                        <p>Kepala Kantor</p>
+                    </td>
+                </tr>
+            </table>
+        </div>';
+        
 
         if ($availableHeight + $requiredHeight <= $pageHeight) {
             // Jika ruang cukup, tambahkan footer pada halaman terakhir
@@ -134,7 +135,7 @@ class LaporanController extends Controller
 
         $headerHTML = '
         <div class="header" style="text-align: center;">
-            <h1>PT SANDYA SISTEM INDONESIA</h1>
+            <h1>LAPORAN REKAP BARANG</h1>
             </div>
             <p class="periode">Periode: ' .
             ("$periode") .
@@ -208,7 +209,7 @@ class LaporanController extends Controller
         $isPrinting = request()->has('is_printing') ? true : false;
 
 
-        $pdf = Pdf::loadView(
+        $pdf = Pdf::loadView(   
             'suratjalan',
             [
                 'result' => $result,
