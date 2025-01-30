@@ -112,6 +112,7 @@ Route::middleware(['auth', 'clear.temp_items'])->group(function () {
         Route::get('/tabel_barang_rusak', [BarangRusakController::class, 'index'])->name('tabel_barang_rusak');
 
         Route::post('/settings/notifications', [NotificationController::class, 'updateSettings'])->name('notification.update');
+        Route::get('/settings/notifications/reset', [NotificationController::class, 'resetSettings'])->name('notification.reset');
 
         Route::get('/tabel_stok_gudang', [StokGudangController::class, 'index'])->name('tabel_stok_gudang');
 
