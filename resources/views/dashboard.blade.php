@@ -11,17 +11,17 @@
             <div class="grid grid-cols-3 gap-8 font-roboto p-4 mobile:grid-cols-2 xl:grid-cols-4">
                 <!-- Barang Masuk -->
                 <div
-                    class="flex items-center justify-between p-2 bg-white rounded-md border-r-4 border-b-4 border-green-500 border-opacity-80 bg-darker h-15 md:h-full">
+                    class="flex items-center justify-between p-2 bg-white rounded-md border-r-4 border-b-4 border-emerald-900 border-opacity-80 bg-darker h-15 md:h-full">
                     <div>
                         <h6
                             class="text-sm mobile:text-[8px] font-medium leading-none tracking-wider text-gray-500 uppercase text-primary-light">
                             Barang Masuk
                         </h6>
-                        <span class="text-sm md:text-xl font-semibold pl-2 text-green-600">{{ $barang_masuk }}</span>
+                        <span class="text-sm md:text-xl font-semibold pl-2 text-emerald-900">{{ $barang_masuk }}</span>
                     </div>
                     <div>
                         <span>
-                            <svg class="md:w-12 md:h-12 text-green-500 text-opacity-60" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            <svg class="md:w-12 md:h-12 text-emerald-900 text-opacity-60" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M5.027 10.9a8.729 8.729 0 0 1 6.422-3.62v-1.2A2.061 2.061 0 0 1 12.61 4.2a1.986 1.986 0 0 1 2.104.23l5.491 4.308a2.11 2.11 0 0 1 .588 2.566 2.109 2.109 0 0 1-.588.734l-5.489 4.308a1.983 1.983 0 0 1-2.104.228 2.065 2.065 0 0 1-1.16-1.876v-.942c-5.33 1.284-6.212 5.251-6.25 5.441a1 1 0 0 1-.923.806h-.06a1.003 1.003 0 0 1-.955-.7A10.221 10.221 0 0 1 5.027 10.9Z" />
@@ -32,17 +32,17 @@
 
                 <!-- Barang Keluar -->
                 <div
-                    class="flex items-center justify-between p-2 bg-white rounded-md border-r-4 border-b-4 border-blue-500 border-opacity-80 bg-darker h-15 md:h-full">
+                    class="flex items-center justify-between p-2 bg-white rounded-md border-r-4 border-b-4 border-blue-900 border-opacity-80 bg-darker h-15 md:h-full">
                     <div>
                         <h6
                             class="text-sm mobile:text-[8px] font-medium leading-none tracking-wider text-gray-500 uppercase text-primary-light">
                             Barang Keluar
                         </h6>
-                        <span class="text-sm md:text-xl font-semibold pl-2 text-blue-600">{{ $barang_keluar }}</span>
+                        <span class="text-sm md:text-xl font-semibold pl-2 text-blue-900">{{ $barang_keluar }}</span>
                     </div>
                     <div>
                         <span>
-                            <svg class="md:w-12 md:h-12 text-blue-500 text-opacity-60" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            <svg class="md:w-12 md:h-12 text-blue-900 text-opacity-60" xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M14.502 7.046h-2.5v-.928a2.122 2.122 0 0 0-1.199-1.954 1.827 1.827 0 0 0-1.984.311L3.71 8.965a2.2 2.2 0 0 0 0 3.24L8.82 16.7a1.829 1.829 0 0 0 1.985.31 2.121 2.121 0 0 0 1.199-1.959v-.928h1a2.025 2.025 0 0 1 1.999 2.047V19a1 1 0 0 0 1.275.961 6.59 6.59 0 0 0 4.662-7.22 6.593 6.593 0 0 0-6.437-5.695Z" />
@@ -53,17 +53,17 @@
 
                 <!-- Barang Rusak -->
                 <div
-                    class="flex items-center justify-between p-2 bg-white rounded-md border-r-4 border-b-4 border-red-500 border-opacity-80 bg-darker h-15 md:h-full">
+                    class="flex items-center justify-between p-2 bg-white rounded-md border-r-4 border-b-4 border-[#650000] border-opacity-80 bg-darker h-15 md:h-full">
                     <div>
                         <h6
                             class="text-sm mobile:text-[8px] font-medium leading-none tracking-wider text-gray-500 uppercase text-primary-light">
                             Barang Rusak
                         </h6>
-                        <span class="text-sm md:text-xl font-semibold pl-2 text-red-600">{{ $barang_rusak }}</span>
+                        <span class="text-sm md:text-xl font-semibold pl-2 text-[#650000]">{{ $barang_rusak }}</span>
                     </div>
                     <div>
                         <span>
-                            <svg class="md:w-12 md:h-12 text-red-500 text-opacity-60" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            <svg class="md:w-12 md:h-12 text-[#650000] text-opacity-60" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                 fill="currentColor" viewBox="0 0 512 512">
                                 <path
                                     d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z" />
@@ -137,19 +137,19 @@
                 <table class="w-full text-sm mobile:text-[12px] text-left rtl:text-right">
                     <thead class="text-xs mobile:text-[9px] text-black uppercase border-b-2 border-gray-300">
                         <tr>
-                            <th scope="col" class="px-6 py-2 bg-[#2D52A3] text-white bg-opacity-80">
+                            <th scope="col" class="px-6 py-2 bg-[#200B0B] text-white bg-opacity-80">
                                 Nama Barang
                             </th>
                             <th scope="col" class="px-6 py-2 bg-body">
                                 Stok Awal
                             </th>
-                            <th scope="col" class="px-6 py-2 bg-[#2D52A3] text-white bg-opacity-80">
+                            <th scope="col" class="px-6 py-2 bg-[#200B0B] text-white bg-opacity-80">
                                 In
                             </th>
                             <th scope="col" class="px-4 py-2 bg-body">
                                 Out
                             </th>
-                            <th scope="col" class="px-4 py-2 bg-[#2D52A3] text-white bg-opacity-80">
+                            <th scope="col" class="px-4 py-2 bg-[#200B0B] text-white bg-opacity-80">
                                 Sisa
                             </th>
                         </tr>
@@ -159,12 +159,12 @@
                             <tr
                                 class="border-gray-200 border-gray-700 hover:bg-gray-200 cursor-pointer transition-colors duration-300 ease-in-out">
                                 <th scope="row"
-                                    class="px-6 py-2 font-medium whitespace-nowrap bg-[#2D52A3] text-white bg-opacity-80"><span
+                                    class="px-6 py-2 font-medium whitespace-nowrap bg-[#200B0B] text-white bg-opacity-80"><span
                                         x-text="item.nama_barang"></span> - <span x-text="item.seri"></span></th>
                                 <td class="px-6 py-2 bg-body" x-text="item.stok_awal"></td>
-                                <td class="px-6 py-2 bg-[#2D52A3] text-white bg-opacity-80" x-text="item.in ?? 0"></td>
+                                <td class="px-6 py-2 bg-[#200B0B] text-white bg-opacity-80" x-text="item.in ?? 0"></td>
                                 <td class="px-2 py-2 bg-body" x-text="item.out ?? 0"></td>
-                                <td class="px-2 py-2 bg-[#2D52A3] text-white bg-opacity-80">
+                                <td class="px-2 py-2 bg-[#200B0B] text-white bg-opacity-80">
                                     <span>
                                         <template x-if="item.satuan === 'pcs' || item.satuan === 'unit'">
                                             <span x-text="item.jumlah"></span>

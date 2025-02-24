@@ -18,7 +18,7 @@
 </head>
 
 <body class="antialiased bg-body" x-data="{ isSidebarOpen: false }">
-    <nav class="bg-zinc-900 text-white shadow-lg fixed top-0 w-full left-0 z-30">
+    <nav class="bg-[#0F0606] text-white shadow-lg fixed top-0 w-full left-0 z-30">
         <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <div class="relative flex justify-end h-16 pt-3">
                 @if(auth()->user() && auth()->user()->role === 'admin')
@@ -89,7 +89,7 @@
                                         <div x-show="open" tabindex="-1" x-transition.opacity.duration.300ms aria-hidden="true" class="fixed inset-0 z-50 mt-16 flex justify-center w-full max-h-full bg-black bg-opacity-50">
                                             <div class="fixed w-full max-w-[300px] max-h-full mobile:max-w-[250px] ">
                                                 <!-- Modal content -->
-                                                <div class="relative rounded-b-lg shadow bg-zinc-700">
+                                                <div class="relative rounded-b-lg shadow bg-[#0F0606]">
                                                     <!-- Modal header -->
                                                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-600">
                                                         <h3 class="text-lg font-semibold text-gray-900 text-white">
@@ -249,7 +249,7 @@
                             tabindex="-1" aria-hidden="true" class="fixed top-0 right-0 left-0 z-50 flex justify-center w-full h-full bg-black bg-opacity-70">
                             <div class="relative p-4 w-full max-w-md max-h-full mobile:w-64 top-16">
                                 <!-- Modal content -->
-                                <div class="relative rounded-lg shadow bg-zinc-700">
+                                <div class="relative rounded-lg shadow bg-[#0F0606]">
                                     <!-- Modal header -->
                                     <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-600">
                                         @if($request_access->isNotEmpty())
@@ -337,7 +337,7 @@
     </nav>
 
     <aside x-data="{ isSidebarOpen: false}" :class="{'w-60': isSidebarOpen, 'w-20': !isSidebarOpen}" class="fixed top-0 -left-2 z-50 h-screen transition-all duration-300 ease-in-out translate-x-0 text-sm flex flex-col justify-between" aria-label="Sidebar">
-        <div class="h-full px-3 py-2 overflow-y-auto bg-zinc-900 flex-grow">
+        <div class="h-full px-3 py-2 overflow-y-auto bg-[#0F0606] flex-grow">
 
             <div @click="isSidebarOpen = !isSidebarOpen" class="flex items-center py-2.5 px-2">
                 @if ($foto_profile)
@@ -357,7 +357,7 @@
                 <li title="Dashboard">
                     <a href="{{ route('dashboard') }}"
                         class="flex items-center p-2 rounded-lg text-white 
-                        {{ request()->routeIs('dashboard') ? 'border-l-4 border-indigo-700 bg-gradient-to-r from-indigo-500' : 'bg-zinc-900 hover:bg-gray-600' }}">
+                        {{ request()->routeIs('dashboard') ? 'border-l-4 border-red-700 bg-gradient-to-r from-red-500' : 'bg-[#0F0606] hover:bg-gray-600' }}">
                         <svg class="w-8 h-8 text-white"
                             xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                             <path fill-rule="evenodd" d="M11.293 3.293a1 1 0 0 1 1.414 0l6 6 2 2a1 1 0 0 1-1.414 1.414L19 12.414V19a2 2 0 0 1-2 2h-3a1 1 0 0 1-1-1v-3h-2v3a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2v-6.586l-.293.293a1 1 0 0 1-1.414-1.414l2-2 6-6Z" clip-rule="evenodd" />
@@ -368,8 +368,8 @@
                 <div x-data="{ openDropdown1: false, openDropdown2: false }">
                     @if(auth()->user() && auth()->user()->role === 'admin' && (auth()->user()->request_access === 0 || auth()->user()->request_access === 1))
                     <li class="mb-2" title="Barang Masuk">
-                        <div class="relative items-center rounded-lg text-white bg-zinc-900">
-                            <button @click="openDropdown1 = !openDropdown1; if (!isSidebarOpen) { isSidebarOpen = true;}" class="flex items-center w-full px-2 py-2 rounded-lg {{ request()->routeIs('input_barang_masuk.view') || request()->routeIs('tabel_barang_masuk') ? 'border-l-4 border-indigo-700 bg-gradient-to-r from-indigo-500' : 'bg-zinc-900 hover:bg-gray-600' }}">
+                        <div class="relative items-center rounded-lg text-white bg-[#0F0606]">
+                            <button @click="openDropdown1 = !openDropdown1; if (!isSidebarOpen) { isSidebarOpen = true;}" class="flex items-center w-full px-2 py-2 rounded-lg {{ request()->routeIs('input_barang_masuk.view') || request()->routeIs('tabel_barang_masuk') ? 'border-l-4 border-red-700 bg-gradient-to-r from-red-500' : 'bg-[#0F0606] hover:bg-gray-600' }}">
                                 <svg class="flex-shrink-0 w-10 h-10 mobile:h-8 mobile:w-8 text-blue-800 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M5.027 10.9a8.729 8.729 0 0 1 6.422-3.62v-1.2A2.061 2.061 0 0 1 12.61 4.2a1.986 1.986 0 0 1 2.104.23l5.491 4.308a2.11 2.11 0 0 1 .588 2.566 2.109 2.109 0 0 1-.588.734l-5.489 4.308a1.983 1.983 0 0 1-2.104.228 2.065 2.065 0 0 1-1.16-1.876v-.942c-5.33 1.284-6.212 5.251-6.25 5.441a1 1 0 0 1-.923.806h-.06a1.003 1.003 0 0 1-.955-.7A10.221 10.221 0 0 1 5.027 10.9Z" />
                                 </svg>
@@ -387,7 +387,7 @@
                     <li title="Permintaan Barang">
                         <a href="{{ route('request_barang') }}"
                             class="flex items-center p-2 rounded-lg text-white 
-                        {{ request()->routeIs('request_barang') ? 'border-l-4 border-indigo-700 bg-gradient-to-r from-indigo-500' : 'bg-zinc-900 hover:bg-gray-600' }}">
+                        {{ request()->routeIs('request_barang') ? 'border-l-4 border-red-700 bg-gradient-to-r from-red-500' : 'bg-[#0F0606] hover:bg-gray-600' }}">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler w-9 h-9 mobile:h-7 mobile:w-7 icons-tabler-outline icon-tabler-pointer-question">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M15.062 12.506l-.284 -.284l3.113 -2.09a1.2 1.2 0 0 0 -.309 -2.228l-13.582 -3.904l3.904 13.563a1.2 1.2 0 0 0 2.228 .308l2.09 -3.093l1.278 1.278" />
@@ -399,8 +399,8 @@
                     </li>
                     @endif
                     <li title="Barang Keluar">
-                        <div class="relative items-center rounded-lg text-white bg-zinc-900 group">
-                            <button @click="openDropdown2 = !openDropdown2; if (!isSidebarOpen) { isSidebarOpen = true;}" class="flex items-center w-full px-2 py-2 rounded-lg {{ request()->routeIs('input_barang_keluar') || request()->routeIs('tabel_barang_keluar') ? 'border-l-4 border-indigo-700 bg-gradient-to-r from-indigo-500' : 'bg-zinc-900 hover:bg-gray-600' }}">
+                        <div class="relative items-center rounded-lg text-white bg-[#0F0606] group">
+                            <button @click="openDropdown2 = !openDropdown2; if (!isSidebarOpen) { isSidebarOpen = true;}" class="flex items-center w-full px-2 py-2 mt-2 rounded-lg {{ request()->routeIs('input_barang_keluar') || request()->routeIs('tabel_barang_keluar') ? 'border-l-4 border-red-700 bg-gradient-to-r from-red-500' : 'bg-[#0F0606] hover:bg-gray-600' }}">
                                 <svg class="flex-shrink-0 w-10 h-10 mobile:w-8 mobile:h-8 text-blue-800 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M14.502 7.046h-2.5v-.928a2.122 2.122 0 0 0-1.199-1.954 1.827 1.827 0 0 0-1.984.311L3.71 8.965a2.2 2.2 0 0 0 0 3.24L8.82 16.7a1.829 1.829 0 0 0 1.985.31 2.121 2.121 0 0 0 1.199-1.959v-.928h1a2.025 2.025 0 0 1 1.999 2.047V19a1 1 0 0 0 1.275.961 6.59 6.59 0 0 0 4.662-7.22 6.593 6.593 0 0 0-6.437-5.695Z" />
                                 </svg>
@@ -420,7 +420,7 @@
                 <li title="Barang Rusak">
                     <a href="{{ route('tabel_barang_rusak') }}"
                         class="flex items-center p-2 rounded-lg text-white 
-                        {{ request()->routeIs('tabel_barang_rusak') ? 'border-l-4 border-indigo-700 bg-gradient-to-r from-indigo-500' : 'bg-zinc-900 hover:bg-gray-600' }}">
+                        {{ request()->routeIs('tabel_barang_rusak') ? 'border-l-4 border-red-700 bg-gradient-to-r from-red-500' : 'bg-[#0F0606] hover:bg-gray-600' }}">
                         <svg class="w-8 h-8 mobile:w-7 mobile:h-7 text-blue-800 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 512 512">
                             <path d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z" />
                             <path fill-rule="evenodd" d="M21.707 21.707a1 1 0 0 1-1.414 0l-3.5-3.5a1 1 0 0 1 1.414-1.414l3.5 3.5a1 1 0 0 1 0 1.414Z" clip-rule="evenodd" />
@@ -432,7 +432,7 @@
                 <li title="Stok Gudang">
                     <a href="{{ route('tabel_stok_gudang') }}"
                         class="flex items-center p-2 rounded-lg text-white 
-                    {{ request()->routeIs('tabel_stok_gudang') ? 'border-l-4 border-indigo-700 bg-gradient-to-r from-indigo-500' : 'bg-zinc-900 hover:bg-gray-600' }}">
+                    {{ request()->routeIs('tabel_stok_gudang') ? 'border-l-4 border-red-700 bg-gradient-to-r from-red-500' : 'bg-[#0F0606] hover:bg-gray-600' }}">
                         <svg class="w-8 h-8 mobile:w-7 mobile:h-7 text-blue-800 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 640 512">
                             <path d="M58.9 42.1c3-6.1 9.6-9.6 16.3-8.7L320 64 564.8 33.4c6.7-.8 13.3 2.7 16.3 8.7l41.7 83.4c9 17.9-.6 39.6-19.8 45.1L439.6 217.3c-13.9 4-28.8-1.9-36.2-14.3L320 64 236.6 203c-7.4 12.4-22.3 18.3-36.2 14.3L37.1 170.6c-19.3-5.5-28.8-27.2-19.8-45.1L58.9 42.1zM321.1 128l54.9 91.4c14.9 24.8 44.6 36.6 72.5 28.6L576 211.6v167c0 22-15 41.2-36.4 46.6l-204.1 51c-10.2 2.6-20.9 2.6-31 0l-204.1-51C79 419.7 64 400.5 64 378.5v-167L191.6 248c27.8 8 57.6-3.8 72.5-28.6L318.9 128h2.2z" />
                             <path fill-rule="evenodd" d="M21.707 21.707a1 1 0 0 1-1.414 0l-3.5-3.5a1 1 0 0 1 1.414-1.414l3.5 3.5a1 1 0 0 1 0 1.414Z" clip-rule="evenodd" />
@@ -448,7 +448,7 @@
                 <li>
                     <a href="{{ route('tabel_barang_masuk.superadmin') }}"
                         class="flex items-center p-2 rounded-lg text-white 
-                        {{ request()->routeIs('tabel_barang_masuk.superadmin') ? 'border-l-4 border-indigo-700 bg-gradient-to-r from-indigo-500' : 'bg-zinc-900 hover:bg-gray-600' }}">
+                        {{ request()->routeIs('tabel_barang_masuk.superadmin') ? 'border-l-4 border-red-700 bg-gradient-to-r from-red-500' : 'bg-[#0F0606] hover:bg-gray-600' }}">
                         <svg class="w-8 h-8 mobile:w-7 mobile:h-7 text-blue-800 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 640 512">
                             <path d="M58.9 42.1c3-6.1 9.6-9.6 16.3-8.7L320 64 564.8 33.4c6.7-.8 13.3 2.7 16.3 8.7l41.7 83.4c9 17.9-.6 39.6-19.8 45.1L439.6 217.3c-13.9 4-28.8-1.9-36.2-14.3L320 64 236.6 203c-7.4 12.4-22.3 18.3-36.2 14.3L37.1 170.6c-19.3-5.5-28.8-27.2-19.8-45.1L58.9 42.1zM321.1 128l54.9 91.4c14.9 24.8 44.6 36.6 72.5 28.6L576 211.6v167c0 22-15 41.2-36.4 46.6l-204.1 51c-10.2 2.6-20.9 2.6-31 0l-204.1-51C79 419.7 64 400.5 64 378.5v-167L191.6 248c27.8 8 57.6-3.8 72.5-28.6L318.9 128h2.2z" />
                             <path fill-rule="evenodd" d="M21.707 21.707a1 1 0 0 1-1.414 0l-3.5-3.5a1 1 0 0 1 1.414-1.414l3.5 3.5a1 1 0 0 1 0 1.414Z" clip-rule="evenodd" />
@@ -457,8 +457,8 @@
                     </a>
                 </li>
                 <li x-data="{ openDropdown1: false, openDropdown2: false }" title="Pengiriman Barang">
-                    <div class="relative items-center rounded-lg text-white bg-zinc-900 group">
-                        <button @click="openDropdown2 = !openDropdown2; if (!isSidebarOpen) { isSidebarOpen = true;}" class="flex items-center w-full px-2 py-2 rounded-lg {{ request()->routeIs('pengiriman_barang.superadmin') || request()->routeIs('pengiriman_barang.input.superadmin') ? 'border-l-4 border-indigo-700 bg-gradient-to-r from-indigo-500' : 'bg-zinc-900 hover:bg-gray-600' }}">
+                    <div class="relative items-center rounded-lg text-white bg-[#0F0606] group">
+                        <button @click="openDropdown2 = !openDropdown2; if (!isSidebarOpen) { isSidebarOpen = true;}" class="flex items-center w-full px-2 py-2 rounded-lg {{ request()->routeIs('pengiriman_barang.superadmin') || request()->routeIs('pengiriman_barang.input.superadmin') ? 'border-l-4 border-red-700 bg-gradient-to-r from-red-500' : 'bg-[#0F0606] hover:bg-gray-600' }}">
                             <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 w-9 h-9 mobile:h-7 mobile:w-7 text-blue-800 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-telegram">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4" />
@@ -477,7 +477,7 @@
                 <li class="relative" title="Permintaan Barang">
                     <a href="{{ route('permintaan_barang.superadmin') }}"
                         class="flex items-center p-2 rounded-lg text-white 
-        {{ request()->routeIs('permintaan_barang.superadmin') ? 'border-l-4 border-indigo-700 bg-gradient-to-r from-indigo-500' : 'bg-zinc-900 hover:bg-gray-600' }}">
+        {{ request()->routeIs('permintaan_barang.superadmin') ? 'border-l-4 border-red-700 bg-gradient-to-r from-red-500' : 'bg-zinc-900 hover:bg-gray-600' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler w-9 h-9 mobile:h-7 mobile:w-7 icons-tabler-outline icon-tabler-pointer-question">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                             <path d="M15.062 12.506l-.284 -.284l3.113 -2.09a1.2 1.2 0 0 0 -.309 -2.228l-13.582 -3.904l3.904 13.563a1.2 1.2 0 0 0 2.228 .308l2.09 -3.093l1.278 1.278" />
