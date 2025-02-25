@@ -179,6 +179,8 @@
                             <img :src="photo" alt="Preview" class="w-40 h-40 rounded-lg shadow-md">
                         </div>
                     </div>
+
+
                 </div>
                 <button type="submit" class="px-8 py-2 mb-2 mobile:mb-0 w-32 bg-[#4B0082] text-white rounded-md hover:bg-indigo-700 transition-colors duration-200 ease-in-out">Simpan</button>
             </main>
