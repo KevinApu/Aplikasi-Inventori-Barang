@@ -168,18 +168,29 @@
                 <div class="flex px-6 justify-end space-x-6 mb-2">
                     <textarea name="keterangan" x-model="keterangan" rows="8" class="block form-input w-full mobile:max-w-md tablet:max-w-lg border-0 focus:ring-0 border-b bg-transparent text-sm " placeholder="Keterangan (opsional)"></textarea>
 
-                    <div x-data="{ photo: null }" class="bg-transparent rounded-lg">
+                    <div x-data="{ photo: null, isDragging: false }" class="bg-transparent rounded-lg mt-6 ml-2">
                         <input type="file" name="foto" @change="const file = $event.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = e => photo = e.target.result; reader.readAsDataURL(file); }" accept="image/*"
-                            class="block form-input w-full mobile:max-w-md tablet:max-w-lg border-0 focus:ring-0 border-b bg-transparent ">
+                            class="hidden" x-ref="fileInput">
+                        <div @dragover.prevent="isDragging = true" @dragleave.prevent="isDragging = false" @drop.prevent="isDragging = false; const file = $event.dataTransfer.files[0]; if (file) { const reader = new FileReader(); reader.onload = e => photo = e.target.result; reader.readAsDataURL(file); $refs.fileInput.files = $event.dataTransfer.files; }"
+                            :class="{'border-indigo-500': isDragging, 'border-gray-300': !isDragging}"
+                            class="border-2 border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center cursor-pointer"
+                            @click="$refs.fileInput.click()">
+
+                            <template x-if="!photo">
+                                <div class="flex flex-col items-center">
+                                    <p class="text-gray-600 text-sm font-medium transition-opacity duration-300 ease-in-out">Drag & drop a photo here or click to select</p>
+                                    <div class="w-32 h-32 flex items-center justify-center mt-2 animate-bounce">
+                                        <img src="/img/Animasi Photo.png" alt="Animation" class="w-24 h-24 transition-opacity duration-300 ease-in-out">
+                                    </div>
+                                </div>
+                            </template>
+
+                            <img :src="photo" alt="Preview" class="w-40 h-40 rounded-lg shadow-md mx-auto mt-2" x-show="photo">
+                        </div>
                         @error('foto')
                         <p class="text-red-500 text-sm mt-1">{{$message}}</p>
                         @enderror
-
-                        <div x-show="photo" class="mt-4 flex items-center justify-center  ">
-                            <img :src="photo" alt="Preview" class="w-40 h-40 rounded-lg shadow-md">
-                        </div>
                     </div>
-
 
                 </div>
                 <button type="submit" class="px-8 py-2 mb-2 mobile:mb-0 w-32 bg-[#4B0082] text-white rounded-md hover:bg-indigo-700 transition-colors duration-200 ease-in-out">Simpan</button>
