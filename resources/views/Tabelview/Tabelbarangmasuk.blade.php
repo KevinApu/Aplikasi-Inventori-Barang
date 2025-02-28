@@ -386,15 +386,15 @@
                                                 x-transition:leave-end="opacity-0">
                                                 <div class="relative p-4 w-full max-w-md max-h-full">
                                                     <!-- Modal content -->
-                                                    <div class="relative bg-white rounded-lg shadow bg-zinc-700">
+                                                    <div class="relative bg-white rounded-lg shadow">
                                                         <!-- Modal header -->
-                                                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-600">
-                                                            <h3 class="text-lg font-semibold text-gray-200">
+                                                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-300">
+                                                            <h3 class="text-lg font-semibold text-gray-900">
                                                                 Edit Product
                                                             </h3>
 
                                                             <!-- Button Close -->
-                                                            <button type="button" x-on:click="open = false" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center hover:bg-gray-600 hover:text-white">
+                                                            <button type="button" x-on:click="open = false" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center">
                                                                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                                                 </svg>
@@ -408,28 +408,28 @@
                                                             @method('PUT')
                                                             <div class="grid gap-4 mb-4 grid-cols-2">
                                                                 <div class="col-span-2">
-                                                                    <label class="block mb-2 text-sm font-medium text-zinc-400">Nama Barang</label>
-                                                                    <input type="text" name="namabarang" x-model="item.nama_barang" class="border-0 focus:ring-0 border-b bg-transparent w-full text-white" required="">
+                                                                    <label class="block mb-2 text-sm font-medium text-gray-700">Nama Barang</label>
+                                                                    <input type="text" name="namabarang" x-model="item.nama_barang" class="border-0 focus:ring-0 border-b bg-transparent w-full text-gray-900" required="">
                                                                 </div>
                                                                 <div class="col-span-2 sm:col-span-1">
-                                                                    <label class="block mb-2 text-sm font-medium text-zinc-400">Kode Barang</label>
-                                                                    <input type="text" name="kodebarang" x-model="item.kode_barang" class="border-0 focus:ring-0 border-b bg-transparent w-full text-white" required="">
+                                                                    <label class="block mb-2 text-sm font-medium text-gray-700">Kode Barang</label>
+                                                                    <input type="text" name="kodebarang" x-model="item.kode_barang" class="border-0 focus:ring-0 border-b bg-transparent w-full text-gray-900" required="">
                                                                 </div>
                                                                 <div class="col-span-2 sm:col-span-1">
-                                                                    <label class="block mb-2 text-sm font-medium text-zinc-400">Seri</label>
-                                                                    <input type="text" name="seri" x-model="item.seri" class="border-0 focus:ring-0 border-b bg-transparent w-full text-white" required="">
+                                                                    <label class="block mb-2 text-sm font-medium text-gray-700">Seri</label>
+                                                                    <input type="text" name="seri" x-model="item.seri" class="border-0 focus:ring-0 border-b bg-transparent w-full text-gray-900" required="">
                                                                 </div>
                                                                 <div class="col-span-2 sm:col-span-1">
-                                                                    <label class="block mb-2 text-sm font-medium text-zinc-400">Lokasi</label>
-                                                                    <input type="text" name="lokasi" x-model="item.lokasi" class="border-0 focus:ring-0 border-b bg-transparent w-full text-white text-white" required="">
+                                                                    <label class="block mb-2 text-sm font-medium text-gray-700">Lokasi</label>
+                                                                    <input type="text" name="lokasi" x-model="item.lokasi" class="border-0 focus:ring-0 border-b bg-transparent w-full text-gray-900 text-gray-900" required="">
                                                                 </div>
                                                                 <div class="col-span-2 sm:col-span-1">
-                                                                    <label class="block mb-2 text-sm font-medium text-zinc-400">Keterangan</label>
-                                                                    <textarea type="text" name="keterangan" x-model="item.keterangan" class="border-0 focus:ring-0 border-b bg-transparent w-full text-white"></textarea>
+                                                                    <label class="block mb-2 text-sm font-medium text-gray-700">Keterangan</label>
+                                                                    <textarea type="text" name="keterangan" x-model="item.keterangan" class="border-0 focus:ring-0 border-b bg-transparent w-full text-gray-900"></textarea>
                                                                 </div>
                                                                 <div class="col-span-2">
-                                                                    <label class="block mb-2 text-sm font-medium text-zinc-400">Foto (opsional)</label>
-                                                                    <input class="border-0 focus:ring-0 border-b bg-transparent w-full p-2" name="foto" type="file">
+                                                                    <label class="block mb-2 text-sm font-medium text-gray-700">Foto (opsional)</label>
+                                                                    <input class="border-0 focus:ring-0 border-b bg-transparent w-full p-2 text-gray-900" name="foto" type="file">
                                                                 </div>
                                                             </div>
                                                             <!-- Button -->
@@ -465,14 +465,14 @@
                                                 x-transition:leave-end="opacity-0">
                                                 <div class="relative p-4 w-full max-w-md max-h-full">
                                                     <!-- Modal content -->
-                                                    <div class="relative rounded-lg shadow bg-zinc-700">
+                                                    <div class="relative rounded-lg shadow bg-white">
                                                         <!-- Modal header -->
-                                                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-600">
-                                                            <h3 class="text-lg font-semibold text-gray-900 text-white">
+                                                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-300">
+                                                            <h3 class="text-lg font-semibold text-gray-900">
                                                                 Add Stock
                                                             </h3>
                                                             <!-- Button Close -->
-                                                            <button type="button" x-on:click="open = false" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center hover:bg-gray-600 hover:text-white">
+                                                            <button type="button" x-on:click="open = false" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center">
                                                                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                                                 </svg>
@@ -483,7 +483,7 @@
                                                             @csrf
                                                             <div class="grid gap-4 mb-4 grid-cols-2">
                                                                 <div class="col-span-2">
-                                                                    <input type="number" name="jumlah" oninput="this.value = this.value.replace(/[^0-9]/g, '');" min="1" class="border-0 focus:ring-0 border-b bg-transparent w-full text-white" required="">
+                                                                    <input type="number" name="jumlah" oninput="this.value = this.value.replace(/[^0-9]/g, '');" min="1" class="border-0 focus:ring-0 border-b bg-transparent w-full text-gray-900" required="">
                                                                 </div>
                                                             </div>
 
@@ -520,13 +520,13 @@
                                                 x-transition:leave-end="opacity-0">
                                                 <div class="relative p-4 w-full max-w-md max-h-full">
                                                     <!-- Modal content -->
-                                                    <div class="relative bg-white rounded-lg shadow bg-zinc-700">
+                                                    <div class="relative bg-white rounded-lg shadow">
                                                         <!-- Modal header -->
-                                                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-600">
-                                                            <h3 class="text-lg font-semibold text-gray-900 text-white">
+                                                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-300">
+                                                            <h3 class="text-lg font-semibold text-gray-900">
                                                                 Infromasi Kerusakan
                                                             </h3>
-                                                            <button type="button" x-on:click="open = false" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center hover:bg-gray-600 hover:text-white">
+                                                            <button type="button" x-on:click="open = false" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center">
                                                                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                                                 </svg>
@@ -537,25 +537,25 @@
                                                             @csrf
                                                             <div class="grid gap-4 mb-4 grid-cols-2">
                                                                 <div class="col-span-2">
-                                                                    <label class="block mb-2 text-sm font-medium text-gray-900 text-white">Kondisi Barang</label>
-                                                                    <textarea name="kondisi" rows="1" class="border-0 focus:ring-0 border-b bg-transparent w-full text-white" placeholder="Kondisi Barang" required=""></textarea>
+                                                                    <label class="block mb-2 text-sm font-medium text-gray-900">Kondisi Barang</label>
+                                                                    <textarea name="kondisi" rows="1" class="border-0 focus:ring-0 border-b bg-transparent w-full text-gray-900" placeholder="Kondisi Barang" required=""></textarea>
                                                                 </div>
                                                                 <div class="col-span-2">
-                                                                    <label class="block mb-2 text-sm font-medium text-gray-900 text-white">Penyebeb Kerusakan</label>
-                                                                    <textarea name="penyebab" rows="1" class="border-0 focus:ring-0 border-b bg-transparent w-full text-white" placeholder="Penyebeb Kerusakan" required=""></textarea>
+                                                                    <label class="block mb-2 text-sm font-medium text-gray-900">Penyebeb Kerusakan</label>
+                                                                    <textarea name="penyebab" rows="1" class="border-0 focus:ring-0 border-b bg-transparent w-full text-gray-900" placeholder="Penyebeb Kerusakan" required=""></textarea>
                                                                 </div>
                                                             </div>
                                                             <div class="col-span-2 sm:col-span-1">
-                                                                <label for="jumlah" class="block mb-2 text-sm font-medium text-gray-900 text-white">Jumlah</label>
+                                                                <label for="jumlah" class="block mb-2 text-sm font-medium text-gray-900">Jumlah</label>
                                                                 <input type="number"
                                                                     name="jumlah"
-                                                                    class="border-0 focus:ring-0 border-b bg-transparent w-full text-white"
+                                                                    class="border-0 focus:ring-0 border-b bg-transparent w-full text-gray-900"
                                                                     oninput="this.value = this.value.replace(/[^0-9]/g, '');" min="1"
                                                                     x-bind:max="item.jumlah" required="" />
                                                             </div>
                                                             <div class="col-span-2 sm:col-span-1">
-                                                                <label class="block mb-2 mt-4 text-sm font-medium text-gray-900 text-white">Foto</label>
-                                                                <input type="file" name="foto" class="border-0 focus:ring-0 border-b bg-transparent w-full text-white p-2" required="">
+                                                                <label class="block mb-2 mt-4 text-sm font-medium text-gray-900">Foto</label>
+                                                                <input type="file" name="foto" class="border-0 focus:ring-0 border-b bg-transparent w-full text-gray-900 p-2" required="">
                                                             </div>
                                                             <button type="submit" class="mt-4 text-white inline-flex items-center font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700">
                                                                 <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
