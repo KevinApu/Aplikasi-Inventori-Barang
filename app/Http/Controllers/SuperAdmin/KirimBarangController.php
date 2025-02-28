@@ -37,7 +37,6 @@ class KirimBarangController extends Controller
      */
     public function store(Request $request)
     {
-
         $lokasiList = collect($request->items)->pluck('lokasi')->unique();
 
         $sedangDikirim = PengirimanModel::whereIn('tujuan', $lokasiList)

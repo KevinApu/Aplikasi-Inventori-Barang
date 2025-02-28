@@ -18,9 +18,15 @@
 
 <body>
     <div class="container mx-auto p-4">
+        <a href="{{ url()->previous() }}"
+            class="flex items-center mb-2 text-gray-700 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg border border-gray-300 transition duration-200">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            <span class="font-medium">Kembali</span>
+        </a>
         <h1 class="text-3xl font-semibold text-gray-800 mb-6">Settings</h1>
-
-        <div x-data="{ activeTab: '{{ session('activeTab', 'defaultTab') }}' }">
+        <div x-data="{ activeTab: '{{ session('activeTab', 'pengaturanfoto') }}' }">
             <!-- Tabs Menu -->
             <div class="flex space-x-4 border-b border-gray-200 mb-6">
                 @if(auth()->user() && auth()->user()->role === 'superadmin')

@@ -315,22 +315,23 @@
                                             </button>
 
                                             <!-- Main modal -->
-                                            <div x-show="open" @keydown.escape.window="open = false" tabindex="-1" aria-hidden="true" class="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-black bg-opacity-70"
-                                                x-transition:enter="transition ease-out duration-300 transform"
-                                                x-transition:enter-start="-translate-y-full opacity-0"
-                                                x-transition:enter-end="translate-y-0 opacity-100"
-                                                x-transition:leave="transition ease-in duration-200 transform"
-                                                x-transition:leave-start="translate-y-0 opacity-100"
-                                                x-transition:leave-end="-translate-y-full opacity-0">
+                                            <div x-show="open" @keydown.escape.window="open = false" tabindex="-1" aria-hidden="true" class="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-black bg-opacity-70">
                                                 <div class="relative p-4 w-full max-w-md max-h-full">
                                                     <!-- Modal content -->
-                                                    <div class="relative bg-white rounded-lg shadow bg-zinc-700">
+                                                    <div class="relative rounded-lg shadow bg-white"
+                                                        x-show="open"
+                                                        x-transition:enter="transition ease-out duration-300"
+                                                        x-transition:enter-start="opacity-0"
+                                                        x-transition:enter-end="opacity-100"
+                                                        x-transition:leave="transition ease-in duration-200"
+                                                        x-transition:leave-start="opacity-100"
+                                                        x-transition:leave-end="opacity-0">
                                                         <!-- Modal header -->
                                                         <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-600">
-                                                            <h3 class="text-lg font-semibold text-gray-900 text-white">
-                                                                Infromasi Kerusakan
+                                                            <h3 class="text-lg font-semibold text-gray-900">
+                                                                Informasi Kerusakan
                                                             </h3>
-                                                            <button type="button" x-on:click="open = false" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center hover:bg-gray-600 hover:text-white">
+                                                            <button type="button" x-on:click="open = false" class="text-gray-400 bg-transparent hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center transform transition-transform duration-300 hover:scale-125">
                                                                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                                                 </svg>
@@ -341,25 +342,25 @@
                                                             @csrf
                                                             <div class="grid gap-4 mb-4 grid-cols-2">
                                                                 <div class="col-span-2">
-                                                                    <label class="block mb-2 text-sm font-medium text-gray-900 text-white">Kondisi Barang</label>
-                                                                    <textarea name="kondisi" rows="1" class="border-0 focus:ring-0 border-b bg-transparent w-full text-white" placeholder="Kondisi Barang" required=""></textarea>
+                                                                    <label class="block mb-2 text-sm font-medium text-gray-900">Kondisi Barang</label>
+                                                                    <textarea name="kondisi" rows="1" class="border-0 focus:ring-0 border-b bg-transparent w-full text-gray-900 min-h-[35px]" placeholder="Kondisi Barang" required=""></textarea>
                                                                 </div>
                                                                 <div class="col-span-2">
-                                                                    <label class="block mb-2 text-sm font-medium text-gray-900 text-white">Penyebeb Kerusakan</label>
-                                                                    <textarea name="penyebab" rows="1" class="border-0 focus:ring-0 border-b bg-transparent w-full text-white" placeholder="Penyebeb Kerusakan" required=""></textarea>
+                                                                    <label class="block mb-2 text-sm font-medium text-gray-900">Penyebab Kerusakan</label>
+                                                                    <textarea name="penyebab" rows="1" class="border-0 focus:ring-0 border-b bg-transparent w-full text-gray-900 min-h-[35px]" placeholder="Penyebab Kerusakan" required=""></textarea>
                                                                 </div>
                                                             </div>
                                                             <div class="col-span-2 sm:col-span-1">
-                                                                <label for="jumlah" class="block mb-2 text-sm font-medium text-gray-900 text-white">Jumlah</label>
+                                                                <label for="jumlah" class="block mb-2 text-sm font-medium text-gray-900">Jumlah</label>
                                                                 <input type="number"
                                                                     name="jumlah"
-                                                                    class="border-0 focus:ring-0 border-b bg-transparent w-full text-white"
+                                                                    class="border-0 focus:ring-0 border-b bg-transparent w-full text-gray-900"
                                                                     min="0"
                                                                     x-bind:max="item.jumlah" required="" />
                                                             </div>
                                                             <div class="col-span-2 sm:col-span-1">
-                                                                <label class="block mb-2 mt-4 text-sm font-medium text-gray-900 text-white">Foto</label>
-                                                                <input type="file" name="foto" class="border-0 focus:ring-0 border-b bg-transparent w-full text-white p-2" required="">
+                                                                <label class="block mb-2 mt-4 text-sm font-medium text-gray-900">Foto</label>
+                                                                <input type="file" name="foto" class="border-0 focus:ring-0 border-b bg-transparent w-full text-gray-900 p-2" required="">
                                                             </div>
                                                             <button type="submit" class="mt-4 text-white inline-flex items-center font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700">
                                                                 <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

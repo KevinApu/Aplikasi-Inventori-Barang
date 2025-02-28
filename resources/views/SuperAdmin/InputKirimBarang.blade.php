@@ -112,78 +112,100 @@
 
         <!-- Step 1: Input Barang -->
         <div x-data="formData()">
-            <div x-show="step === 1">
-                <h2 class="text-xl mobile:text-md font-semibold text-gray-700 mb-4 mobile:mb-2">Step 1: Input Barang</h2>
+            <div x-show="step === 1" class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">Step 1: Input Barang</h2>
 
                 <template x-for="(item, index) in items" :key="index">
-                    <div class="border-b pb-4 mb-4">
-                        <h3 class="text-lg mobile:text-sm font-semibold text-gray-700 md:mb-2">Data Barang - <span x-text="index + 1"></span></h3>
-                        <div class="grid grid-cols-2 gap-4 mb-4 mobile:gap-2 mobile:mb-2">
-                            <div class="col-span-2 sm:col-span-1">
-                                <label for="nama_barang" class="block text-sm mobile:text-[10px] font-medium text-gray-700">Nama Barang</label>
-                                <input type="text" :id="'nama_barang_' + index" class="w-full px-4 py-2 md:py-2 mobile:px-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" x-model="item.nama_barang" required>
+                    <div class="bg-gray-50 border border-gray-300 p-4 rounded-lg shadow-md mb-6">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-3">Data Barang - <span x-text="index + 1"></span></h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Nama Barang</label>
+                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" x-model="item.nama_barang" required>
                             </div>
-                            <div class="col-span-2 sm:col-span-1">
-                                <label for="seri" class="block text-sm mobile:text-[10px] font-medium text-gray-700">Seri</label>
-                                <input type="text" :id="'seri_' + index" class="w-full px-4 py-2 md:py-2 mobile:px-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" x-model="item.seri" required>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Seri</label>
+                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" x-model="item.seri" required>
                             </div>
-                            <div class="col-span-2">
-                                <label for="jumlah" class="block text-sm mobile:text-[10px] font-medium text-gray-700">Jumlah</label>
-                                <input type="number" :id="'jumlah_' + index" class="w-full px-4 md:py-2 mobile:px-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" x-model="item.jumlah" required>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Jumlah</label>
+                                <input type="number"
+                                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                    x-model.number="item.jumlah"
+                                    min="1"
+                                    inputmode="numeric"
+                                    pattern="[0-9]*"
+                                    onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                                    required>
                             </div>
-                            <div class="col-span-2">
-                                <label for="satuan" class="block text-sm mobile:text-[10px] font-medium text-gray-700">Satuan</label>
-                                <div class="flex space-x-6 mobile:space-x-3 md:mt-2 text-sm mobile:text-[10px] mobile:h-9">
-                                    <!-- Satuan -->
-                                    <select x-model="item.satuan" class="mobile:text-[10px]" @change="updateRasio(index)">
-                                        <option value="" class="bg-gray-400 hover:bg-gray-300" selected>Pilih satuan...</option>
-                                        <option value="Pcs">Pcs</option>
-                                        <option value="Roll">Roll</option>
-                                        <option value="Pack">Pack</option>
-                                        <option value="Unit">Unit</option>
-                                    </select>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Satuan</label>
+                                <select x-model="item.satuan" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" @change="updateRasio(index)">
+                                    <option value="" selected>Pilih satuan...</option>
+                                    <option value="Pcs">Pcs</option>
+                                    <option value="Roll">Roll</option>
+                                    <option value="Pack">Pack</option>
+                                    <option value="Unit">Unit</option>
+                                </select>
+                            </div>
 
-                                    <!-- Rasio Input (Jika Diperlukan) -->
-                                    <div x-show="item.showRasio">
-                                        <input type="number" x-model="item.rasio" class="mobile:text-[10px] mobile:w-24 mobile:h-9" :placeholder="item.placeholder" :required="item.rasioRequired">
-                                    </div>
-                                </div>
+                            <div x-show="item.showRasio" class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700">Rasio</label>
+                                <input type="number" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" x-model="item.rasio" :placeholder="item.placeholder" :required="item.rasioRequired">
                             </div>
+
                             <div class="col-span-2">
-                                <label for="lokasi" class="block text-sm mobile:text-[10px] font-medium text-gray-700">Lokasi</label>
-                                <select :id="'lokasi_' + index" x-model="item.lokasi" class="block w-full pl-10 mobile:pl-5 bg-body text-sm mobile:text-[10px] text-gray-900 border-0 focus:ring-0" required>
+                                <label class="block text-sm font-medium text-gray-700">Lokasi</label>
+                                <select x-model="item.lokasi" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" required>
                                     <option value="" selected>Pilih lokasi...</option>
-                                    @foreach ($kantorlayanan as $item)
-                                    <option value="{{ $item->lokasi }}">
-                                        {{ $item->pop }} - {{ $item->lokasi }}
-                                    </option>
+                                    @foreach ($kantorlayanan as $lokasi)
+                                    <option value="{{ $lokasi->lokasi }}">{{ $lokasi->pop }} - {{ $lokasi->lokasi }}</option>
                                     @endforeach
                                 </select>
                             </div>
+
                             <div class="col-span-2">
-                                <label for="catatan" class="block text-sm mobile:text-[10px] font-medium text-gray-700">Catatan (opsional)</label>
-                                <input type="text" :id="'catatan_' + index" class="w-full px-4 md:py-2 mobile:px-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" x-model="item.catatan">
+                                <label class="block text-sm font-medium text-gray-700">Catatan (Opsional)</label>
+                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" x-model="item.catatan">
                             </div>
-                            <button type="button" @click="removeItem(index)" class="bg-red-500 text-white px-2 py-1 rounded-lg mt-2" x-show="items.length > 1">Hapus Data</button>
                         </div>
+
+                        <button type="button" @click="removeItem(index)" class="bg-red-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-red-600 transition" x-show="index > 0">
+                            Hapus Data
+                        </button>
                     </div>
                 </template>
 
-                <button type="button" @click="addItem" class="bg-blue-500 text-white px-4 md:py-2 mobile:px-2 rounded-lg md:mt-2">Tambah Data</button>
-
-                <div class="flex md:justify-end mt-4 md:-mt-10">
-                    <button type="button" @click="step = 2" :disabled="!isFormValid()" class="bg-blue-500 text-white px-4 md:py-2 mobile:px-2 rounded-lg hover:bg-blue-600">Lanjut ke Pengiriman</button>
+                <div class="flex justify-between items-center mt-4">
+                    <button type="button" @click="addItem" class="bg-green-500 hover:bg-green-600 text-white py-2 px-5 rounded-lg shadow-md border border-green-600 transition-transform transform hover:scale-105 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        Tambah Data
+                    </button>
                 </div>
+
+                <div class="flex justify-end mt-6">
+                    <button type="button" @click="step = 2" :disabled="!isFormValid()" class="bg-blue-500 hover:bg-blue-600 text-white py-3 px-8 text-lg rounded-lg shadow-md border border-blue-700 transition-transform transform hover:scale-105 flex items-center gap-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Lanjut ke Pengiriman
+                    </button>
+                </div>
+
             </div>
 
+
             <!-- Step 2: Kirim Barang -->
-            <div x-show="step === 2">
-                <h2 class="text-xl mobile:text-md font-semibold text-gray-700 mb-4 mobile:mb-2">Step 2: Kirim Barang</h2>
+            <div x-show="step === 2" class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6">Step 2: Kirim Barang</h2>
+
                 <form action="{{ route('pengiriman_barang.input.post.superadmin') }}" method="POST">
                     @csrf
+
                     <template x-for="(item, index) in items" :key="index">
-                        <div>
-                            <!-- Hidden inputs to capture item data -->
+                        <div class="bg-gray-100 p-4 rounded-lg shadow-sm mb-4 border border-gray-200">
                             <input type="hidden" :name="'items[' + index + '][nama_barang]'" :value="item.nama_barang">
                             <input type="hidden" :name="'items[' + index + '][seri]'" :value="item.seri">
                             <input type="hidden" :name="'items[' + index + '][jumlah]'" :value="item.jumlah">
@@ -192,46 +214,61 @@
                             <input type="hidden" :name="'items[' + index + '][lokasi]'" :value="item.lokasi">
                             <input type="hidden" :name="'items[' + index + '][catatan]'" :value="item.catatan">
 
-                            <!-- Displayed item details -->
-                            <p class="md:mb-2">
-                                <span class="font-medium text-gray-700">Nama Barang:</span>
-                                <span x-text="item.nama_barang"></span>
-                            </p>
-                            <p>
-                                <span class="font-medium text-gray-700">Seri:</span>
-                                <span x-text="item.seri"></span>
-                            </p>
-                            <p>
-                                <span class="font-medium text-gray-700">Jumlah:</span>
-                                <span x-text="item.jumlah"></span>
-                            </p>
-                            <p>
-                                <span class="font-medium text-gray-700">Satuan:</span>
-                                <span x-text="item.satuan"></span>
-                            </p>
-                            <p>
-                                <span class="font-medium text-gray-700">Rasio:</span>
-                                <span x-text="item.rasio"></span>
-                            </p>
-                            <p>
-                                <span class="font-medium text-gray-700">Lokasi Tujuan:</span>
-                                <span x-text="item.lokasi"></span>
-                            </p>
-                            <p>
-                                <span class="font-medium text-gray-700">Catatan:</span>
-                                <span x-text="item.catatan"></span>
-                            </p>
-                            <hr class="my-4">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-2">Barang <span x-text="index + 1"></span></h3>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <p>
+                                    <span class="font-medium text-gray-600">Nama Barang:</span>
+                                    <span class="text-gray-800 font-semibold" x-text="item.nama_barang"></span>
+                                </p>
+                                <p>
+                                    <span class="font-medium text-gray-600">Seri:</span>
+                                    <span class="text-gray-800 font-semibold" x-text="item.seri"></span>
+                                </p>
+                                <p>
+                                    <span class="font-medium text-gray-600">Jumlah:</span>
+                                    <span class="text-gray-800 font-semibold" x-text="item.jumlah"></span>
+                                </p>
+                                <p>
+                                    <span class="font-medium text-gray-600">Satuan:</span>
+                                    <span class="text-gray-800 font-semibold" x-text="item.satuan"></span>
+                                </p>
+                                <p x-show="item.rasio">
+                                    <span class="font-medium text-gray-600">Rasio:</span>
+                                    <span class="text-gray-800 font-semibold" x-text="item.rasio"></span>
+                                </p>
+                                <p>
+                                    <span class="font-medium text-gray-600">Lokasi Tujuan:</span>
+                                    <span class="text-gray-800 font-semibold" x-text="item.lokasi"></span>
+                                </p>
+                                <p x-show="item.catatan">
+                                    <span class="font-medium text-gray-600">Catatan:</span>
+                                    <span class="text-gray-800 font-semibold" x-text="item.catatan"></span>
+                                </p>
+                            </div>
                         </div>
                     </template>
 
+                    <div class="flex justify-between mt-6">
+                        <button type="button" @click="step = 1"
+                            class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-5 py-2 rounded-lg shadow-md border border-gray-400 transition-transform transform hover:scale-105 flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                            Kembali
+                        </button>
 
-                    <div class="flex justify-between">
-                        <button type="button" @click="step = 1" class="bg-gray-300 text-gray-700 px-4 md:py-2 mobile:px-2 rounded-lg hover:bg-gray-400 mobile:mr-2">Kembali ke Input Barang</button>
-                        <button type="submit" class="bg-green-500 text-white px-4 md:py-2 mobile:px-2 rounded-lg hover:bg-green-600">Kirim Barang</button>
+                        <button type="submit"
+                            class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 text-lg rounded-lg shadow-md border border-green-700 transition-transform transform hover:scale-105 flex items-center gap-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Kirim Barang
+                        </button>
                     </div>
                 </form>
             </div>
+
         </div>
     </div>
     <script>

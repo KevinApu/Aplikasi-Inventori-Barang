@@ -19,122 +19,121 @@
 
 <body class="antialiased bg-body" x-data="{ isSidebarOpen: false }">
     <nav class="bg-[#0F0606] text-white shadow-lg fixed top-0 w-full left-0 z-30">
-        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-            <div class="relative flex justify-end h-16 pt-3">
-                @if(auth()->user() && auth()->user()->role === 'admin')
-                <div x-data="{ open: false }" class="relative inline-block">
-                    <button type="button" x-on:click="open = ! open" data-dropdown-toggle="notification-dropdown" class="relative p-2 mr-1 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 text-gray-400 hover:text-white hover:bg-gray-700" title="Notifikasi">
-                        <!-- ikon bel -->
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
-                        </svg>
 
-                        <!-- Angka Notifikasi -->
-                        @if($barangKurangCount > 0)
-                        <span class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold leading-none text-white bg-orange-400 rounded-full">
-                            {{ $barangKurangCount }}
-                        </span>
-                        @endif
-                    </button>
+        <div class="w-full px-4 relative flex justify-end h-16 items-center">
+            @if(auth()->user() && auth()->user()->role === 'admin')
+            <div x-data="{ open: false }" class="relative inline-block">
+                <button type="button" x-on:click="open = ! open" data-dropdown-toggle="notification-dropdown" class="relative p-2 mr-1 text-gray-500 rounded-lg hover:text-white hover:bg-gray-700" title="Notifikasi">
+                    <!-- ikon bel -->
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
+                    </svg>
+
+                    <!-- Angka Notifikasi -->
+                    @if($barangKurangCount > 0)
+                    <span class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold leading-none text-white bg-orange-400 rounded-full">
+                        {{ $barangKurangCount }}
+                    </span>
+                    @endif
+                </button>
 
 
-                    <!-- Main modal -->
-                    <div x-show="open" @keydown.escape.window="open = false" @click.self="open = false" class="w-96 md:w-full fixed -mt-10 md:mt-2 z-50 flex justify-end left-28 md:left-12 md:inset-0"
-                        x-transition:enter="transition ease-out duration-300"
-                        x-transition:enter-start="opacity-0 -translate-y-4"
-                        x-transition:enter-end="opacity-100 translate-y-0"
-                        x-transition:leave="transition ease-in duration-200"
-                        x-transition:leave-start="opacity-100 translate-y-0"
-                        x-transition:leave-end="opacity-0 -translate-y-4">
-                        <div class="w-64 mr-[160px] mt-14 z-50">
-                            <!-- Modal content -->
-                            <div class="relative w-full max-w-md max-h-full rounded-lg shadow-2xl bg-[#F3F4F6]">
-                                <!-- Modal header -->
-                                <div class="flex items-center justify-between py-2 pl-7 border-b rounded-t border-gray-600">
-                                    <h3 class="text-lg font-semibold text-gray-900 ">
-                                        Notification
-                                    </h3>
+                <!-- Main modal -->
+                <div x-show="open" @keydown.escape.window="open = false" @click.self="open = false" class="w-96 md:w-full fixed -mt-10 md:mt-2 z-50 flex justify-end left-28 md:left-12 md:inset-0"
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 -translate-y-4"
+                    x-transition:enter-end="opacity-100 translate-y-0"
+                    x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="opacity-100 translate-y-0"
+                    x-transition:leave-end="opacity-0 -translate-y-4">
+                    <div class="w-64 mr-[100px] mobile:mr-[50px] mt-14 z-50 mobile:shadow-lg">
+                        <!-- Modal content -->
+                        <div class="relative w-full rounded-lg shadow-2xl bg-[#F3F4F6]">
+                            <!-- Modal header -->
+                            <div class="flex items-center justify-between py-2 pl-7 border-b rounded-t border-gray-600">
+                                <h3 class="text-lg font-semibold text-gray-900 ">
+                                    Notification
+                                </h3>
+                            </div>
+                            <!-- Modal body -->
+                            <div class="p-4 md:p-5 text-sm shadow-inner">
+                                <div class="max-h-48 overflow-y-auto">
+                                    @foreach($barangKurang as $pop => $items)
+                                    @foreach($items as $item)
+                                    <ul class="space-y-4 mb-4 pb-2 border-b">
+                                        <li class="flex items-start">
+                                            <img src="{{ asset('storage/' . $item->foto) }}" class="w-8 h-8 rounded-md" alt="">
+                                            <div class="block ml-5">
+                                                <div class="w-full p-0 text-gray-700 font-semibold text-[13px]">{{ $item->nama_barang }} - {{ $item->seri }}</div>
+                                                @if ($item->satuan == 'roll')
+                                                <div class="w-full text-gray-400 text-[10px]">Barang tersisa {{ $item->jumlah }} roll - {{ $item->hasil }} meter</div>
+                                                @elseif ($item->satuan == 'pack')
+                                                <div class="w-full text-gray-400 text-[10px]">Barang tersisa {{ $item->jumlah }} pack - {{ $item->hasil }} pcs</div>
+                                                @else
+                                                <div class="w-full text-gray-400 text-[10px]">Barang tersisa {{ $item->jumlah }} {{ $item->satuan }}</div>
+                                                @endif
+                                                <div class="w-full text-gray-400 text-[10px]">{{ $item->waktu }}</div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    @endforeach
+                                    @endforeach
+
                                 </div>
-                                <!-- Modal body -->
-                                <div class="p-4 md:p-5 text-sm shadow-inner">
-                                    <div class="max-h-48 overflow-y-auto">
-                                        @foreach($barangKurang as $pop => $items)
-                                        @foreach($items as $item)
-                                        <ul class="space-y-4 mb-4 pb-2 border-b">
-                                            <li class="flex items-start">
-                                                <img src="{{ asset('storage/' . $item->foto) }}" class="w-8 h-8 rounded-md" alt="">
-                                                <div class="block ml-5">
-                                                    <div class="w-full p-0 text-gray-700 font-semibold text-[13px]">{{ $item->nama_barang }} - {{ $item->seri }}</div>
-                                                    @if ($item->satuan == 'roll')
-                                                    <div class="w-full text-gray-400 text-[10px]">Barang tersisa {{ $item->jumlah }} roll - {{ $item->hasil }} meter</div>
-                                                    @elseif ($item->satuan == 'pack')
-                                                    <div class="w-full text-gray-400 text-[10px]">Barang tersisa {{ $item->jumlah }} pack - {{ $item->hasil }} pcs</div>
-                                                    @else
-                                                    <div class="w-full text-gray-400 text-[10px]">Barang tersisa {{ $item->jumlah }} {{ $item->satuan }}</div>
-                                                    @endif
-                                                    <div class="w-full text-gray-400 text-[10px]">{{ $item->waktu }}</div>
+                                @if($barangKurangCount > 0)
+                                <a href="{{ route('request_barang') }}" class="flex items-center text-gray-500 hover:underline">Tambah</a>
+                                @endif
+                                <div x-data="{ open: false }">
+                                    <button type="button" x-on:click="open = ! open" class="flex items-center text-gray-500 hover:underline">Notification Settings</button>
+                                    <!-- Main modal -->
+                                    <div x-show="open" tabindex="-1" x-transition.opacity.duration.300ms aria-hidden="true" class="fixed inset-0 z-50 mt-16 flex justify-center w-full max-h-full bg-black bg-opacity-50">
+                                        <div class="fixed w-full max-w-[300px] max-h-full mobile:max-w-[250px] ">
+                                            <!-- Modal content -->
+                                            <div class="relative rounded-b-lg shadow bg-[#0F0606]">
+                                                <!-- Modal header -->
+                                                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-600">
+                                                    <h3 class="text-lg font-semibold text-gray-900 text-white">
+                                                        Notification Settings
+                                                    </h3>
+                                                    <button type="button" x-on:click="open = false" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center hover:bg-gray-600 hover:text-white" data-modal-toggle="crud-modal">
+                                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                                        </svg>
+                                                        <span class="sr-only">Close modal</span>
+                                                    </button>
                                                 </div>
-                                            </li>
-                                        </ul>
-                                        @endforeach
-                                        @endforeach
-
-                                    </div>
-                                    @if($barangKurangCount > 0)
-                                    <a href="{{ route('request_barang') }}" class="flex items-center text-gray-500 hover:underline">Tambah</a>
-                                    @endif
-                                    <div x-data="{ open: false }">
-                                        <button type="button" x-on:click="open = ! open" class="flex items-center text-gray-500 hover:underline">Notification Settings</button>
-                                        <!-- Main modal -->
-                                        <div x-show="open" tabindex="-1" x-transition.opacity.duration.300ms aria-hidden="true" class="fixed inset-0 z-50 mt-16 flex justify-center w-full max-h-full bg-black bg-opacity-50">
-                                            <div class="fixed w-full max-w-[300px] max-h-full mobile:max-w-[250px] ">
-                                                <!-- Modal content -->
-                                                <div class="relative rounded-b-lg shadow bg-[#0F0606]">
-                                                    <!-- Modal header -->
-                                                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-600">
-                                                        <h3 class="text-lg font-semibold text-gray-900 text-white">
-                                                            Notification Settings
-                                                        </h3>
-                                                        <button type="button" x-on:click="open = false" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center hover:bg-gray-600 hover:text-white" data-modal-toggle="crud-modal">
-                                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                                            </svg>
-                                                            <span class="sr-only">Close modal</span>
-                                                        </button>
-                                                    </div>
-                                                    <!-- Modal body -->
-                                                    <form action="{{ route('notification.update') }}" method="POST" class="p-4 md:p-5">
-                                                        @csrf
-                                                        <div class="grid gap-4 mb-4 grid-cols-1">
-                                                            <div class="col-span-2 sm:col-span-1">
-                                                                <label for="price" class="block mb-2 text-sm font-medium text-gray-900 text-white">Roll</label>
-                                                                <input type="number" oninput="this.value = this.value.replace(/[^0-9]/g, '');" min="1" name="roll" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-600 border-gray-500 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500" required="">
-                                                            </div>
-                                                            <div class="col-span-2 sm:col-span-1">
-                                                                <label for="price" class="block mb-2 text-sm font-medium text-gray-900 text-white">Pack</label>
-                                                                <input type="number" oninput="this.value = this.value.replace(/[^0-9]/g, '');" min="1" name="pack" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-600 border-gray-500 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500" required="">
-                                                            </div>
-                                                            <div class="col-span-2 sm:col-span-1">
-                                                                <label for="price" class="block mb-2 text-sm font-medium text-gray-900 text-white">Pcs & Unit</label>
-                                                                <input type="number" oninput="this.value = this.value.replace(/[^0-9]/g, '');" min="1" name="unit" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-600 border-gray-500 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500" required="">
-                                                            </div>
+                                                <!-- Modal body -->
+                                                <form action="{{ route('notification.update') }}" method="POST" class="p-4 md:p-5">
+                                                    @csrf
+                                                    <div class="grid gap-4 mb-4 grid-cols-1">
+                                                        <div class="col-span-2 sm:col-span-1">
+                                                            <label for="price" class="block mb-2 text-sm font-medium text-gray-900 text-white">Roll</label>
+                                                            <input type="number" oninput="this.value = this.value.replace(/[^0-9]/g, '');" min="1" name="roll" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-600 border-gray-500 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500" required="">
                                                         </div>
-                                                        <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
-                                                            Save
-                                                        </button>
-                                                    </form>
-                                                    <form action="{{ route('notification.reset') }}" method="GET" class="px-4 md:px-5">
-                                                        @csrf
-                                                        <!-- Reset Button -->
-                                                        <button name="submit" class="text-black inline-flex items-center bg-gray-400 hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-gray-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                                                            Reset
-                                                        </button>
-                                                        <p class="text-sm text-gray-400 m-2">
-                                                            *Reset ini akan mengubah nilai default notifikasi menjadi <strong>5</strong>.
-                                                        </p>
-                                                        <br>
-                                                    </form>
-                                                </div>
+                                                        <div class="col-span-2 sm:col-span-1">
+                                                            <label for="price" class="block mb-2 text-sm font-medium text-gray-900 text-white">Pack</label>
+                                                            <input type="number" oninput="this.value = this.value.replace(/[^0-9]/g, '');" min="1" name="pack" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-600 border-gray-500 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500" required="">
+                                                        </div>
+                                                        <div class="col-span-2 sm:col-span-1">
+                                                            <label for="price" class="block mb-2 text-sm font-medium text-gray-900 text-white">Pcs & Unit</label>
+                                                            <input type="number" oninput="this.value = this.value.replace(/[^0-9]/g, '');" min="1" name="unit" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 bg-gray-600 border-gray-500 placeholder-gray-400 text-white focus:ring-primary-500 focus:border-primary-500" required="">
+                                                        </div>
+                                                    </div>
+                                                    <button type="submit" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
+                                                        Save
+                                                    </button>
+                                                </form>
+                                                <form action="{{ route('notification.reset') }}" method="GET" class="px-4 md:px-5">
+                                                    @csrf
+                                                    <!-- Reset Button -->
+                                                    <button name="submit" class="text-black inline-flex items-center bg-gray-400 hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-gray-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                                        Reset
+                                                    </button>
+                                                    <p class="text-sm text-gray-400 m-2">
+                                                        *Reset ini akan mengubah nilai default notifikasi menjadi <strong>5</strong>.
+                                                    </p>
+                                                    <br>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -143,135 +142,140 @@
                         </div>
                     </div>
                 </div>
-                @endif
+            </div>
+            @endif
 
-                @if(auth()->user() && auth()->user()->role === 'superadmin')
-                <div x-data="{ open: false }" class="relative inline-block">
-                    <button type="button" x-on:click="open = ! open" data-dropdown-toggle="notification-dropdown" class="relative p-2 mr-1 text-gray-500 rounded-lg hover:text-gray-900 hover:bg-gray-100 text-gray-400 hover:text-white hover:bg-gray-700" title="Notifikasi">
-                        <!-- ikon bel -->
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
-                        </svg>
+            @if(auth()->user() && auth()->user()->role === 'superadmin')
+            <div x-data="{ open: false }" class="relative inline-block">
+                <button type="button" x-on:click="open = ! open" data-dropdown-toggle="notification-dropdown" class="relative p-2 mr-8 text-gray-500 rounded-lg hover:text-white hover:bg-gray-700" title="Notifikasi">
+                    <!-- ikon bel -->
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
+                    </svg>
 
-                        <!-- Angka Notifikasi -->
-                        @if($data_tergabung_count > 0)
-                        <span class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold leading-none text-white bg-orange-400 rounded-full">
-                            {{ $data_tergabung_count }}
-                        </span>
-                        @endif
-                    </button>
+                    <!-- Angka Notifikasi -->
+                    @if($data_tergabung_count > 0)
+                    <span class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold leading-none text-white bg-orange-400 rounded-full">
+                        {{ $data_tergabung_count }}
+                    </span>
+                    @endif
+                </button>
 
 
-                    <!-- Main modal -->
-                    <div x-show="open" @keydown.escape.window="open = false" @click.self="open = false" class="w-96 md:w-full fixed -mt-10 md:mt-2 z-50 flex justify-end left-28 md:left-12 md:inset-0"
-                        x-transition:enter="transition ease-out duration-300"
-                        x-transition:enter-start="opacity-0 -translate-y-4"
-                        x-transition:enter-end="opacity-100 translate-y-0"
-                        x-transition:leave="transition ease-in duration-200"
-                        x-transition:leave-start="opacity-100 translate-y-0"
-                        x-transition:leave-end="opacity-0 -translate-y-4">
-                        <div class="w-64 mr-[160px] mt-14 z-50">
-                            <!-- Modal content -->
-                            <div class="relative w-full max-w-md max-h-full rounded-lg shadow-2xl bg-[#F3F4F6]">
-                                <!-- Modal header -->
-                                <div class="flex items-center justify-between py-2 pl-7 border-b rounded-t border-gray-600">
-                                    <h3 class="text-lg font-semibold text-gray-900 ">
-                                        Notification
-                                    </h3>
-                                </div>
-                                <!-- Modal body -->
-                                <div class="p-4 md:p-5 text-sm shadow-inner">
-                                    <div class="max-h-48 overflow-y-auto">
-                                        <!-- Menampilkan data menunggu_pengiriman -->
-                                        @foreach($data_tergabung as $item)
-                                        <ul class="space-y-4 mb-4 pb-2 border-b">
-                                            <li class="flex items-start">
-                                                <div class="block ml-5">
-                                                    <div class="w-full p-0 text-gray-700 font-semibold text-[13px]">
-                                                        {{ $item->tujuan }} - {{ $item->tujuan_lokasi }}
-                                                    </div>
-                                                    <div class="w-full text-gray-400 text-[10px]">{{ $item->status }}</div>
-                                                    <div class="w-full text-gray-400 text-[10px]">{{ $item->waktu }}</div>
+                <!-- Main modal -->
+                <div x-show="open" @keydown.escape.window="open = false" @click.self="open = false" class="w-96 md:w-full fixed -mt-10 md:mt-2 z-50 flex justify-end left-28 md:left-12 md:inset-0"
+                    x-transition:enter="transition ease-out duration-300"
+                    x-transition:enter-start="opacity-0 -translate-y-4"
+                    x-transition:enter-end="opacity-100 translate-y-0"
+                    x-transition:leave="transition ease-in duration-200"
+                    x-transition:leave-start="opacity-100 translate-y-0"
+                    x-transition:leave-end="opacity-0 -translate-y-4">
+                    <div class="w-64 mr-[100px] mobile:mr-[50px] mt-14 z-50 mobile:shadow-lg">
+                        <!-- Modal content -->
+                        <div class="relative w-full rounded-lg shadow-2xl bg-[#F3F4F6]">
+                            <!-- Modal header -->
+                            <div class="flex items-center justify-between py-2 pl-7 border-b rounded-t border-gray-600">
+                                <h3 class="text-lg font-semibold text-gray-900 ">
+                                    Notification
+                                </h3>
+                            </div>
+                            <!-- Modal body -->
+                            <div class="p-4 md:p-5 text-sm shadow-inner">
+                                <div class="max-h-48 overflow-y-auto">
+                                    <!-- Menampilkan data menunggu_pengiriman -->
+                                    @foreach($data_tergabung as $item)
+                                    <ul class="space-y-4 mb-4 pb-2 border-b">
+                                        <li class="flex items-start">
+                                            <div class="block ml-5">
+                                                <div class="w-full p-0 text-gray-700 font-semibold text-[13px]">
+                                                    {{ $item->tujuan }} - {{ $item->tujuan_lokasi }}
                                                 </div>
-                                            </li>
-                                        </ul>
-                                        @endforeach
-                                    </div>
-                                    @if($data_tergabung_count > 0)
-                                    <div class="flex inline-flex space-x-4">
-                                        <a href="{{ route('pengiriman_barang.superadmin') }}" class="flex items-center text-gray-500 hover:underline">Update</a>
-                                        <a href="{{ route('pengiriman_barang.input.superadmin') }}" class="flex items-center text-gray-500 hover:underline">Input</a>
-                                    </div>
-                                    @endif
+                                                <div class="w-full text-gray-400 text-[10px]">{{ $item->status }}</div>
+                                                <div class="w-full text-gray-400 text-[10px]">{{ $item->waktu }}</div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    @endforeach
                                 </div>
+                                @if($data_tergabung_count > 0)
+                                <div class="flex inline-flex space-x-4">
+                                    <a href="{{ route('pengiriman_barang.superadmin') }}" class="flex items-center text-gray-500 hover:underline">Update</a>
+                                    <a href="{{ route('pengiriman_barang.input.superadmin') }}" class="flex items-center text-gray-500 hover:underline">Input</a>
+                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
-                @endif
-                @if(auth()->user() && auth()->user()->role === 'user')
-                <div class="relative inline-block p-2 flex justify-center items-center text-gray-500 rounded-lg h-10 hover:text-gray-900 hover:bg-gray-100 text-gray-400 hover:text-white hover:bg-gray-700" title="Permintaan Akses">
-                    <a href="javascript:void(0);" onclick="submitRequest()">
+            </div>
+            @endif
+            @if(auth()->user() && auth()->user()->role === 'user')
+            <div class="relative inline-block p-2 flex justify-center items-center text-gray-500 rounded-lg h-10 hover:text-gray-900 hover:bg-gray-100 text-gray-400 hover:text-white hover:bg-gray-700" title="Permintaan Akses">
+                <a href="javascript:void(0);" onclick="submitRequest()">
+                    <svg class="w-7 h-7" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" d="M7 19H5a1 1 0 0 1-1-1v-1a3 3 0 0 1 3-3h1m4-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm7.441 1.559a1.907 1.907 0 0 1 0 2.698l-6.069 6.069L10 19l.674-3.372 6.07-6.07a1.907 1.907 0 0 1 2.697 0Z" />
+                    </svg>
+                </a>
+            </div>
+            @endif
+
+
+
+            @if(auth()->user() && auth()->user()->role === 'admin' && !auth()->user()->request_access)
+            <div x-data="{ open: false }">
+                <div class="relative inline-block p-2 flex justify-center items-center text-gray-500 rounded-lg h-10 hover:text-gray-900 hover:bg-gray-100 text-gray-400 hover:text-white hover:bg-gray-700" title="Permintaan Akses Admin Pengguna">
+                    <button x-on:click="open = ! open">
                         <svg class="w-7 h-7" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <path stroke="currentColor" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" d="M7 19H5a1 1 0 0 1-1-1v-1a3 3 0 0 1 3-3h1m4-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm7.441 1.559a1.907 1.907 0 0 1 0 2.698l-6.069 6.069L10 19l.674-3.372 6.07-6.07a1.907 1.907 0 0 1 2.697 0Z" />
+                            <path stroke="currentColor" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" d="M10 19H5a1 1 0 0 1-1-1v-1a3 3 0 0 1 3-3h2m10 1a3 3 0 0 1-3 3m3-3a3 3 0 0 0-3-3m3 3h1m-4 3a3 3 0 0 1-3-3m3 3v1m-3-4a3 3 0 0 1 3-3m-3 3h-1m4-3v-1m-2.121 1.879-.707-.707m5.656 5.656-.707-.707m-4.242 0-.707.707m5.656-5.656-.707.707M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                         </svg>
-                    </a>
-                </div>
-                @endif
 
+                        @if($request_access_count > 0)
+                        <span class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold leading-none text-white bg-orange-400 rounded-full">
+                            {{ $request_access_count }}
+                        </span>
+                        @endif
+                    </button>
 
+                    <!-- Main modal -->
+                    <div x-show="open"
+                        x-transition:enter="transition-opacity ease-out duration-300"
+                        x-transition:enter-start="opacity-0"
+                        x-transition:enter-end="opacity-100"
+                        x-transition:leave="transition-opacity ease-in duration-200"
+                        x-transition:leave-start="opacity-100"
+                        x-transition:leave-end="opacity-0"
+                        @keydown.escape.window="open = false"
+                        @click.self="open = false"
+                        tabindex="-1" aria-hidden="true" class="fixed top-0 right-0 left-0 z-50 flex justify-center w-full h-full bg-black bg-opacity-70">
+                        <div class="relative p-4 w-full max-w-md max-h-full mobile:w-64 top-16">
+                            <!-- Modal content -->
+                            <div class="relative rounded-lg shadow bg-white">
+                                <!-- Modal header -->
+                                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-600">
+                                    @if($request_access->isNotEmpty())
+                                    <h3 class="text-lg font-semibold text-gray-900 text-black">
+                                        Permintaan Akses Admin Pengguna
+                                    </h3>
+                                    @elseif($request_access->isEmpty())
+                                    <p class="text-center text-gray-500 text-gray-300">Tidak ada pengguna yang meminta akses admin.</p>
+                                    @endif
+                                    <button type="button" x-on:click="open = false" class="text-gray-400 bg-transparent hover:text-gray-900 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center hover:scale-125 transition-transform duration-200">
+                                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                </div>
+                                <!-- Modal body -->
+                                @foreach($request_access as $pop => $users)
+                                @foreach($users as $item)
+                                <div class="p-4 md:p-5">
+                                    <p class="text-[10px] text-gray-500 text-gray-400">Pengguna berikut telah mengajukan permintaan untuk mendapatkan akses admin. Silakan tinjau permintaan ini dan beri persetujuan atau tolak berdasarkan kebutuhan dan kriteria akses.</p>
+                                    <ul class="my-4 space-y-3">
+                                        <li class="flex items-center justify-between p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow bg-gray-600 hover:bg-gray-500 text-white">
+                                            <p class="text-white">{{ $item->username }}</p>
 
-                @if(auth()->user() && auth()->user()->role === 'admin' && !auth()->user()->request_access)
-                <div x-data="{ open: false }">
-                    <div class="relative inline-block p-2 flex justify-center items-center text-gray-500 rounded-lg h-10 hover:text-gray-900 hover:bg-gray-100 text-gray-400 hover:text-white hover:bg-gray-700" title="Permintaan Akses Admin Pengguna">
-                        <button x-on:click="open = ! open">
-                            <svg class="w-7 h-7" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" d="M10 19H5a1 1 0 0 1-1-1v-1a3 3 0 0 1 3-3h2m10 1a3 3 0 0 1-3 3m3-3a3 3 0 0 0-3-3m3 3h1m-4 3a3 3 0 0 1-3-3m3 3v1m-3-4a3 3 0 0 1 3-3m-3 3h-1m4-3v-1m-2.121 1.879-.707-.707m5.656 5.656-.707-.707m-4.242 0-.707.707m5.656-5.656-.707.707M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                            </svg>
-
-                            @if($request_access_count > 0)
-                            <span class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold leading-none text-white bg-orange-400 rounded-full">
-                                {{ $request_access_count }}
-                            </span>
-                            @endif
-                        </button>
-
-                        <!-- Main modal -->
-                        <div x-show="open"
-                            x-transition:enter="transition-opacity ease-out duration-300"
-                            x-transition:enter-start="opacity-0"
-                            x-transition:enter-end="opacity-100"
-                            x-transition:leave="transition-opacity ease-in duration-200"
-                            x-transition:leave-start="opacity-100"
-                            x-transition:leave-end="opacity-0"
-                            @keydown.escape.window="open = false"
-                            @click.self="open = false"
-                            tabindex="-1" aria-hidden="true" class="fixed top-0 right-0 left-0 z-50 flex justify-center w-full h-full bg-black bg-opacity-70">
-                            <div class="relative p-4 w-full max-w-md max-h-full mobile:w-64 top-16">
-                                <!-- Modal content -->
-                                <div class="relative rounded-lg shadow bg-[#0F0606]">
-                                    <!-- Modal header -->
-                                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-600">
-                                        @if($request_access->isNotEmpty())
-                                        <h3 class="text-lg font-semibold text-gray-900 text-white">
-                                            Permintaan Akses Admin Pengguna
-                                        </h3>
-                                        <button type="button" x-on:click="open = false" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center hover:bg-gray-600 hover:text-white">
-                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                            </svg>
-                                            <span class="sr-only">Close modal</span>
-                                        </button>
-                                    </div>
-                                    <!-- Modal body -->
-                                    <div class="p-4 md:p-5">
-                                        <p class="text-sm font-normal text-gray-500 text-gray-400">Pengguna berikut telah mengajukan permintaan untuk mendapatkan akses admin. Silakan tinjau permintaan ini dan beri persetujuan atau tolak berdasarkan kebutuhan dan kriteria akses.</p>
-                                        <ul class="my-4 space-y-3">
-                                            @foreach($request_access as $pop => $users)
-                                            @foreach($users as $item)
-                                            <li class="flex items-center justify-between p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow bg-gray-600 hover:bg-gray-500 text-white">
-                                                <p class="text-white">{{ $item->username }}</p>
-
+                                            <div class="flex items-center space-x-4">
                                                 <label for="toggleThree{{ $item->id }}" class="flex items-center cursor-pointer select-none text-dark text-white">
                                                     <div x-data="{ isChecked: {{ $item->role === 'admin' ? 'true' : 'false' }} }" class="relative">
                                                         <input
@@ -281,22 +285,22 @@
                                                             x-model="isChecked"
                                                             @change="toggleAccess({{ $item->id }}, isChecked)" />
 
-                                                        <div class="block h-8 rounded-full bg-gray-300 bg-dark-200 w-14"></div>
+                                                        <div class="block h-6 rounded-full bg-gray-300 bg-dark-200 w-10 peer-checked:bg-blue-500 transition"></div>
 
                                                         <div
-                                                            class="absolute flex items-center justify-center w-6 h-6 transition bg-white rounded-full dot bg-dark-500 left-1 top-1"
+                                                            class="absolute flex items-center justify-center w-4 h-4 transition bg-white rounded-full dot bg-dark-500 left-1 top-1"
                                                             :class="{ 'translate-x-full bg-blue-700': isChecked, 'bg-white': !isChecked }">
 
                                                             <!-- Icon Aktif (Checkbox diaktifkan) -->
                                                             <template x-if="isChecked">
-                                                                <svg width="11" height="8" viewBox="0 0 11 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path d="M10.0915 0.951972L10.0867 0.946075L10.0813 0.940568C9.90076 0.753564 9.61034 0.753146 9.42927 0.939309L4.16201 6.22962L1.58507 3.63469C1.40401 3.44841 1.11351 3.44879 0.932892 3.63584C0.755703 3.81933 0.755703 4.10875 0.932892 4.29224L0.932878 4.29225L0.934851 4.29424L3.58046 6.95832C3.73676 7.11955 3.94983 7.2 4.1473 7.2C4.36196 7.2 4.55963 7.11773 4.71406 6.9584L10.0468 1.60234C10.2436 1.4199 10.2421 1.1339 10.0915 0.951972ZM4.2327 6.30081L4.2317 6.2998C4.23206 6.30015 4.23237 6.30049 4.23269 6.30082L4.2327 6.30081Z" fill="white" stroke="white" stroke-width="0.4" />
+                                                                <svg width="8" height="6" viewBox="0 0 8 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path d="M7.0915 0.951972L7.0867 0.946075L7.0813 0.940568C6.90076 0.753564 6.61034 0.753146 6.42927 0.939309L3.16201 4.22962L1.58507 2.63469C1.40401 2.44841 1.11351 2.44879 0.932892 2.63584C0.755703 2.81933 0.755703 3.10875 0.932892 3.29224L0.932878 3.29225L0.934851 3.29424L2.58046 4.95832C2.73676 5.11955 2.94983 5.2 3.1473 5.2C3.36196 5.2 3.55963 5.11773 3.71406 4.9584L7.0468 1.60234C7.2436 1.4199 7.2421 1.1339 7.0915 0.951972ZM3.2327 5.30081L3.2317 5.2998C3.23206 5.30015 3.23237 5.30049 3.23269 5.30082L3.2327 5.30081Z" fill="white" stroke="white" stroke-width="0.4" />
                                                                 </svg>
                                                             </template>
 
                                                             <!-- Icon Tidak Aktif (Checkbox tidak diaktifkan) -->
                                                             <template x-if="!isChecked">
-                                                                <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                <svg class="w-3 h-3 stroke-current" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                                 </svg>
                                                             </template>
@@ -305,34 +309,25 @@
                                                 </label>
                                                 <form action="{{ route('admin.delete.access', ['id' => $item->id]) }}" method="POST" class="inline">
                                                     @csrf
-                                                    <button type="submit" class="p-2 rounded-full text-red-500 hover:text-red-700 hover:bg-red-100 transition">
-                                                        <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                    <button type="submit" class="p-1 rounded-full text-red-500 hover:text-red-700 hover:bg-red-200 bg-red-100 transition">
+                                                        <svg class="w-3 h-3 stroke-current" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                         </svg>
                                                     </button>
                                                 </form>
+                                            </div>
 
-                                            </li>
-                                            @endforeach
-                                            @endforeach
-                                        </ul>
-                                        @elseif($request_access->isEmpty())
-                                        <p class="text-center text-gray-500 text-gray-300">Tidak ada pengguna yang meminta akses admin.</p>
-                                        <button type="button" x-on:click="open = false" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm h-6 w-6 ms-auto inline-flex justify-center items-center hover:bg-gray-600 hover:text-white">
-                                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                            </svg>
-                                            <span class="sr-only">Close modal</span>
-                                        </button>
-                                        @endif
-                                    </div>
+                                        </li>
+                                    </ul>
                                 </div>
+                                @endforeach
+                                @endforeach
                             </div>
                         </div>
                     </div>
                 </div>
-                @endif
             </div>
+            @endif
         </div>
     </nav>
 
@@ -661,7 +656,46 @@
                 })
                 .then(data => {
                     const message = data.message; // Ambil pesan dari response
-                    alert(message); // Show alert with the message
+                    const alertType = data.alert_type; // Ambil tipe alert dari response
+
+                    const alertBox = document.createElement('div');
+
+                    // Styling alert
+                    alertBox.style.position = 'fixed';
+                    alertBox.style.top = '56px';
+                    alertBox.style.right = '20px';
+                    alertBox.style.padding = '12px 20px';
+                    alertBox.style.borderRadius = '8px';
+                    alertBox.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+                    alertBox.style.zIndex = '1000';
+                    alertBox.style.opacity = '0';
+                    alertBox.style.transform = 'translateY(-10px)';
+                    alertBox.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+
+                    // Pilih warna berdasarkan tipe alert
+                    if (alertType === 'warning') {
+                        alertBox.style.backgroundColor = '#FFC107'; // Kuning (Warning)
+                        alertBox.style.color = 'black';
+                    } else if (alertType === 'success') {
+                        alertBox.style.backgroundColor = '#4CAF50'; // Hijau (Success)
+                        alertBox.style.color = 'white';
+                    }
+
+                    alertBox.innerText = message;
+
+                    document.body.appendChild(alertBox);
+                    setTimeout(() => {
+                        alertBox.style.opacity = '1';
+                        alertBox.style.transform = 'translateY(0)';
+                    }, 100);
+
+                    setTimeout(() => {
+                        alertBox.style.opacity = '0';
+                        alertBox.style.transform = 'translateY(-10px)';
+                        setTimeout(() => {
+                            alertBox.remove();
+                        }, 500);
+                    }, 3000);
                 })
                 .catch(error => console.error('Error:', error));
         }

@@ -97,9 +97,14 @@ class LoginUserController extends Controller
     public function requestAccess()
     {
         $userId = Auth::id();
-        DB::table('users')->where('id', $userId)->update(['request_access' => true]);
+        $user = User::find($userId);
 
-        return response()->json(['message' => 'Permintaan akses telah dikirim.']);
+            if ($user->request_access) {
+                return response()->json(['message' => 'Permintaan akses sudah pernah dikirim.', 'alert_type' => 'warning']);
+            } else {
+                DB::table('users')->where('id', $userId)->update(['request_access' => true]);
+                return response()->json(['message' => 'Permintaan akses telah dikirim.', 'alert_type' => 'success']);
+            }
     }
 
     public function approveAccess($userId)
