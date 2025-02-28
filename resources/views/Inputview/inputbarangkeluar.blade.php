@@ -112,7 +112,7 @@
                     </button>
                 </div>
                 <div class="flex items-center relative ml-2 mobile:hidden tablet:hidden" x-data="barcodeScannerApp()" x-init="initScanner()">
-                    <div class="flex items-center space-x-4" title="Tombol Scanner" >
+                    <div class="flex items-center space-x-4" title="Tombol Scanner">
                         <!-- Toggle Button -->
                         <button
                             @click.prevent="toggleScanner"
@@ -243,7 +243,7 @@
                                             x-transition:leave="transition ease-in duration-200"
                                             x-transition:leave-start="opacity-100 transform scale-100"
                                             x-transition:leave-end="opacity-0 transform scale-90"
-                                            tabindex="-1" @keydown.escape.window="open = false" @click.self="open = false" class="fixed inset-0 z-50 flex items-center justify-center w-4/5 md:w-full">
+                                            tabindex="-1" @keydown.escape.window="open = false" @click.self="open = false" class="fixed inset-0 z-50 flex items-center justify-center w-full h-screen">
                                             <div class="relative w-full max-w-[300px] max-h-full rounded-lg bg-zinc-700 shadow-[0px_50px_60px_20px_rgba(0,0,0,0.3)]">
                                                 <div class="flex items-center justify-between p-2 border-b rounded-t border-gray-600">
                                                     <button type="button" x-on:click="open = false" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center hover:bg-gray-600 hover:text-white">
@@ -327,134 +327,59 @@
         @endphp
 
         @if ($item)
-        <form id="order" action="{{ route('barangkeluar.store') }}" method="POST" enctype="multipart/form-data">
+        <form id="order" action="{{ route('barangkeluar.store') }}" method="POST" enctype="multipart/form-data" class="w-full mx-auto mt-16 bg-white p-6 rounded-lg shadow-md">
             @csrf
-            <div class="flex border-b bg-body mt-24 mobile:flex-row mobile:px-10 tablet:px-20 laptop:px-20">
-                <a class="text-3xl font-bold font-roboto text-gray-800">Order.</a>
-            </div>
 
-            <div class="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-10">
-                <div class="px-4 pt-8 font-roboto">
-                    <p class="text-xl font-medium">Ringkasan Pesanan</p>
-                    <p class="text-gray-400">Cek daftar barang dan pilih pilihan yang sesuai.</p>
-                    <!-- Product -->
-                    <div class="mt-8 space-y-3 rounded-lg border bg-white px-4 py-4 max-w-xs items-center truncate mobile:px-4">
+            <h2 class="text-3xl font-bold text-gray-800 border-b pb-4 mb-6">Order</h2>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Ringkasan Pesanan -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Ringkasan Pesanan</h3>
+                    <div class="space-y-4">
                         @foreach ($order as $item)
-                        <div class="grid grid-cols-3 gap-4 p-1 pr-8 rounded-lg bg-zinc-50 border-2">
-
-                            <input type="hidden" name="id[{{ $item->id }}]" value="{{ $item->id }}">
-                            <input type="hidden" name="qr_code[{{ $item->id }}]" value="{{ $item->qr_code }}">
-
-                            <div class="flex items-center justify-start col-span-1">
-                                <img class="m-2 h-28 w-28 flex col-span-1 rounded-md border object-cover object-center" src="{{ asset('storage/' . $item->foto) }}" />
-                            </div>
-                            <div class="col-span-2 flex flex-col justify-between w-full py-2 truncate space-y-1">
-                                <span class="font-semibold text-sm">{{$item->nama_barang}} - {{$item->seri}}</span>
-                                <span class="float-right text-gray-400 text-sm">Stok : {{$item->stok}}</span>
-                                <p class="text-base font-bold">{{$item->lokasi}}</p>
-
-                                <a href="{{ url('/hapus_order/' . $item->qr_code) }}" class="absolute ml-40 pl-2 z-50 text-red-900 hover:text-red-900 focus:outline-none">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 448 512" stroke="currentColor" stroke-width="10">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M170.5 51.6L151.5 80l145 0-19-28.4c-1.5-2.2-4-3.6-6.7-3.6l-93.7 0c-2.7 0-5.2 1.3-6.7 3.6zm147-26.6L354.2 80 368 80l48 0 8 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-8 0 0 304c0 44.2-35.8 80-80 80l-224 0c-44.2 0-80-35.8-80-80l0-304-8 0c-13.3 0-24-10.7-24-24S10.7 80 24 80l8 0 48 0 13.8 0 36.7-55.1C140.9 9.4 158.4 0 177.1 0l93.7 0c18.7 0 36.2 9.4 46.6 24.9zM80 128l0 304c0 17.7 14.3 32 32 32l224 0c17.7 0 32-14.3 32-32l0-304L80 128zm80 64l0 208c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-208c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0l0 208c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-208c0-8.8 7.2-16 16-16s16 7.2 16 16zm80 0l0 208c0 8.8-7.2 16-16 16s-16-7.2-16-16l0-208c0-8.8 7.2-16 16-16s16 7.2 16 16z" />
-                                    </svg>
-                                </a>
-
-                                <div x-data="quantityInput({{ $item->stok }})" class="relative flex items-center mt-2 mr-0 mt-9 mobile:mt-10 border-0">
-                                    <!-- Auto Fill Quantity for 'unit' and 'pcs' -->
+                        <div class="flex items-center gap-4 p-4 border rounded-lg shadow-sm bg-gray-50">
+                            <img class="h-24 w-24 rounded-md border object-cover" src="{{ asset('storage/' . $item->foto) }}" />
+                            <div class="flex flex-col flex-1">
+                                <span class="font-medium text-gray-800">{{$item->nama_barang}} - {{$item->seri}}</span>
+                                <span class="text-sm text-gray-500">Stok: {{$item->stok}}</span>
+                                <span class="text-gray-600 font-bold">{{$item->lokasi}}</span>
+                                <div class="mt-2 flex items-center space-x-2">
+                                    <span class="text-gray-600">Jumlah:</span>
                                     @if ($item->satuan === 'unit' || $item->satuan === 'pcs')
+                                    <span class="text-gray-800 font-semibold">1</span>
                                     <input type="hidden" name="jumlah[{{ $item->id }}]" value="1" />
-                                    <span class="text-gray-500 text-sm">Jumlah: 1</span>
+                                    @else
+                                    <input type="number" name="jumlah[{{ $item->id }}]" value="1" min="1" max="{{ $item->stok }}" class="w-16 text-center border rounded-md py-1" />
                                     @endif
-                                    <!-- Input Quantity for 'roll' and 'pack' -->
-                                    @if ($item->satuan === 'roll' || $item->satuan === 'pack')
-                                    <button type="button" @click="decrement" class="p-1 rounded-l-lg bg-gray-700 hover:bg-gray-600 hover:bg-gray-200 rounded-s-lg px-2 pl-4 h-7 w-8 mobile:h-5 mobile:w-6 focus:outline-none">
-                                        <svg class="w-2 h-2 mobile:w-1.5 mobile:h-1.5 mobile:-ml-1 items-center text-gray-900 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16" />
-                                        </svg>
-                                    </button>
-
-                                    <input type="number"
-                                        name="jumlah[{{ $item->id }}]"
-                                        x-model="quantity"
-                                        @input="quantity = isNaN(quantity) ? 0 : Math.min(quantity, maxQuantity)"
-                                        id="quantity-input"
-                                        class="bg-gray-50 focus:outline-none focus:ring-0 border-0 h-7 p-0 text-center text-gray-900 text-sm mobile:text-xs block w-9 py-2.5 mobile:h-2 mobile:w-5 bg-gray-700 placeholder-gray-400 text-white"
-                                        placeholder="{{ $item->stok }}"
-                                        min="0" />
-
-                                    <button type="button" @click="increment" class="p-1 rounded-r-lg bg-gray-700 hover:bg-gray-600 hover:bg-gray-200 rounded-e-lg px-2 h-7 w-8 mobile:h-5 mobile:w-6 border-none focus:outline-none">
-                                        <svg class="w-2 h-2 mobile:w-1.5 mobile:h-1.5 mobile:-ml-1 text-gray-900 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16" />
-                                        </svg>
-                                    </button>
-                                    @endif
-                                    @error('jumlah.*')
-                                    <p class="text-red-500 text-[10px]">Number cannot be empty</p>
-                                    @enderror
                                 </div>
                             </div>
+                            <a href="{{ url('/hapus_order/' . $item->qr_code) }}" class="text-red-500 hover:text-red-700">
+                                &#10005;
+                            </a>
                         </div>
                         @endforeach
                     </div>
                 </div>
-                <div class="mt-10 bg-zinc-50 px-4 py-4 lg:mt-0 font-roboto rounded-md max-w-sm items-center">
-                    <div class="border-2 rounded-md p-2">
-                        <p class="text-xl font-medium mt-2">Konfirmasi Proses</p>
-                        <p class="text-gray-400">Pastikan untuk menyelesaikannya dengan memberikan informasi yang diperlukan.</p>
-                        <label class="mt-4 mb-2 block text-sm font-medium">Nama Customer</label>
-                        <div class="relative">
-                            <div class="flex items-center">
-                                <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '');" placeholder="ID" name="ID" class="w-1/2 rounded-md border border-gray-200 px-4 py-3 pl-8 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" />
-                                <span class="mx-2 text-lg">-</span>
-                                <input type="text" placeholder="Nama Customer" name="namacustomer" class="w-1/2 rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" />
-                            </div>
-                            <div class="absolute inset-y-0 left-0 z-50 inline-flex items-center px-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke="currentColor" stroke-width="2" d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="flex justify-between">
-                            @error('ID')
-                            <p class="text-red-500 text-[10px]">{{$message}}</p>
-                            @enderror
-                            @error('namacustomer')
-                            <p class="text-red-500 text-[10px]">{{$message}}</p>
-                            @enderror
-                        </div>
-                        <label class="mt-4 mb-2 block text-sm font-medium">Alamat</label>
-                        <div class="relative">
-                            <input type="text" name="lokasi" class="w-full rounded-md border border-gray-200 px-4 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500" />
-                            <div class="absolute inset-y-0 left-0 inline-flex items-center px-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path d="M8 0a7.992 7.992 0 0 0-6.583 12.535 1 1 0 0 0 .12.183l.12.146c.112.145.227.285.326.4l5.245 6.374a1 1 0 0 0 1.545-.003l5.092-6.205c.206-.222.4-.455.578-.7l.127-.155a.934.934 0 0 0 .122-.192A8.001 8.001 0 0 0 8 0Zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
-                                </svg>
-                                </svg>
-                            </div>
-                            @error('lokasi')
-                            <p class="text-red-500 text-[10px]">{{$message}}</p>
-                            @enderror
-                        </div>
-                        <label class="mt-4 mb-2 block text-sm font-medium">Keterangan (opsional)</label>
-                        <div class="relative">
-                            <div class="relativeflex-shrink-0">
-                                <textarea name="keterangan" rows="1" class="w-full rounded-md border border-gray-200 px-2 py-3 pl-11 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"></textarea>
-                                <div class="absolute inset-y-0 left-0 inline-flex items-center px-3">
-                                    <svg class="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z" />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mt-6 border-t border-b py-2">
-                            @foreach ($order as $item)
-                            <div class="flex items-center justify-between">
-                                <p class="text-sm font-medium text-gray-900">{{$item->nama_barang}} - {{$item->seri}} </p>
-                            </div>
-                            @endforeach
-                        </div>
-                        <button type="submit" class="mt-4 mb-2 w-full rounded-md bg-zinc-900 hover:bg-zinc-700 px-6 py-3 font-medium text-white">Place Order</button>
+
+                <!-- Konfirmasi Proses -->
+                <div class="p-6 bg-gray-50 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-semibold mb-4">Konfirmasi Proses</h3>
+                    <p class="text-sm text-gray-600 mb-4">Pastikan untuk mengisi informasi dengan benar.</p>
+
+                    <label class="block font-medium text-sm mb-1">Nama Customer</label>
+                    <div class="flex gap-2">
+                        <input type="text" placeholder="ID" name="ID" class="w-1/3 border rounded-md px-3 py-2" />
+                        <input type="text" placeholder="Nama Customer" name="namacustomer" class="w-2/3 border rounded-md px-3 py-2" />
                     </div>
+
+                    <label class="block font-medium text-sm mt-4 mb-1">Alamat</label>
+                    <input type="text" name="lokasi" class="w-full border rounded-md px-3 py-2" placeholder="Alamat lengkap" />
+
+                    <label class="block font-medium text-sm mt-4 mb-1">Keterangan (opsional)</label>
+                    <textarea name="keterangan" rows="3" class="w-full border rounded-md px-3 py-2" placeholder="Tambahkan catatan jika perlu..."></textarea>
+
+                    <button type="submit" class="mt-6 w-full bg-zinc-900 hover:bg-zinc-700 text-white font-semibold py-3 rounded-md transition">Place Order</button>
                 </div>
             </div>
         </form>

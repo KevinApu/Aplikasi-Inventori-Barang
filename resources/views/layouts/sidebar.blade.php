@@ -17,9 +17,8 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="antialiased bg-body" x-data="{ isSidebarOpen: false }">
-    <nav class="bg-[#0F0606] text-white shadow-lg fixed top-0 w-full left-0 z-30">
-
+<body class="antialiased bg-body" x-data="{ isSidebarOpen: true }">
+    <nav class="bg-[#0F0606] shadow-lg fixed top-0 w-full left-0 z-30">
         <div class="w-full px-4 relative flex justify-end h-16 items-center">
             @if(auth()->user() && auth()->user()->role === 'admin')
             <div x-data="{ open: false }" class="relative inline-block">
@@ -331,19 +330,27 @@
         </div>
     </nav>
 
-    <aside x-data="{ isSidebarOpen: false}" :class="{'w-60': isSidebarOpen, 'w-20': !isSidebarOpen}" class="fixed top-0 -left-2 z-50 h-screen transition-all duration-300 ease-in-out translate-x-0 text-sm flex flex-col justify-between" aria-label="Sidebar">
+    <aside :class="{'w-60': isSidebarOpen, 'w-20': !isSidebarOpen}" class="fixed top-0 -left-2 z-50 h-screen transition-all duration-300 ease-in-out translate-x-0 text-sm flex flex-col justify-between" aria-label="Sidebar">
         <div class="h-full px-3 py-2 overflow-y-auto bg-[#0F0606] flex-grow">
-
-            <div @click="isSidebarOpen = !isSidebarOpen" class="flex items-center py-2.5 px-2">
+            <div class="flex items-center py-2.5 px-2 gap-3 w-full">
                 @if ($foto_profile)
                 <img src="/storage/{{ $foto_profile }}" alt="Profile Picture" class="w-9 h-9 mobile:w-4.5 mobile:h-4.5 rounded-full object-cover">
                 @else
-                <svg class="w-9 h-9 text-gray-500 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                <svg class="w-9 h-9 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                     <path fill-rule="evenodd" d="M12 20a7.966 7.966 0 0 1-5.002-1.756l.002.001v-.683c0-1.794 1.492-3.25 3.333-3.25h3.334c1.84 0 3.333 1.456 3.333 3.25v.683A7.966 7.966 0 0 1 12 20ZM2 12C2 6.477 6.477 2 12 2s10 4.477 10 10c0 5.5-4.44 9.963-9.932 10h-.138C6.438 21.962 2 17.5 2 12Zm10-5c-1.84 0-3.333 1.455-3.333 3.25S10.159 13.5 12 13.5c1.84 0 3.333-1.455 3.333-3.25S13.841 7 12 7Z" clip-rule="evenodd" />
                 </svg>
                 @endif
-                <div :class="{'hidden': !isSidebarOpen}" class="text-white absolute mx-9 align-middle px-3 whitespace-nowrap">{{ Auth::user()->username }}</div>
+                <div class="flex items-center justify-between w-full">
+                    <p :class="{'hidden': !isSidebarOpen}" class="text-white px-3 whitespace-nowrap">{{ Auth::user()->username }}</p>
+                    <svg :class="{'rotate-180': isSidebarOpen}" xmlns="http://www.w3.org/2000/svg" @click="isSidebarOpen = !isSidebarOpen" class="w-6 h-6 text-gray-300 hover:text-white transition-transform duration-300 ease-in-out transform hover:scale-110 active:scale-95 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" title="Buka/Tutup Menu">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M5 12l14 0" />
+                        <path d="M13 18l6 -6" />
+                        <path d="M13 6l6 6" />
+                    </svg>
+                </div>
             </div>
+
 
 
 
@@ -514,7 +521,7 @@
             </div>
         </div>
     </aside>
-    <div class="flex-1 p-4 ml-20 mt-16 z-50 transition-transform duration-300">
+    <div :class="{'ml-60': isSidebarOpen, 'ml-20': !isSidebarOpen}" class="flex-1 p-4 mt-16 z-50 transition-all duration-300 ease-in-out translate-x-0">
         <div>
             {{ $slot }}
         </div>

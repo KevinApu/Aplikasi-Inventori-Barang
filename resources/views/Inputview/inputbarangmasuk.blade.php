@@ -135,8 +135,9 @@
                         </div>
                     </div>
                 </div>
-                <div x-data="{ today: (new Date()).toISOString().split('T')[0], selectedDate: (new Date()).toISOString().split('T')[0] }">
-                    <input type="date" :value="today" x-model="selectedDate" name="tglmasuk" class="mt-2 mb-2 w-48 px-3 py-2 bg-transparent border-b shadow-sm focus:outline-none focus:border-indigo-500 ring-0" />
+                <div x-data="{ today: (new Date()).toISOString().split('T')[0], selectedDate: (new Date()).toISOString().split('T')[0] }" class="mt-4">
+                    <label for="tglmasuk" class="block text-sm font-medium text-gray-700">Tanggal Masuk</label>
+                    <input type="date" :value="today" x-model="selectedDate" name="tglmasuk" id="tglmasuk" class="mt-1 w-52 px-3 py-2 border rounded-lg shadow-md bg-white text-gray-700 transition duration-200 ease-in-out hover:bg-gray-50 cursor-pointer" />
                 </div>
             </main>
             <main class="flex-1 px-6 mobile:px-1 tablet:px-3 py-0 pb-6 mobile:pb-1 md:-mt-40">
