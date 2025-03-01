@@ -3,9 +3,7 @@
         <div class="flex items-center justify-between border-b border-primary-darker">
             <h1 class="text-2xl font-semibold font-heading text-gray-500">Dashboard</h1>
         </div>
-
-
-
+        
         <!-- <a href="{{ route('update_rekap_stok') }}" class="block p-4 rounded-md bg-red-600">refresh</a> -->
 
 

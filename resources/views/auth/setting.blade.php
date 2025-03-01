@@ -18,7 +18,7 @@
 
 <body>
     <div class="container mx-auto p-4">
-        <a href="{{ url()->previous() }}"
+        <a href="{{ url('/') }}"
             class="flex items-center mb-2 text-gray-700 hover:text-gray-900 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg border border-gray-300 transition duration-200">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
@@ -515,13 +515,14 @@
                         </div>
                         @endif
                         <!-- Form Ganti Foto Profil -->
-                        <form action="{{ route('profile_picture.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                        <form action="{{ route('profile_picture.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4"
+                            x-data="{ imagePreview: '{{ $foto_profile ? asset('storage/' . $foto_profile) : null }}', fileSelected: false }">
                             @csrf
                             <!-- Menampilkan Foto Profil yang sudah ada dan Preview Gambar -->
-                            <div class="flex justify-center items-center" x-data="{ imagePreview: '{{ $foto_profile ? asset('storage/' . $foto_profile) : null }}' }">
+                            <div class="flex justify-center items-center">
                                 <div class="relative">
                                     <!-- Gambar Preview -->
-                                    <img x-show="imagePreview" :src="imagePreview" class="w-32 h-32 rounded-full object-cover">
+                                    <img x-show="imagePreview" :src="imagePreview" class="w-32 h-32 rounded-full object-cover shadow-lg" alt="Foto Profil">
 
                                     <!-- Jika tidak ada foto, tampilkan ikon default -->
                                     <template x-if="!imagePreview">
@@ -532,15 +533,17 @@
 
                                     <!-- Button untuk memilih gambar -->
                                     <label for="profile_picture" class="absolute bottom-0 right-0 bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center cursor-pointer">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                             <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
                                             <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
                                             <path d="M16 5l3 3" />
                                         </svg>
                                     </label>
+
                                     <!-- Input file untuk memilih gambar -->
-                                    <input type="file" id="profile_picture" name="profile_picture" class="hidden" accept="image/*" x-on:change="imagePreview = URL.createObjectURL($event.target.files[0])">
+                                    <input type="file" id="profile_picture" name="profile_picture" class="hidden" accept="image/*"
+                                        x-on:change="imagePreview = URL.createObjectURL($event.target.files[0]); fileSelected = true;">
                                 </div>
                             </div>
                             @error('profile_picture')
@@ -548,11 +551,17 @@
                                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                             </div>
                             @enderror
+
+                            <!-- Tombol Submit -->
                             <div class="mt-4">
-                                <button type="submit" class="w-full py-3 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Ganti Foto Profil</button>
+                                <button type="submit"
+                                    class="w-full py-3 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 
+                                            transition disabled:opacity-50 disabled:cursor-not-allowed"
+                                    x-bind:disabled="!fileSelected"
+                                    x-text="fileSelected ? 'Ganti Foto Profil' : 'Pilih Foto Profil'">
+                                </button>
                             </div>
                         </form>
-
                     </div>
                 </div>
             </div>

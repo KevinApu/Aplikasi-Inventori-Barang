@@ -330,7 +330,9 @@
         </div>
     </nav>
 
-    <aside :class="{'w-60': isSidebarOpen, 'w-20': !isSidebarOpen}" class="fixed top-0 -left-2 z-50 h-screen transition-all duration-300 ease-in-out translate-x-0 text-sm flex flex-col justify-between" aria-label="Sidebar">
+    <aside :class="{'w-60': isSidebarOpen, 'w-20': !isSidebarOpen}"
+        class="fixed top-0 left-0 z-50 h-screen transition-all duration-300 ease-in-out text-sm flex flex-col justify-between bg-gray-900 overflow-hidden shadow-lg"
+        aria-label="Sidebar">
         <div class="h-full px-3 py-2 overflow-y-auto bg-[#0F0606] flex-grow">
             <div class="flex items-center py-2.5 px-2 gap-3 w-full">
                 @if ($foto_profile)
@@ -341,8 +343,25 @@
                 </svg>
                 @endif
                 <div class="flex items-center justify-between w-full">
-                    <p :class="{'hidden': !isSidebarOpen}" class="text-white px-3 whitespace-nowrap">{{ Auth::user()->username }}</p>
-                    <svg :class="{'rotate-180': isSidebarOpen}" xmlns="http://www.w3.org/2000/svg" @click="isSidebarOpen = !isSidebarOpen" class="w-6 h-6 text-gray-300 hover:text-white transition-transform duration-300 ease-in-out transform hover:scale-110 active:scale-95 cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" title="Buka/Tutup Menu">
+                    <a href="{{ url('/settings') }}"
+                        class="flex flex-col transition-all duration-300 ease-in-out"
+                        :class="{'opacity-0 scale-95 w-0 overflow-hidden': !isSidebarOpen, 'opacity-100 scale-100 w-auto': isSidebarOpen}">
+                        <p class="text-white px-2 whitespace-nowrap capitalize text-[12px] font-semibold">
+                            {{ Auth::user()->username }}
+                        </p>
+                        <p class="px-2 py-0.5 text-[10px] rounded-full w-max shadow-sm font-medium
+                            {{ Auth::user()->role == 'admin' ? 'text-red-500' : 
+                            (Auth::user()->role == 'superadmin' ? 'text-blue-500' : 'text-gray-500') }}" title="Role">
+                            {{ Auth::user()->role == 'admin' ? 'Admin' : (Auth::user()->role == 'superadmin' ? 'Superadmin' : 'User') }}
+                        </p>
+                    </a>
+
+
+                    <!-- Ikon Toggle Sidebar -->
+                    <svg :class="{'rotate-180': isSidebarOpen}" xmlns="http://www.w3.org/2000/svg"
+                        @click="isSidebarOpen = !isSidebarOpen"
+                        class="w-6 h-6 text-gray-300 hover:text-white transition-transform duration-300 ease-in-out transform hover:scale-110 active:scale-95 cursor-pointer"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" title="Buka/Tutup Menu">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                         <path d="M5 12l14 0" />
                         <path d="M13 18l6 -6" />
