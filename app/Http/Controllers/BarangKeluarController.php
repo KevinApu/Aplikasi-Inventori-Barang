@@ -51,12 +51,10 @@ class BarangKeluarController extends Controller
             $nama_customer = $request->input('ID') . '_' . $request->input('namacustomer'); // Cari barang berdasarkan ID
             $qr_code_value = isset($qr_code[$id]) ? $qr_code[$id] : null; // Ambil qr_code yang sesuai dengan ID
 
-
             $exists = BarangKeluarModel::where('id', $id)
                 ->where('qr_code', $qr_code_value)
                 ->where('pop', Auth::user()->pop) // Memeriksa pop juga
                 ->exists();
-
 
             if ($exists) {
                 // Jika kombinasi ID dan QR Code sudah ada, tampilkan error
@@ -105,7 +103,6 @@ class BarangKeluarController extends Controller
                     $stokGudang->save();
                 }
 
-
                 $rekap = RekapModel::where('id', $id)->first();
                 if ($rekap) {
                     $rekap->jumlah = $barangMasuk->jumlah; // Update jumlah dengan penambahan
@@ -120,7 +117,6 @@ class BarangKeluarController extends Controller
                     $barangMasuk->delete();
                 }
             }
-
 
             if ($barangMasuk->satuan == 'pcs' || $barangMasuk->satuan == 'meter' || $barangMasuk->satuan == 'unit') {
                 $barangMasuk->jumlah -= $jumlah;

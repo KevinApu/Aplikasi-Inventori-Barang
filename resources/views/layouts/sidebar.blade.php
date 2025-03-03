@@ -356,7 +356,6 @@
                         </p>
                     </a>
 
-
                     <!-- Ikon Toggle Sidebar -->
                     <svg :class="{'rotate-180': isSidebarOpen}" xmlns="http://www.w3.org/2000/svg"
                         @click="isSidebarOpen = !isSidebarOpen"
@@ -369,9 +368,6 @@
                     </svg>
                 </div>
             </div>
-
-
-
 
             <ul class="space-y-2 font-medium">
                 @if(auth()->user() && auth()->user()->role !== 'superadmin')
@@ -389,7 +385,7 @@
                 <div x-data="{ openDropdown1: false, openDropdown2: false }">
                     @if(auth()->user() && auth()->user()->role === 'admin' && (auth()->user()->request_access === 0 || auth()->user()->request_access === 1))
                     <li class="mb-2" title="Barang Masuk">
-                        <div class="flex items-center rounded-lg text-white">
+                        <div class="rounded-lg text-white">
                             <button @click="openDropdown1 = !openDropdown1; if (!isSidebarOpen) { isSidebarOpen = true;}" class="flex items-center w-full px-2 py-2 rounded-lg {{ request()->routeIs('input_barang_masuk.view') || request()->routeIs('tabel_barang_masuk') ? 'border-l-4 border-red-700 bg-gradient-to-r from-red-500' : 'bg-[#0F0606] hover:bg-gray-600' }}">
                                 <svg class="flex-shrink-0 w-10 h-10 mobile:h-8 mobile:w-8 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M5.027 10.9a8.729 8.729 0 0 1 6.422-3.62v-1.2A2.061 2.061 0 0 1 12.61 4.2a1.986 1.986 0 0 1 2.104.23l5.491 4.308a2.11 2.11 0 0 1 .588 2.566 2.109 2.109 0 0 1-.588.734l-5.489 4.308a1.983 1.983 0 0 1-2.104.228 2.065 2.065 0 0 1-1.16-1.876v-.942c-5.33 1.284-6.212 5.251-6.25 5.441a1 1 0 0 1-.923.806h-.06a1.003 1.003 0 0 1-.955-.7A10.221 10.221 0 0 1 5.027 10.9Z" />
@@ -399,7 +395,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 15l-7-7-7 7" />
                                 </svg>
                             </button>
-                            <ul x-show="openDropdown1" @click.away="openDropdown1 = false" class="left-0 top-full mt-2 rounded-md shadow-lg w-full transition-all duration-300 ease-in-out transform origin-top">
+                            <ul x-show="openDropdown1" @click.away="openDropdown1 = false" class="left-0 top-full mt-2 rounded-md shadow-lg w-full transition-all duration-800 ease-in-out">
                                 <li><a href="{{ route('input_barang_masuk.view') }}" @click="isSidebarOpen = false" class="block px-4 py-2 text-white hover:bg-gray-600 rounded-md">Input</a></li>
                                 <li><a href="{{ route('tabel_barang_masuk') }}" @click="isSidebarOpen = false" class="block px-4 py-2 text-white hover:bg-gray-600 rounded-md">Data</a></li>
                             </ul>
@@ -420,7 +416,7 @@
                     </li>
                     @endif
                     <li title="Barang Keluar">
-                        <div class="flex items-center rounded-lg text-white">
+                        <div class="rounded-lg text-white">
                             <button @click="openDropdown2 = !openDropdown2; if (!isSidebarOpen) { isSidebarOpen = true;}" class="flex items-center w-full px-2 py-2 mt-2 rounded-lg {{ request()->routeIs('input_barang_keluar') || request()->routeIs('tabel_barang_keluar') ? 'border-l-4 border-red-700 bg-gradient-to-r from-red-500' : 'bg-[#0F0606] hover:bg-gray-600' }}">
                                 <svg class="flex-shrink-0 w-10 h-10 mobile:w-8 mobile:h-8 text-blue-800 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M14.502 7.046h-2.5v-.928a2.122 2.122 0 0 0-1.199-1.954 1.827 1.827 0 0 0-1.984.311L3.71 8.965a2.2 2.2 0 0 0 0 3.24L8.82 16.7a1.829 1.829 0 0 0 1.985.31 2.121 2.121 0 0 0 1.199-1.959v-.928h1a2.025 2.025 0 0 1 1.999 2.047V19a1 1 0 0 0 1.275.961 6.59 6.59 0 0 0 4.662-7.22 6.593 6.593 0 0 0-6.437-5.695Z" />
@@ -498,7 +494,7 @@
                 <li class="relative" title="Permintaan Barang">
                     <a href="{{ route('permintaan_barang.superadmin') }}"
                         class="flex items-center p-2 rounded-lg text-white 
-        {{ request()->routeIs('permintaan_barang.superadmin') ? 'border-l-4 border-red-700 bg-gradient-to-r from-red-500' : 'bg-zinc-900 hover:bg-gray-600' }}">
+        {{ request()->routeIs('permintaan_barang.superadmin') ? 'border-l-4 border-red-700 bg-gradient-to-r from-red-500' : 'bg-[#0F0606] hover:bg-gray-600' }}">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler w-9 h-9 mobile:h-7 mobile:w-7 icons-tabler-outline icon-tabler-pointer-question">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                             <path d="M15.062 12.506l-.284 -.284l3.113 -2.09a1.2 1.2 0 0 0 -.309 -2.228l-13.582 -3.904l3.904 13.563a1.2 1.2 0 0 0 2.228 .308l2.09 -3.093l1.278 1.278" />
