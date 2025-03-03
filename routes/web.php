@@ -35,7 +35,9 @@ Route::get('/coba', function () {
 
 Route::middleware(['auth', 'clear.temp_items'])->group(function () {
     Route::middleware(['clear.temp_items'])->group(function () {
-        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+        Route::middleware(['not_super_admin'])->group(function () {
+            Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+        });
 
         Route::middleware(['admin'])->group(function () {
             Route::get('/input_barang_masuk', [BarangMasukController::class, 'create'])->name('input_barang_masuk.view');

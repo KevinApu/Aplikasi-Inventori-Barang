@@ -43,42 +43,54 @@
             <!-- Account Settings -->
             <div x-show="activeTab === 'permintaan'" class="space-y-6">
                 <h2 class="text-xl mobile:text-sm font-semibold text-gray-800 mb-4">Form Permintaan Barang</h2>
-                <form action="{{ route('request_barang.post') }}" method="post" class="space-y-4">
+                <form action="{{ route('request_barang.post') }}" method="post" class="space-y-6">
                     @csrf
-                    <!-- Daftar Barang (Repeating Group for multiple items) -->
                     <div id="items" class="space-y-4">
                         @foreach($barangKurang as $pop => $items)
                         @foreach($items as $item)
-                        <div class="mobile:grid mobile:grid-cols-2 flex space-x-4 item-row mobile:space-x-2">
-                            <div class="w-1/2 mobile:w-full">
-                                <label for="nama_barang" class="block text-gray-600 font-medium">Nama Barang</label>
-                                <input type="text" name="nama_barang[]" value="{{ $item['nama_barang'] }}" placeholder="Nama Barang" class="mobile:text-[10px] mobile:-ml-1 w-full border border-gray-300 p-2 mobile:p-1 rounded" required>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-gray-100 p-4 rounded-lg shadow-sm item-row">
+                            <div>
+                                <label for="nama_barang" class="block text-gray-700 font-medium">Nama Barang</label>
+                                <input type="text" name="nama_barang[]" value="{{ $item['nama_barang'] }}" placeholder="Nama Barang" class="w-full border border-gray-300 p-2 rounded focus:ring focus:ring-blue-300" required>
                             </div>
-                            <div class="w-1/2 mobile:w-full">
-                                <label for="seri" class="block text-gray-600 font-medium">Seri</label>
-                                <input type="text" name="seri[]" value="{{ $item['seri'] }}" placeholder="Seri" class="mobile:text-[10px] mobile:-ml-1 w-full border border-gray-300 p-2 mobile:p-1 rounded" required>
+                            <div>
+                                <label for="seri" class="block text-gray-700 font-medium">Seri</label>
+                                <input type="text" name="seri[]" value="{{ $item['seri'] }}" placeholder="Seri" class="w-full border border-gray-300 p-2 rounded focus:ring focus:ring-blue-300" required>
                             </div>
-                            <div class="w-1/4 mobile:w-full">
-                                <label for="jumlah" class="block text-gray-600 font-medium">Jumlah</label>
-                                <input type="number" name="jumlah[]" value="{{ $item['jumlah'] }}" placeholder="Jumlah" class="mobile:text-[10px] mobile:-ml-3 w-full border border-gray-300 p-2 mobile:p-1 rounded" min="1" required>
+                            <div>
+                                <label for="jumlah" class="block text-gray-700 font-medium">Jumlah</label>
+                                <input type="number" name="jumlah[]" value="{{ $item['jumlah'] }}" placeholder="Jumlah" class="w-full border border-gray-300 p-2 rounded focus:ring focus:ring-blue-300" min="1" required>
                             </div>
-                            <div class="w-1/4 mobile:w-full">
-                                <label for="keterangan" class="block text-gray-600 font-medium">Keterangan</label>
-                                <input type="text" name="keterangan[]" value="{{ $item['keterangan'] }}" placeholder="Keterangan (opsional)" class="mobile:text-[10px] mobile:-ml-1 w-full border border-gray-300 p-2 mobile:p-1 rounded">
+                            <div>
+                                <label for="keterangan" class="block text-gray-700 font-medium">Keterangan</label>
+                                <input type="text" name="keterangan[]" value="{{ $item['keterangan'] }}" placeholder="Keterangan (opsional)" class="w-full border border-gray-300 p-2 rounded focus:ring focus:ring-blue-300">
                             </div>
                         </div>
                         @endforeach
                         @endforeach
                     </div>
 
-                    <!-- Button Tambah Barang -->
-                    <button type="button" id="addItemButton" class="bg-green-500 hover:bg-green-600 text-white py-1 px-4 rounded">Tambah Barang</button>
-
-                    <!-- Submit Button -->
-                    <div>
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded">Kirim Permintaan</button>
+                    <div class="flex justify-between items-center">
+                        <button type="button" id="addItemButton" class="bg-green-500 hover:bg-green-600 text-white py-2 px-5 rounded-lg shadow-md border border-green-600 transition-transform transform hover:scale-105 flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            Tambah Barang
+                        </button>
                     </div>
+
+                    <div class="flex justify-end mt-4">
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-3 px-8 text-lg rounded-lg shadow-md border border-blue-700 transition-transform transform hover:scale-105 flex items-center gap-2">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Kirim Permintaan
+                        </button>
+                    </div>
+
+
                 </form>
+
             </div>
 
             <!-- Preferences -->
@@ -179,10 +191,8 @@
                             </span>
                         </div>
 
-                        <!-- Line -->
                         <div class="h-1 flex-1 bg-gray-300"></div>
 
-                        <!-- Step 4: Sampai Tujuan -->
                         <div class="flex items-center flex-col text-center">
                             <div class="w-10 h-10 flex items-center justify-center bg-gray-300 text-gray-600 rounded-full font-semibold">
                                 <span>3</span>
@@ -472,30 +482,37 @@
     @endif
 
 
+
+
     <!-- JavaScript for adding/removing items -->
     <script>
         document.getElementById('addItemButton').addEventListener('click', function() {
             const itemTemplate = `
             <div class="space-y-4">
-                <div class="mobile:grid mobile:grid-cols-2 flex space-x-4 item-row mobile:space-x-2">
-                    <div class="w-1/2 mobile:w-full">
-                        <label for="nama_barang" class="block text-gray-600 font-medium">Nama Barang</label>
-                        <input type="text" name="nama_barang[]" placeholder="Nama Barang" class="mobile:text-[10px] mobile:-ml-1 w-full border border-gray-300 p-2 mobile:p-1 rounded" required>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-gray-100 p-4 rounded-lg item-row shadow-sm item-row">
+                    <div>
+                        <label for="nama_barang" class="block text-gray-700 font-medium">Nama Barang</label>
+                        <input type="text" name="nama_barang[]" placeholder="Nama Barang" class="w-full border border-gray-300 p-2 rounded focus:ring focus:ring-blue-300" required>
                     </div>
-                    <div class="w-1/2 mobile:w-full">
-                        <label for="seri" class="block text-gray-600 font-medium">Seri</label>
-                        <input type="text" name="seri[]" placeholder="Seri" class="mobile:text-[10px] mobile:-ml-1 w-full border border-gray-300 p-2 mobile:p-1 rounded" required>
+                    <div>
+                        <label for="seri" class="block text-gray-700 font-medium">Seri</label>
+                        <input type="text" name="seri[]" placeholder="Seri" class="w-full border border-gray-300 p-2 rounded focus:ring focus:ring-blue-300" required>
                     </div>
-                    <div class="w-1/4 mobile:w-full">
-                        <label for="jumlah" class="block text-gray-600 font-medium">Jumlah</label>
-                        <input type="number" name="jumlah[]" placeholder="Jumlah" class="mobile:text-[10px] mobile:-ml-3 w-full border border-gray-300 p-2 mobile:p-1 rounded" min="1" required>
+                    <div>
+                        <label for="jumlah" class="block text-gray-700 font-medium">Jumlah</label>
+                        <input type="number" name="jumlah[]" placeholder="Jumlah" class="w-full border border-gray-300 p-2 rounded focus:ring focus:ring-blue-300" min="1" required>
                     </div>
-                    <div class="w-1/4 mobile:w-full">
-                        <label for="keterangan" class="block text-gray-600 font-medium">Keterangan</label>
-                        <input type="text" name="keterangan[]" placeholder="Keterangan (opsional)" class="mobile:text-[10px] mobile:-ml-1 w-full border border-gray-300 p-2 mobile:p-1 rounded">
+                    <div>
+                        <label for="keterangan" class="block text-gray-700 font-medium">Keterangan</label>
+                        <input type="text" name="keterangan[]" placeholder="Keterangan (opsional)" class="w-full border border-gray-300 p-2 rounded focus:ring focus:ring-blue-300">
                     </div>
                 </div>
-                <button type="button" class="remove-item mobile:ml-32 mobile:-mt-8 text-red-500">Hapus</button>
+                <button type="button" class="remove-item flex items-center gap-2 px-3 py-1.5 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 hover:text-red-700 transition-transform transform hover:scale-105 shadow-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    <span>Hapus</span>
+                </button>
             </div>`;
             document.getElementById('items').insertAdjacentHTML('beforeend', itemTemplate);
         });

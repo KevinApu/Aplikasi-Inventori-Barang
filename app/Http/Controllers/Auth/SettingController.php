@@ -68,12 +68,6 @@ class SettingController extends Controller
         ->with('activeTab', 'daftarpop');
     }
 
-
-
-
-
-
-
     public function update_username(Request $request)
     {
         Login::where('id', Auth::user()->id)
@@ -119,7 +113,7 @@ class SettingController extends Controller
     public function update_profile_picture(Request $request)
     {
         $request->validate([
-            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         // Jika ada foto yang diupload
