@@ -76,14 +76,14 @@
                     <input type="search" x-model="seri" @input="search()" class="block w-full ps-10 bg-body text-sm text-gray-900 border-0 focus:ring-0 focus:border-b focus:border-zinc-700" placeholder="Seri ..." required />
                 </div>
                 <div class="flex justify-between">
-                    <button @click="resetFilter()" class="hidden md:block bg-gray-500 text-white py-1 px-2 ml-2 h-9 text-xs rounded-md hover:bg-gray-600" title="Reset Filter">
+                    <button @click="resetFilter()" class="hidden md:block bg-gray-700 text-white py-1 px-2 ml-2 h-9 text-xs rounded-md hover:bg-gray-600" title="Reset Filter">
                         Reset
                     </button>
                 </div>
             </div>
             <div class="overflow-x-auto shadow-md rounded-t-lg overscroll-x-none transition-shadow duration-200 ease-in-out shadow hover:shadow-2xl hover:shadow-header-4">
                 <table class="w-full text-left rtl:text-right font-roboto">
-                    <thead class="text-sm mobile:text-xs uppercase whitespaces-nowrap bg-header-4 text-center bg-opacity-40 text-gray-500 shadow-inner">
+                    <thead class="text-sm mobile:text-xs uppercase whitespaces-nowrap bg-gray-600 text-center text-white">
                         <tr>
                             <th scope="col" class="px-6 py-3">Kode Barang</th>
                             <th scope="col" class="px-6 py-3">Kategori</th>
@@ -98,7 +98,7 @@
                     </thead>
                     <tbody>
                         <template x-for="item in paginatedResults" :key="item.id">
-                            <tr class="odd:bg-odd-4 even:bg-even-4 whitespace-nowrap border-6 border-b border-gray-300 mobile:text-xs laptop:text-sm hover:bg-gray-200 cursor-pointer transition-colors duration-300 ease-in-out">
+                            <tr class="odd:bg-gray-50 even:bg-white whitespace-nowrap border-6 border-b border-gray-300 mobile:text-xs laptop:text-sm hover:bg-gray-200 cursor-pointer transition-colors duration-300 ease-in-out">
                                 <th scope="row" class="px-6 py-3 font-medium whitespace-nowrap" x-text="item.kode_barang"></th>
                                 <td class="px-6 py-3 truncate" x-text="item.kategori"></td>
                                 <td class="px-6 py-3 truncate" x-text="item.nama_barang"></td>

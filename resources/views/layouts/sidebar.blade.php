@@ -391,7 +391,7 @@
                     <li class="mb-2" title="Barang Masuk">
                         <div class="flex items-center rounded-lg text-white">
                             <button @click="openDropdown1 = !openDropdown1; if (!isSidebarOpen) { isSidebarOpen = true;}" class="flex items-center w-full px-2 py-2 rounded-lg {{ request()->routeIs('input_barang_masuk.view') || request()->routeIs('tabel_barang_masuk') ? 'border-l-4 border-red-700 bg-gradient-to-r from-red-500' : 'bg-[#0F0606] hover:bg-gray-600' }}">
-                                <svg class="flex-shrink-0 w-10 h-10 mobile:h-8 mobile:w-8 text-blue-800 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                <svg class="flex-shrink-0 w-10 h-10 mobile:h-8 mobile:w-8 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M5.027 10.9a8.729 8.729 0 0 1 6.422-3.62v-1.2A2.061 2.061 0 0 1 12.61 4.2a1.986 1.986 0 0 1 2.104.23l5.491 4.308a2.11 2.11 0 0 1 .588 2.566 2.109 2.109 0 0 1-.588.734l-5.489 4.308a1.983 1.983 0 0 1-2.104.228 2.065 2.065 0 0 1-1.16-1.876v-.942c-5.33 1.284-6.212 5.251-6.25 5.441a1 1 0 0 1-.923.806h-.06a1.003 1.003 0 0 1-.955-.7A10.221 10.221 0 0 1 5.027 10.9Z" />
                                 </svg>
                                 <span :class="{'hidden': !isSidebarOpen}" class="ms-1 whitespace-nowrap">Barang Masuk</span>

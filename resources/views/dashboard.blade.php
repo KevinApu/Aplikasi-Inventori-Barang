@@ -13,7 +13,7 @@
                 <h2 class="text-lg font-semibold">Barang Masuk</h2>
                 <p class="text-2xl font-bold">{{ $barang_masuk }}</p>
                 <div class="absolute top-0 right-0 mt-5 mr-5">
-                    <svg class="md:w-12 md:h-12 text-emerald-900 text-opacity-60" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    <svg class="md:w-12 md:h-12 text-emerald-600 text-opacity-60" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M5.027 10.9a8.729 8.729 0 0 1 6.422-3.62v-1.2A2.061 2.061 0 0 1 12.61 4.2a1.986 1.986 0 0 1 2.104.23l5.491 4.308a2.11 2.11 0 0 1 .588 2.566 2.109 2.109 0 0 1-.588.734l-5.489 4.308a1.983 1.983 0 0 1-2.104.228 2.065 2.065 0 0 1-1.16-1.876v-.942c-5.33 1.284-6.212 5.251-6.25 5.441a1 1 0 0 1-.923.806h-.06a1.003 1.003 0 0 1-.955-.7A10.221 10.221 0 0 1 5.027 10.9Z" />
@@ -30,7 +30,7 @@
                 <h2 class="text-lg font-semibold">Barang Keluar</h2>
                 <p class="text-2xl font-bold">{{ $barang_keluar }}</p>
                 <div class="absolute top-0 right-0 mt-5 mr-5">
-                    <svg class="md:w-12 md:h-12 text-blue-900 text-opacity-60" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    <svg class="md:w-12 md:h-12 text-blue-600 text-opacity-60" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M14.502 7.046h-2.5v-.928a2.122 2.122 0 0 0-1.199-1.954 1.827 1.827 0 0 0-1.984.311L3.71 8.965a2.2 2.2 0 0 0 0 3.24L8.82 16.7a1.829 1.829 0 0 0 1.985.31 2.121 2.121 0 0 0 1.199-1.959v-.928h1a2.025 2.025 0 0 1 1.999 2.047V19a1 1 0 0 0 1.275.961 6.59 6.59 0 0 0 4.662-7.22 6.593 6.593 0 0 0-6.437-5.695Z" />
@@ -46,7 +46,7 @@
                 <h2 class="text-lg font-semibold">Barang Rusak</h2>
                 <p class="text-2xl font-bold">{{ $barang_rusak }}</p>
                 <div class="absolute top-0 right-0 mt-5 mr-5">
-                    <svg class="md:w-12 md:h-12 text-[#650000] text-opacity-60" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    <svg class="md:w-12 md:h-12 text-red-600 text-opacity-60" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                         fill="currentColor" viewBox="0 0 512 512">
                         <path
                             d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z" />
@@ -122,7 +122,7 @@
                 return results.slice(start, end);
             },
             }" class="relative shadow-md sm:rounded-lg bg-white">
-                <table class="w-full text-sm text-left text-gray-900">
+                <table class="w-full text-sm text-left text-gray-900 rounded-t-lg">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-100 border-b">
                         <tr>
                             <th scope="col" class="px-6 py-3 font-semibold">Nama Barang</th>
