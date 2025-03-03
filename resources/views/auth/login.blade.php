@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <div class="flex items-center justify-center min-h-screen bg-zinc-100 px-4 font-roboto text-sm">
+    <div class="flex items-center justify-center min-h-screen bg-rose-50 px-4 font-roboto text-sm">
         <div class="relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0 w-full md:w-[600px] transform transition-transform duration-500 hover:scale-[1.01] hover:shadow-neutral-400">
             <div class="flex flex-col justify-center p-8 md:p-14 bg-white rounded-2xl">
                 <h1 class="mb-3 text-4xl font-bold font-roboto">Login</h1>
@@ -44,7 +44,7 @@
                     <input type="hidden" name="pop" x-bind:value="pop" />
 
                     <div>
-                        <button class="w-full p-2 rounded-lg mb-6 mt-6 bg-stone-950 text-white rounded-md hover:bg-neutral-700 transition-colors duration-200 ease-in-out" type="submit">Login</button>
+                        <button class="w-full p-2 rounded-lg mb-6 mt-6 bg-[#0F0606] text-white rounded-md hover:bg-neutral-700 transition-colors duration-200 ease-in-out" type="submit">Login</button>
                     </div>
                 </form>
             </div>
