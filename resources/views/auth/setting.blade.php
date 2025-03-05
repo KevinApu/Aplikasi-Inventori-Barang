@@ -31,16 +31,16 @@
             <div class="flex space-x-4 border-b border-gray-200 mb-6">
                 @if(auth()->user() && auth()->user()->role === 'superadmin')
                 <button
-                    @click="activeTab = 'tambahpop'"
-                    :class="{'border-b-2 border-blue-500 text-blue-500': activeTab === 'tambahpop'}"
+                    @click="activeTab = 'tambahcabang'"
+                    :class="{'border-b-2 border-blue-500 text-blue-500': activeTab === 'tambahcabang'}"
                     class="px-4 py-2 font-medium text-gray-600 hover:text-blue-500 focus:outline-none">
-                    Tambah Pop
+                    Tambah Cabang
                 </button>
                 <button
-                    @click="activeTab = 'daftarpop'"
-                    :class="{'border-b-2 border-blue-500 text-blue-500': activeTab === 'daftarpop'}"
+                    @click="activeTab = 'daftarcabang'"
+                    :class="{'border-b-2 border-blue-500 text-blue-500': activeTab === 'daftarcabang'}"
                     class="px-4 py-2 font-medium text-gray-600 hover:text-blue-500 focus:outline-none">
-                    Daftar Pop
+                    Daftar Cabang
                 </button>
                 <button
                     @click="activeTab = 'pengaturanakun'"
@@ -59,28 +59,26 @@
 
             <!-- Account Settings -->
             @if(auth()->user() && auth()->user()->role === 'superadmin')
-            <div x-show="activeTab === 'tambahpop'" class="max-w-4xl mx-auto mt-10 p-8 bg-white shadow-lg rounded-lg">
+            <div x-show="activeTab === 'tambahcabang'" class="max-w-4xl mx-auto mt-10 p-8 bg-white shadow-lg rounded-lg">
                 <!-- Header Pengaturan -->
-                <h2 class="text-2xl font-bold text-gray-800 border-b pb-4 mb-6">Pengaturan - Tambah Kantor Layanan/POP</h2>
-
-                <!-- Form Tambah Kantor Layanan/POP -->
+                <h2 class="text-2xl font-bold text-gray-800 border-b pb-4 mb-6">Pengaturan - Tambah Cabang</h2>
                 <form action="{{ route('setting.pop') }}" method="post" class="space-y-6">
                     @csrf
                     <!-- Kode POP -->
                     <div class="flex flex-col space-y-2">
-                        <label for="kodepop" class="text-lg font-medium text-gray-700">Kode POP</label>
+                        <label for="kodepop" class="text-lg font-medium text-gray-700">Kode Cabang</label>
                         <input type="text" name="kodepop"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             oninput="this.value = this.value.toUpperCase()">
                         @error('kodepop')
                         <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
                         @enderror
-                        <p class="text-sm text-gray-500">*Kode POP sangat penting dan berpengaruh terhadap data yang tersimpan.</p>
+                        <p class="text-sm text-gray-500">*Kode Cabang sangat penting dan berpengaruh terhadap data yang tersimpan.</p>
                     </div>
 
                     <!-- Lokasi Kantor -->
                     <div class="flex flex-col space-y-2">
-                        <label for="lokasikantor" class="text-lg font-medium text-gray-700">Kode Wilayah Kantor</label>
+                        <label for="lokasikantor" class="text-lg font-medium text-gray-700">Kode Lokasi Cabang</label>
                         <input type="text" name="lokasikantor"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                             oninput="this.value = this.value.toUpperCase()">
@@ -90,26 +88,16 @@
                     </div>
 
                     <div class="flex flex-col space-y-2">
-                        <label for="alamatkantor" class="text-lg font-medium text-gray-700">Alamat Kantor</label>
+                        <label for="alamatkantor" class="text-lg font-medium text-gray-700">Alamat Cabang</label>
                         <textarea name="alamatkantor" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                         @error('alamatkantor')
                         <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
                         @enderror
                     </div>
 
-                    <div class="flex flex-col space-y-2">
-                        <label for="kepalakantor" class="text-lg font-medium text-gray-700">Kepala Kantor</label>
-                        <input type="text" name="kepalakantor"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        @error('kepalakantor')
-                        <div class="text-red-500 text-sm mt-2">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-
                     <!-- Tombol Simpan -->
                     <div class="flex justify-end">
-                        <button type="submit" class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700">
+                        <button type="submit" class="px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-medium rounded-lg shadow-lg transform transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400">
                             Simpan Kantor Layanan
                         </button>
                     </div>
@@ -118,15 +106,14 @@
 
 
             <!-- Preferences -->
-            <div x-show="activeTab === 'daftarpop'" class="space-y-6" x-cloak>
+            <div x-show="activeTab === 'daftarcabang'" class="space-y-6" x-cloak>
                 <div class="container mx-auto p-4">
-                    <h2 class="text-2xl font-semibold mb-4">Daftar Kantor Layanan / POP</h2>
+                    <h2 class="text-2xl font-semibold mb-4">Daftar Cabang</h2>
                     <div class="overflow-x-auto">
                         <table class="min-w-full bg-white border rounded-lg">
                             <thead>
                                 <tr class="w-full bg-gray-100 text-gray-600 uppercase text-sm leading-normal">
-                                    <th class="py-3 px-6 text-left">Nama Kantor Layanan / POP</th>
-                                    <th class="py-3 px-6 text-left">Kepala Kantor</th>
+                                    <th class="py-3 px-6 text-left">Kode Cabang</th>
                                     <th class="py-3 px-6 text-left">Lokasi</th>
                                     <th class="py-3 px-6 text-left">Alamat</th>
                                     <th class="py-3 px-6 text-center">Aksi</th>
@@ -136,7 +123,6 @@
                                 @foreach ($kantorlayanan as $item)
                                 <tr class="border-b border-gray-200 hover:bg-gray-100">
                                     <td class="py-3 px-6 text-left">{{ $item->pop }}</td>
-                                    <td class="py-3 px-6 text-left">{{ $item->kepalakantor }}</td>
                                     <td class="py-3 px-6 text-left">{{ $item->lokasi }}</td>
                                     <td class="py-3 px-6 text-left">{{ $item->alamat }}</td>
                                     <td class="py-3 px-6 text-center">
@@ -264,65 +250,89 @@
                                                             <!-- Body Modal -->
                                                             <div x-data="{ openUser: false }" class="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
                                                                 <!-- Tombol Buka Form -->
-                                                                <div class="flex justify-between items-center">
-                                                                    <h3 class="text-xl font-semibold text-gray-700">Daftar User</h3>
-                                                                    <button x-on:click="openUser = !openUser" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none">
-                                                                        Tambah User
+                                                                <div class="flex justify-between items-center bg-white shadow-md p-4 rounded-lg">
+                                                                    <h3 class="text-2xl font-bold text-gray-800">Daftar User</h3>
+                                                                    <button
+                                                                        x-on:click="openUser = !openUser"
+                                                                        class="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-medium rounded-lg shadow-lg transform transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400">
+                                                                        + Tambah User
                                                                     </button>
                                                                 </div>
 
+
                                                                 <!-- Tabel User -->
-                                                                <div class="overflow-auto max-h-60 border rounded-lg bg-gray-100">
-                                                                    <table class="min-w-full bg-white border rounded-lg">
-                                                                        <thead class="sticky top-0 bg-gray-200">
-                                                                            <tr class="text-gray-600 uppercase text-sm leading-normal">
-                                                                                <th class="py-2 px-4 text-left">Username</th>
-                                                                                <th class="py-2 px-4 text-left">Password</th>
-                                                                                <th class="py-2 px-4 text-left">Role</th>
-                                                                                <th class="py-2 px-4 text-center">Aksi</th>
+                                                                <div class="overflow-auto max-h-60 border rounded-lg bg-gray-100 shadow-lg">
+                                                                    <table class="w-full bg-white border rounded-lg">
+                                                                        <!-- Header -->
+                                                                        <thead class="sticky top-0 bg-gray-900 text-white">
+                                                                            <tr class="text-sm uppercase">
+                                                                                <th class="py-3 px-6 text-left">Username</th>
+                                                                                <th class="py-3 px-6 text-left">Password</th>
+                                                                                <th class="py-3 px-6 text-left">Role</th>
+                                                                                <th class="py-3 px-6 text-center">Status</th>
+                                                                                <th class="py-3 px-6 text-center">Aksi</th>
                                                                             </tr>
                                                                         </thead>
-                                                                        <tbody class="text-gray-700 text-sm font-light">
+
+                                                                        <!-- Body -->
+                                                                        <tbody class="text-sm text-gray-700 divide-y divide-gray-200">
                                                                             @foreach ($kl_users->where('pop', $item->pop)->groupBy('pop') as $pop => $users)
                                                                             @foreach ($users as $user)
-                                                                            <tr class="border-b border-gray-200 hover:bg-gray-50">
-                                                                                <td class="py-2 px-4">{{ $user->username }}</td>
-                                                                                <td class="py-2 px-4" x-data="{ showPassword: false }">
-                                                                                    <div class="flex items-center">
-                                                                                        <!-- Password -->
-                                                                                        <span x-show="!showPassword" class="truncate">{{ str_repeat('*', strlen($user->password)) }}</span>
+                                                                            <tr class="hover:bg-gray-100 transition">
+                                                                                <!-- Username -->
+                                                                                <td class="py-3 px-6 font-medium text-gray-900">{{ $user->username }}</td>
+
+                                                                                <!-- Password -->
+                                                                                <td class="py-3 px-6" x-data="{ showPassword: false }">
+                                                                                    <div class="flex items-center space-x-2">
+                                                                                        <!-- Password (Hidden / Shown) -->
+                                                                                        <span x-show="!showPassword" class="tracking-widest text-gray-500">
+                                                                                            {{ str_repeat('*', strlen($user->password)) }}
+                                                                                        </span>
                                                                                         <span x-show="showPassword">{{ $user->password }}</span>
 
                                                                                         <!-- Toggle Button -->
-                                                                                        <button type="button" x-on:click="showPassword = !showPassword" class="ml-2 focus:outline-none">
-                                                                                            <!-- Eye-Off Icon -->
-                                                                                            <svg x-show="!showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 hover:text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                                                                <path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" />
-                                                                                                <path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" />
-                                                                                                <path d="M3 3l18 18" />
+                                                                                        <button type="button" x-on:click="showPassword = !showPassword" class="focus:outline-none">
+                                                                                            <svg x-show="!showPassword" class="h-5 w-5 text-gray-500 hover:text-gray-700 transition" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18M10.585 10.587a2 2 0 0 0 2.829 2.828M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6 1.272-2.12 2.712-3.678 4.32-4.674m2.86-1.146a9.055 9.055 0 0 1 1.82-.18c3.6 0 6.6 2 9 6-.666 1.11-1.379 2.067-2.138 2.87" />
                                                                                             </svg>
-
-                                                                                            <!-- Eye Icon -->
-                                                                                            <svg x-show="showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 hover:text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                                                                <path stroke="none" d="M0 0h24V24H0z" fill="none" />
-                                                                                                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-                                                                                                <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                                                                            <svg x-show="showPassword" class="h-5 w-5 text-gray-500 hover:text-gray-700 transition" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0M21 12c-2.4 4 -5.4 6 -9 6-3.6 0 -6.6 -2 -9 -6 2.4-4 5.4-6 9-6 3.6 0 6.6 2 9 6" />
                                                                                             </svg>
                                                                                         </button>
                                                                                     </div>
                                                                                 </td>
-                                                                                <td class="py-2 px-4">{{ $user->role }}</td>
-                                                                                <td class="py-2 px-4 text-center">
+
+                                                                                <!-- Role -->
+                                                                                <td class="py-3 px-6 capitalize">{{ $user->role }}</td>
+
+                                                                                <!-- Status -->
+                                                                                <td class="py-3 px-6 text-center">
+
+
+                                                                                    <div class="inline-block px-6 py-2 rounded-md w-auto min-w-[160px]">
+                                                                                        <!-- Label Status -->
+                                                                                        <span class="block text-sm font-semibold px-3 py-1 rounded-md 
+            {{ $user->status === 'Aktif' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600' }}">
+                                                                                            {{ $user->status }}
+                                                                                        </span>
+
+                                                                                        <!-- Last Active Date -->
+                                                                                        <p class="mt-1 text-gray-700 text-sm whitespace-nowrap">Last active: {{ $user->last_login ? $user->last_login->format('d F') : 'Belum login' }}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                </td>
+
+                                                                                <!-- Aksi -->
+                                                                                <td class="py-3 px-6 text-center">
                                                                                     <form action="{{ route('destroy.user', ['id' => $user->id, 'username' => $user->username, 'password' => $user->password]) }}"
                                                                                         method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?');">
                                                                                         @csrf
                                                                                         @method('DELETE')
-                                                                                        <button type="submit" class="text-red-500 hover:text-red-700">
-                                                                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-x">
-                                                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                                                                <path d="M18 6l-12 12" />
-                                                                                                <path d="M6 6l12 12" />
+
+                                                                                        <button type="submit" class="p-2 bg-red-100 rounded-full hover:bg-red-200 transition">
+                                                                                            <svg class="h-6 w-6 text-red-500 hover:text-red-700 transition" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6l12 12M18 6l-12 12" />
                                                                                             </svg>
                                                                                         </button>
                                                                                     </form>
@@ -333,6 +343,7 @@
                                                                         </tbody>
                                                                     </table>
                                                                 </div>
+
 
                                                                 <!-- Form Tambah User -->
                                                                 <div
@@ -345,55 +356,27 @@
                                                                     x-transition:leave-start="opacity-100"
                                                                     x-transition:leave-end="opacity-0"
                                                                     class="border rounded-lg bg-white p-4 shadow-md max-h-[80vh] overflow-y-auto">
-                                                                    <form method="POST" action="{{ route('add.user') }}">
+                                                                    <form method="POST" action="{{ route('add.user') }}" class="bg-white shadow-lg rounded-xl p-6 space-y-4">
                                                                         @csrf
                                                                         <input type="hidden" name="kantor_id" value="{{ $item->pop }}">
-                                                                        <div class="grid gap-4">
+
+                                                                        <h2 class="text-2xl font-bold text-gray-800 text-center">Tambah User</h2>
+
+                                                                        <div class="space-y-4">
+                                                                            <!-- Username -->
                                                                             <div>
-                                                                                <label class="block text-sm font-medium text-gray-700">Username</label>
-                                                                                <input type="text" name="username" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-500" required>
+                                                                                <label class="block text-sm font-semibold text-gray-700">Username</label>
+                                                                                <input type="text" name="username" class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                                                                                 @error('username')
-                                                                                <span class="text-sm text-red-500">{{ $message }}</span>
-                                                                                @enderror
-                                                                            </div>
-                                                                            <div x-data="{ showPassword: false }">
-                                                                                <label class="block text-sm font-medium text-gray-700">Password</label>
-                                                                                <div class="relative">
-                                                                                    <input type="password"
-                                                                                        :type="showPassword ? 'text' : 'password'"
-                                                                                        name="password"
-                                                                                        class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-500"
-                                                                                        required>
-                                                                                    <button type="button"
-                                                                                        x-on:click="showPassword = !showPassword"
-                                                                                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
-                                                                                        <svg x-show="!showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye-off">
-                                                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                                                            <path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" />
-                                                                                            <path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" />
-                                                                                            <path d="M3 3l18 18" />
-                                                                                        </svg>
-                                                                                        <svg x-show="showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
-                                                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                                                                            <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
-                                                                                            <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
-                                                                                        </svg>
-                                                                                    </button>
-                                                                                </div>
-                                                                                @error('password')
-                                                                                <span class="text-sm text-red-500">{{ $message }}</span>
+                                                                                <span class="text-xs text-red-500">{{ $message }}</span>
                                                                                 @enderror
                                                                             </div>
 
+                                                                            <!-- Password -->
                                                                             <div x-data="{ showPassword: false }">
-                                                                                <label class="block text-sm font-medium text-gray-700" for="password_confirmation">Konfirmasi Password</label>
+                                                                                <label class="block text-sm font-semibold text-gray-700">Password</label>
                                                                                 <div class="relative">
-                                                                                    <input type="password"
-                                                                                        :type="showPassword ? 'text' : 'password'"
-                                                                                        name="password_confirmation"
-                                                                                        class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-500"
-                                                                                        id="password_confirmation"
-                                                                                        required>
+                                                                                    <input :type="showPassword ? 'text' : 'password'" name="password" class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                                                                                     <button type="button"
                                                                                         x-on:click="showPassword = !showPassword"
                                                                                         class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
@@ -411,32 +394,57 @@
                                                                                     </button>
                                                                                 </div>
                                                                                 @error('password')
-                                                                                <span class="text-sm text-red-500">{{ $message }}</span>
+                                                                                <span class="text-xs text-red-500">{{ $message }}</span>
                                                                                 @enderror
                                                                             </div>
+
+                                                                            <!-- Konfirmasi Password -->
+                                                                            <div x-data="{ showPassword: false }">
+                                                                                <label class="block text-sm font-semibold text-gray-700">Konfirmasi Password</label>
+                                                                                <div class="relative">
+                                                                                    <input :type="showPassword ? 'text' : 'password'" name="password_confirmation" class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                                                                                    <button type="button"
+                                                                                        x-on:click="showPassword = !showPassword"
+                                                                                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                                                                                        <svg x-show="!showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye-off">
+                                                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                                            <path d="M10.585 10.587a2 2 0 0 0 2.829 2.828" />
+                                                                                            <path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87" />
+                                                                                            <path d="M3 3l18 18" />
+                                                                                        </svg>
+                                                                                        <svg x-show="showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-eye">
+                                                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                                                            <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                                                                            <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                                                                        </svg>
+                                                                                    </button>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <!-- Role -->
                                                                             <div>
-                                                                                <label class="block text-sm font-medium text-gray-700">Role</label>
-                                                                                <select name="role" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring focus:border-blue-500" required>
+                                                                                <label class="block text-sm font-semibold text-gray-700">Role</label>
+                                                                                <select name="role" class="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
                                                                                     <option value="admin">Admin</option>
                                                                                     <option value="user">User</option>
                                                                                 </select>
                                                                                 @error('role')
-                                                                                <span class="text-sm text-red-500">{{ $message }}</span>
+                                                                                <span class="text-xs text-red-500">{{ $message }}</span>
                                                                                 @enderror
                                                                             </div>
                                                                         </div>
-                                                                        <div class="mt-4 flex justify-end">
-                                                                            <button
-                                                                                x-on:click="openUser = false"
-                                                                                type="button"
-                                                                                class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 mr-2">
+
+                                                                        <!-- Tombol Aksi -->
+                                                                        <div class="mt-4 flex justify-end space-x-3">
+                                                                            <button x-on:click="openUser = false" type="button" class="px-5 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition">
                                                                                 Batal
                                                                             </button>
-                                                                            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                                                            <button type="submit" class="px-5 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition">
                                                                                 Tambahkan
                                                                             </button>
                                                                         </div>
                                                                     </form>
+
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -487,7 +495,7 @@
                             </div>
 
                             <div>
-                                <button type="submit" class="w-full py-3 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Ganti Password</button>
+                                <button type="submit" class="w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-medium rounded-lg shadow-lg transform transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400">Ganti Password</button>
                             </div>
                         </form>
                     </div>
@@ -509,7 +517,7 @@
                                     <input type="text" id="username" name="username" value="{{ auth()->user()->username }}" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
                                 </div>
                                 <div>
-                                    <button type="submit" class="w-full py-3 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Ganti Username</button>
+                                    <button type="submit" class="w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-medium rounded-lg shadow-lg transform transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400">Ganti Username</button>
                                 </div>
                             </form>
                         </div>
@@ -555,7 +563,7 @@
                             <!-- Tombol Submit -->
                             <div class="mt-4">
                                 <button type="submit"
-                                    class="w-full py-3 px-4 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 
+                                    class="w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-medium rounded-lg shadow-lg transform transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400 
                                             transition disabled:opacity-50 disabled:cursor-not-allowed"
                                     x-bind:disabled="!fileSelected"
                                     x-text="fileSelected ? 'Ganti Foto Profil' : 'Pilih Foto Profil'">

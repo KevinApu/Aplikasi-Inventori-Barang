@@ -17,6 +17,7 @@ class Login extends Authenticatable
         'request_access',
         'pop',
         'foto',
+        'last_login',
     ];
 
     // Kolom yang disembunyikan saat serialisasi (misal: API response)

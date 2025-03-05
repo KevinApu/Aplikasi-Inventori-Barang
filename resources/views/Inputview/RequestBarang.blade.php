@@ -278,7 +278,7 @@
                                 <div class="flex items-start space-x-4">
                                     <div class="w-8 h-8 mobile:w-4 mobile:h-4 p-2 bg-gray-300 text-gray-500 rounded-full flex items-center justify-center font-semibold">3</div>
                                     <div class="flex-1">
-                                        <p class="text-gray-700 font-medium">Estimasi sampai di POP tujuan</p>
+                                        <p class="text-gray-700 font-medium">Estimasi sampai di Lokasi tujuan</p>
                                         <p class="text-sm mobile:text-[10px] text-gray-500">{{ $riwayat->formatted_tanggal_estimasi}}</p>
                                     </div>
                                 </div>
@@ -391,55 +391,6 @@
             </div>
         </div>
     </div>
-
-
-    @if(session('error'))
-    <div x-data="{ isOpen: true }">
-        <div
-            x-show="isOpen"
-            @keydown.escape.window="isOpen = false"
-            @click.self="isOpen = false"
-            tabindex="-1"
-            aria-hidden="true"
-            class="overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0 h-screen md:h-full bg-black bg-opacity-30"
-            x-transition:enter="transition-opacity duration-300 ease-out"
-            x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100"
-            x-transition:leave="transition-opacity duration-300 ease-in"
-            x-transition:leave-start="opacity-100"
-            x-transition:leave-end="opacity-0">
-            <div @click.stop
-                class="bg-white rounded-xl shadow-lg p-4 text-center w-48 transition-transform"
-                x-transition:enter="transform transition-transform duration-300 ease-out"
-                x-transition:enter-start="opacity-0 scale-95"
-                x-transition:enter-end="opacity-100 scale-100"
-                x-transition:leave="transform transition-transform duration-200 ease-in"
-                x-transition:leave-start="opacity-100 scale-100"
-                x-transition:leave-end="opacity-0 scale-95">
-                <!-- Icon Error -->
-                <div class="bg-red-100 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3 shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-red-500 animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-x">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M18 6l-12 12" />
-                        <path d="M6 6l12 12" />
-                    </svg>
-                </div>
-
-                <!-- Pesan -->
-                <h1 class="text-base font-semibold text-red-600">Gagal</h1>
-                <p class="text-gray-500 text-xs mb-3 leading-tight">
-                    {{ session('error') }}
-                </p>
-
-                <!-- Tombol Continue -->
-                <button type="button" @click="isOpen = false"
-                    class="bg-red-500 text-white py-1 px-4 rounded-full text-sm hover:bg-red-600 focus:ring focus:ring-red-300 transition">
-                    Continue
-                </button>
-            </div>
-        </div>
-    </div>
-    @endif
 
 
     @if(session('success'))

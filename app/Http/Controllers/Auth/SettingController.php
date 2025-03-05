@@ -8,6 +8,7 @@ use App\Models\KLModel;
 use App\Models\KLUsers;
 use App\Models\Login;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -22,7 +23,22 @@ class SettingController extends Controller
     public function index()
     {
         $kantorlayanan = KLModel::where('lokasi', '!=', 'pusat')->get();
-        $kl_users = KLUsers::all();
+        $kl_users = KLUsers::all()->map(function ($kl_user) {
+            $user = Login::whereRaw('LOWER(username) = ?', [strtolower($kl_user->username)])->first();
+
+            // Konversi last_login ke Carbon jika tidak null
+            $kl_user->last_login = $user && !is_null($user->last_login)
+                ? Carbon::parse($user->last_login)
+                : null;
+
+            // Tentukan status aktif/tidak aktif
+            $kl_user->status = $kl_user->last_login && $kl_user->last_login->gt(now()->subDays(30))
+                ? 'Aktif'
+                : 'Tidak Aktif';
+
+            return $kl_user;
+        });
+
         $foto_profile = Auth::user()->foto;
         return view('auth.setting', ['kantorlayanan' => $kantorlayanan, 'foto_profile' => $foto_profile, 'kl_users' => $kl_users]);
     }
@@ -42,30 +58,30 @@ class SettingController extends Controller
         // Menyimpan data ke dalam tabel KLUsers
         KLUsers::create([
             'username' => $request->username,
-            'password' => $request->password, 
+            'password' => $request->password,
             'role' => $request->role,
             'pop' => $request->kantor_id,
         ]);
 
         return redirect()->back()
-        ->with('success', 'Penggantian  username berhasil dilakukan!')
-        ->with('activeTab', 'daftarpop');
+            ->with('success', 'Penggantian  username berhasil dilakukan!')
+            ->with('activeTab', 'daftarpop');
     }
-    
+
     public function destroy_user(Request $request, $id, $username, $password)
     {
         KLUsers::where('username', $username)
-        ->where('password', $password)
-        ->where('id', $id)
-        ->delete(); 
-        
+            ->where('password', $password)
+            ->where('id', $id)
+            ->delete();
+
         Login::where('username', $username)
-        ->where('password', $password)
-        ->delete(); 
+            ->where('password', $password)
+            ->delete();
 
         return redirect()->back()
-        ->with('success', 'Penggantian  username berhasil dilakukan!')
-        ->with('activeTab', 'daftarpop');
+            ->with('success', 'Penggantian  username berhasil dilakukan!')
+            ->with('activeTab', 'daftarpop');
     }
 
     public function update_username(Request $request)

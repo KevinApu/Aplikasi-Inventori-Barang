@@ -2,10 +2,10 @@
     <div x-data="searchApp()">
         @if($kantorlayanan && $kantorlayanan->count() > 0)
         <div class="relative w-64">
-            <label class="block text-purple-600 mb-1">Pilih POP</label>
+            <label class="block text-purple-600 mb-1">Pilih Cabang</label>
             <div class="relative">
                 <select x-model="pop" @change="search()" class="block appearance-none w-full bg-white border border-purple-600 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
-                    <option value="" class="bg-gray-400 hover:bg-gray-300" selected>Pilih pop...</option>
+                    <option value="" class="bg-gray-400 hover:bg-gray-300" selected>Pilih Cabang...</option>
                     @foreach ($kantorlayanan as $item)
                     <option value="{{ $item->tujuan }}">
                         {{ $item->tujuan }}
@@ -204,7 +204,7 @@
                                 <div class="flex items-start space-x-4">
                                     <div class="w-8 h-8 mobile:w-4 mobile:h-4 p-2 bg-gray-300 text-gray-500 rounded-full flex items-center justify-center font-semibold">3</div>
                                     <div class="flex-1">
-                                        <p class="text-gray-700 font-medium">Estimasi sampai di POP tujuan</p>
+                                        <p class="text-gray-700 font-medium">Estimasi sampai di Lokasi tujuan</p>
                                         <p class="text-sm text-gray-500" x-text="item.formatted_tanggal_estimasi || 'Estimasi Belum Tersedia'"></p>
                                     </div>
                                 </div>

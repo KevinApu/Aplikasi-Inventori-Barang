@@ -41,12 +41,11 @@ class KLController extends Controller
             'pop' => $request->kodepop,
             'lokasi' => $request->lokasikantor,
             'alamat' => $request->alamatkantor,
-            'kepalakantor' => $request->kepalakantor,
         ]);
 
         return redirect()->back()
             ->with('success', 'Penambahan Kantor berhasil dilakukan!')
-            ->with('activeTab', 'tambahpop');
+            ->with('activeTab', 'tambahcabang');
     }
 
     /**
@@ -86,7 +85,7 @@ class KLController extends Controller
 
         return redirect()->back()
         ->with('success', 'Penggantian data Kantor berhasil dilakukan!')
-        ->with('activeTab', 'daftarpop');
+        ->with('activeTab', 'daftarcabang');
     }
 
     /**
@@ -102,7 +101,7 @@ class KLController extends Controller
         // Mengalihkan kembali ke halaman sebelumnya dengan pesan sukses
         return redirect()->back()
             ->with('success', 'Penghapusan Kantor beserta user terkait berhasil dilakukan!')
-            ->with('activeTab', 'daftarpop');
+            ->with('activeTab', 'daftarcabang');
     }
     
 }

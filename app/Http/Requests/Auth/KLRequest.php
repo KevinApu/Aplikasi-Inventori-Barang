@@ -24,7 +24,6 @@ class KLRequest extends FormRequest
             'kodepop' => 'required|string|unique:kantor_layanan,pop',
             'lokasikantor' => 'required|string|unique:kantor_layanan,lokasi',
             'alamatkantor' => 'required|string|unique:kantor_layanan,alamat',
-            'kepalakantor' => 'required|string',
         ];
     }
 
@@ -42,7 +41,6 @@ class KLRequest extends FormRequest
             'alamatkantor.required' => 'Alamat Kantor harus diisi.',
             'alamatkantor.unique' => 'Alamat kantor sudah terdaftar.',
 
-            'kepalakantor.required' => 'Kepala Kantor harus diisi.',
         ];
     }
 }

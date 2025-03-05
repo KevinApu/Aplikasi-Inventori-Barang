@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('kantor_layanan', function (Blueprint $table) {
             $table->id();
             $table->string('pop', 12)->nullable();
-            $table->string('kepalakantor', 50)->nullable();
             $table->string('lokasi', 20);
             $table->string('alamat', 200)->nullable();
             $table->string('password_superadmin', 30)->nullable();

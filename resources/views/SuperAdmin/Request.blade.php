@@ -2,7 +2,7 @@
     <!-- Header -->
     <header class="bg-zinc-900 text-white p-4">
         <h1 class="text-2xl font-semibold">Permintaan Barang</h1>
-        <p class="text-sm">Menampilkan Permintaan Barang dari Admin Kantor Layanan</p>
+        <p class="text-sm">Menampilkan Permintaan Barang dari Admin Cabang</p>
     </header>
     <!-- Container -->
     <div class="container mx-auto my-6 p-4 bg-white rounded shadow font-roboto">
@@ -10,7 +10,7 @@
         <!-- Title -->
         <div class="mb-6">
             <h2 class="text-2xl font-bold text-gray-800">Permintaan Barang</h2>
-            <p class="text-gray-600">Daftar permintaan barang yang diinputkan oleh admin kantor layanan.</p>
+            <p class="text-gray-600">Daftar permintaan barang yang diinputkan oleh admin Cabang.</p>
         </div>
 
         <!-- Table -->
@@ -18,7 +18,7 @@
             <table class="w-full border-collapse bg-gray-50 rounded-lg">
                 <thead class="bg-blue-500 text-white">
                     <tr>
-                        <th class="py-3 px-4 text-left">Kantor</th>
+                        <th class="py-3 px-4 text-left">Kode Cabang</th>
                         <th class="py-3 px-4 text-left">Tanggal Permintaan</th>
                         <th class="py-3 px-4 text-left">Status</th>
                         <th class="py-3 px-4 text-left">Aksi</th>

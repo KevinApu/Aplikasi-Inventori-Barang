@@ -14,7 +14,7 @@
                     </div>
 
                     <select x-model="pop" @change="search()" class="block w-full pl-10 bg-body text-sm text-gray-900 border-0 focus:ring-0 focus:border-b focus:border-zinc-700" required>
-                        <option value="" class="bg-gray-400 hover:bg-gray-300" selected>Pilih pop...</option>
+                        <option value="" class="bg-gray-400 hover:bg-gray-300" selected>Pilih Cabang...</option>
                         @foreach ($kantorlayanan as $item)
                         <option value="{{ $item->pop}}">
                             {{ $item->pop }} - {{ $item->lokasi }}

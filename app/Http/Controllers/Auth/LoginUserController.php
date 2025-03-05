@@ -35,8 +35,6 @@ class LoginUserController extends Controller
      */
     public function store(LoginRequest $request)
     {
-
-
         // Validasi sudah dilakukan oleh StoreUserRequest
         $username = $request->input('username');
         $password = $request->input('password');
@@ -52,15 +50,11 @@ class LoginUserController extends Controller
         if ($user) {
             // Cek apakah password sesuai dengan yang di-hash di database
             if (Hash::check($password, $user->password)) {
-
-
+                $user->update(['last_login' => now()]);
                 Auth::login($user);
-                if ($user->role === 'superadmin') {
-                    return redirect()->route('tabel_barang_masuk.superadmin');
-                }
-
-
-                return redirect()->route('dashboard');
+                return $user->role === 'superadmin'
+                ? redirect()->route('tabel_barang_masuk.superadmin')
+                : redirect()->route('dashboard');
             } else {
                 // Jika password tidak sesuai
                 return redirect()->back()->withErrors(['password_error' => 'Password tidak valid.'])->withInput();
@@ -83,14 +77,14 @@ class LoginUserController extends Controller
                 'username' => $username,
                 'password' => Hash::make($password),
                 'role' => $role,
-                'pop' => $pop
+                'pop' => $pop,
+                'last_login' => now(),
             ]);
 
             Auth::login($newUser);
-            if ($role === 'superadmin') {
-                return redirect()->route('tabel_barang_masuk.superadmin');
-            }
-            return redirect()->route('dashboard');
+            return $role === 'superadmin'
+            ? redirect()->route('tabel_barang_masuk.superadmin')
+            : redirect()->route('dashboard');
         }
     }
 
