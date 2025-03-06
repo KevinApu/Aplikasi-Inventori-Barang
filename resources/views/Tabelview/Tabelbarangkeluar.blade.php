@@ -315,7 +315,7 @@
                                             </button>
 
                                             <!-- Main modal -->
-                                            <div x-show="open" @keydown.escape.window="open = false" tabindex="-1" aria-hidden="true" class="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-black bg-opacity-70">
+                                            <div x-show="open" @keydown.escape.window="open = false" tabindex="-1" aria-hidden="true" class="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-screen bg-black bg-opacity-70">
                                                 <div class="relative p-4 w-full max-w-md max-h-full">
                                                     <!-- Modal content -->
                                                     <div class="relative rounded-lg shadow bg-white"
@@ -470,7 +470,7 @@
             @click.self="isOpen = false"
             tabindex="-1"
             aria-hidden="true"
-            class="overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0 h-screen md:h-full bg-black bg-opacity-30"
+            class="overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0 h-screen bg-black bg-opacity-30"
             x-transition:enter="transition-opacity duration-300 ease-out"
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"
@@ -518,7 +518,7 @@
             @click.self="isOpen = false"
             tabindex="-1"
             aria-hidden="true"
-            class="overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0 h-screen md:h-full bg-black bg-opacity-30"
+            class="overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0 h-screen bg-black bg-opacity-30"
             x-transition:enter="transition-opacity duration-300 ease-out"
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"

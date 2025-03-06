@@ -206,7 +206,7 @@
                     <br>
                     <br>
                     <br>
-                    <p class="signature-name">{{ $kepalakantor }}</p>
+                    <p class="signature-name">Atasan</p>
                     <hr class="signature-hr">
                     <p>Kepala Kantor</p>
                 </td>

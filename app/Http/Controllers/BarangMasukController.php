@@ -173,12 +173,6 @@ class BarangMasukController extends Controller
         ]);
     }
 
-
-
-
-
-
-
     public function show(Request $request)
     {
         $query = DB::table('stok_gudang')

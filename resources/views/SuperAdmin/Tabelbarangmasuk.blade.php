@@ -183,39 +183,38 @@
                         <button @click="currentPage = Math.max(currentPage - 1, 1)"
                             class="bg-gray-200 text-gray-600 text-xl tablet:text-lg mobile:text-sm hover:bg-blue-400 hover:text-white transition-colors duration-200 rounded-full laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 tablet:w-8 tablet:h-8 mobile:px-1 mobile:py-0 mobile:w-6 mobile:h-6"
                             :class="{'opacity-50 cursor-not-allowed': currentPage === 1}">
-                            <
-                                </button>
-                                <template x-if="currentPage > 3">
-                                    <span class="laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 tablet:w-8 tablet:h-8 mobile:px-1 mobile:py-0 mobile:w-6 mobile:h-6">...</span>
-                                </template>
-                                <template x-for="page in totalPages" :key="page">
-                                    <template x-if="page >= Math.max(currentPage - 2, 1) && page <= Math.min(currentPage + 2, totalPages)">
-                                        <button @click="currentPage = page"
-                                            class="laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 tablet:w-7 tablet:h-7 tablet:text-xs mobile:px-1 mobile:py-0 mobile:w-6 mobile:h-6 mobile:text-[10px] rounded-full border text-gray-700"
-                                            :class="{'bg-blue-500 text-white': currentPage === page, 
+                        </button>
+                        <template x-if="currentPage > 3">
+                            <span class="laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 tablet:w-8 tablet:h-8 mobile:px-1 mobile:py-0 mobile:w-6 mobile:h-6">...</span>
+                        </template>
+                        <template x-for="page in totalPages" :key="page">
+                            <template x-if="page >= Math.max(currentPage - 2, 1) && page <= Math.min(currentPage + 2, totalPages)">
+                                <button @click="currentPage = page"
+                                    class="laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 tablet:w-7 tablet:h-7 tablet:text-xs mobile:px-1 mobile:py-0 mobile:w-6 mobile:h-6 mobile:text-[10px] rounded-full border text-gray-700"
+                                    :class="{'bg-blue-500 text-white': currentPage === page, 
                                             'bg-white hover:bg-gray-200': currentPage !== page}">
-                                            <span x-text="page"></span>
-                                        </button>
-                                    </template>
-                                </template>
-                                <template x-if="currentPage < totalPages - 3">
-                                    <span class="laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 tablet:w-8 tablet:h-8 mobile:px-1 mobile:py-0 mobile:w-6 mobile:h-6">...</span>
-                                </template>
-                                <button @click="currentPage = Math.min(currentPage + 1, totalPages)"
-                                    class="bg-gray-200 text-gray-600 text-xl tablet:text-lg mobile:text-sm hover:bg-blue-400 hover:text-white transition-colors duration-200 rounded-full laptop:px-3 tablet:px-2 tablet:py-0.5 tablet:w-8 tablet:h-8 laptop:py-1 mobile:px-1 mobile:py-0 mobile:w-6 mobile:h-6"
-                                    :class="{'opacity-50 cursor-not-allowed': currentPage === totalPages}">
-                                    >
+                                    <span x-text="page"></span>
                                 </button>
-                                <button @click="perPage = null; currentPage = 1"
-                                    x-show="perPage"
-                                    class="laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 mobile:px-1 mobile:py-0 ml-2 border text-sm tablet:text-xs mobile:text-[10px] font-medium focus:outline-none bg-white text-gray-700 hover:bg-gray-200 bg-gray-700 text-white rounded-full transition-colors duration-200">
-                                    All
-                                </button>
-                                <button @click="perPage = 10; currentPage = 1"
-                                    x-show="!perPage"
-                                    class="laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 mobile:px-1 mobile:py-0 ml-2 border text-sm tablet:text-xs mobile:text-[10px] font-medium focus:outline-none bg-blue-500 text-white rounded-full transition-colors duration-200">
-                                    Page
-                                </button>
+                            </template>
+                        </template>
+                        <template x-if="currentPage < totalPages - 3">
+                            <span class="laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 tablet:w-8 tablet:h-8 mobile:px-1 mobile:py-0 mobile:w-6 mobile:h-6">...</span>
+                        </template>
+                        <button @click="currentPage = Math.min(currentPage + 1, totalPages)"
+                            class="bg-gray-200 text-gray-600 text-xl tablet:text-lg mobile:text-sm hover:bg-blue-400 hover:text-white transition-colors duration-200 rounded-full laptop:px-3 tablet:px-2 tablet:py-0.5 tablet:w-8 tablet:h-8 laptop:py-1 mobile:px-1 mobile:py-0 mobile:w-6 mobile:h-6"
+                            :class="{'opacity-50 cursor-not-allowed': currentPage === totalPages}">
+                            >
+                        </button>
+                        <button @click="perPage = null; currentPage = 1"
+                            x-show="perPage"
+                            class="laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 mobile:px-1 mobile:py-0 ml-2 border text-sm tablet:text-xs mobile:text-[10px] font-medium focus:outline-none bg-white text-gray-700 hover:bg-gray-200 bg-gray-700 text-white rounded-full transition-colors duration-200">
+                            All
+                        </button>
+                        <button @click="perPage = 10; currentPage = 1"
+                            x-show="!perPage"
+                            class="laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 mobile:px-1 mobile:py-0 ml-2 border text-sm tablet:text-xs mobile:text-[10px] font-medium focus:outline-none bg-blue-500 text-white rounded-full transition-colors duration-200">
+                            Page
+                        </button>
                     </div>
                 </div>
             </div>

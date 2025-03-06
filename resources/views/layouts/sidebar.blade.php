@@ -49,32 +49,39 @@
                         <!-- Modal content -->
                         <div class="relative w-full rounded-lg shadow-2xl bg-[#F3F4F6]">
                             <!-- Modal header -->
-                            <div class="flex items-center justify-between py-2 pl-7 border-b rounded-t border-gray-600">
-                                <h3 class="text-lg font-semibold text-gray-900 ">
+                            <div class="flex items-center justify-between px-5 py-3 border-b border-gray-200 rounded-t bg-gray-100">
+                                <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-info-circle">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                                        <path d="M12 9h.01" />
+                                        <path d="M11 12h1v4h1" />
+                                    </svg>
                                     Notification
                                 </h3>
                             </div>
                             <!-- Modal body -->
-                            <div class="p-4 md:p-5 text-sm shadow-inner">
+                            <div class="p-4 text-sm max-h-64 overflow-y-auto">
                                 <div class="max-h-48 overflow-y-auto">
                                     @foreach($barangKurang as $pop => $items)
                                     @foreach($items as $item)
-                                    <ul class="space-y-4 mb-4 pb-2 border-b">
-                                        <li class="flex items-start">
-                                            <img src="{{ asset('storage/' . $item->foto) }}" class="w-8 h-8 rounded-md" alt="">
-                                            <div class="block ml-5">
-                                                <div class="w-full p-0 text-gray-700 font-semibold text-[13px]">{{ $item->nama_barang }} - {{ $item->seri }}</div>
+                                    <div class="flex items-start p-3 border-b last:border-none transition-all hover:bg-gray-50">
+                                        <img src="{{ asset('storage/' . $item->foto) }}" class="w-10 h-10 rounded-md shadow" alt="">
+                                        <div class="ml-4">
+                                            <p class="text-gray-800 font-semibold text-sm">{{ $item->nama_barang }} - {{ $item->seri }}</p>
+                                            <p class="text-gray-500 text-xs">
+                                                Barang tersisa {{ $item->jumlah }}
                                                 @if ($item->satuan == 'roll')
-                                                <div class="w-full text-gray-400 text-[10px]">Barang tersisa {{ $item->jumlah }} roll - {{ $item->hasil }} meter</div>
+                                                roll - {{ $item->hasil }} meter
                                                 @elseif ($item->satuan == 'pack')
-                                                <div class="w-full text-gray-400 text-[10px]">Barang tersisa {{ $item->jumlah }} pack - {{ $item->hasil }} pcs</div>
+                                                pack - {{ $item->hasil }} pcs
                                                 @else
-                                                <div class="w-full text-gray-400 text-[10px]">Barang tersisa {{ $item->jumlah }} {{ $item->satuan }}</div>
+                                                {{ $item->satuan }}
                                                 @endif
-                                                <div class="w-full text-gray-400 text-[10px]">{{ $item->waktu }}</div>
-                                            </div>
-                                        </li>
-                                    </ul>
+                                            </p>
+                                            <p class="text-gray-400 text-xs mt-1">{{ $item->waktu }}</p>
+                                        </div>
+                                    </div>
                                     @endforeach
                                     @endforeach
 

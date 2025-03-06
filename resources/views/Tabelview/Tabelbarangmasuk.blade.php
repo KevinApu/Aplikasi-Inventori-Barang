@@ -377,7 +377,7 @@
                                             </button>
 
                                             <!-- Form Update -->
-                                            <div x-show="open" @keydown.escape.window="open = false" @click.self="open = false" tabindex="-1" aria-hidden="true" class="bg-black bg-opacity-70 fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full"
+                                            <div x-show="open" @keydown.escape.window="open = false" @click.self="open = false" tabindex="-1" aria-hidden="true" class="bg-black bg-opacity-70 fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-screen"
                                                 x-transition:enter="transition-opacity ease-out duration-300"
                                                 x-transition:enter-start="opacity-0"
                                                 x-transition:enter-end="opacity-100"
@@ -456,7 +456,7 @@
                                             </button>
 
                                             <!-- Form Update -->
-                                            <div x-show="open" @keydown.escape.window="open = false" @click.self="open = false" tabindex="-1" aria-hidden="true" class="fixed top-0 right-0 left-0 z-50 flex justify-center w-full h-full bg-black bg-opacity-70"
+                                            <div x-show="open" @keydown.escape.window="open = false" @click.self="open = false" tabindex="-1" aria-hidden="true" class="fixed top-0 right-0 left-0 z-50 flex justify-center w-full h-screen bg-black bg-opacity-70"
                                                 x-transition:enter="transition-opacity ease-out duration-300"
                                                 x-transition:enter-start="opacity-0"
                                                 x-transition:enter-end="opacity-100"
@@ -511,7 +511,7 @@
                                             </button>
 
                                             <!-- Main modal -->
-                                            <div x-show="open" @keydown.escape.window="open = false" @click.self="open = false" tabindex="-1" aria-hidden="true" class="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-black bg-opacity-70"
+                                            <div x-show="open" @keydown.escape.window="open = false" @click.self="open = false" tabindex="-1" aria-hidden="true" class="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-screen bg-black bg-opacity-70"
                                                 x-transition:enter="transition-opacity ease-out duration-300"
                                                 x-transition:enter-start="opacity-0"
                                                 x-transition:enter-end="opacity-100"
@@ -584,7 +584,7 @@
                         x-transition:leave="transition transform duration-300"
                         x-transition:leave-start="translate-y-0 scale-100 opacity-100"
                         x-transition:leave-end="translate-y-full scale-50 opacity-0"
-                        class="flex items-center space-x-6 p-4 w-[16rem] mobile:w-[15rem] h-10 bg-white shadow-md rounded-md">
+                        class="flex items-center space-x-6 p-4 w-[18rem] mobile:w-[15rem] h-10 bg-white shadow-md rounded-md">
                         <div class="flex items-center space-x-2 mobile:space-x-1 mobile:w-full">
                             <input type="checkbox" class="w-5 h-5 mobile:w-4 mobile:h-4 cursor-pointer rounded-md mr-2 checked:bg-indigo-500 focus:ring-0 focus:border-0" checked disabled>
                             <span class="text-gray-700" x-text="`${checkedItems.length} Items`"></span>
@@ -687,7 +687,7 @@
             @click.self="isOpen = false"
             tabindex="-1"
             aria-hidden="true"
-            class="overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0 h-screen md:h-full bg-black bg-opacity-30"
+            class="overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0 h-screen bg-black bg-opacity-30"
             x-transition:enter="transition-opacity duration-300 ease-out"
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"
@@ -735,7 +735,7 @@
             @click.self="isOpen = false"
             tabindex="-1"
             aria-hidden="true"
-            class="overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0 h-screen md:h-full bg-black bg-opacity-30"
+            class="overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0 h-screen bg-black bg-opacity-30"
             x-transition:enter="transition-opacity duration-300 ease-out"
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"
@@ -782,7 +782,7 @@
             @click.self="isOpen = false"
             tabindex="-1"
             aria-hidden="true"
-            class="overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0 h-screen md:h-full bg-black bg-opacity-30"
+            class="overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0 h-screen bg-black bg-opacity-30"
             x-transition:enter="transition-opacity duration-300 ease-out"
             x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100"

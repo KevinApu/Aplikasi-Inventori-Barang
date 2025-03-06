@@ -22,13 +22,12 @@ class LaporanController extends Controller
         if (!$barangmasuk) {
             return redirect()->route('tabel_barang_masuk');
         }
-        $kepalaKantor = DB::table('kantor_layanan')->where('pop', Auth::user()->pop)->value('kepalakantor');
 
         $firstDate = Carbon::parse($barangmasuk->min('created_at'))->format('d F Y');
         $lastDate = Carbon::parse($barangmasuk->max('created_at'))->format('d F Y');
 
         // Mengirimkan data ke view
-        return view('laporan', compact('barangmasuk', 'firstDate', 'lastDate', 'kepalaKantor'));
+        return view('laporan', compact('barangmasuk', 'firstDate', 'lastDate'));
     }
 
     public function printlaporan()
@@ -40,7 +39,6 @@ class LaporanController extends Controller
 
         $firstDate = Carbon::parse($barangmasuk->min('created_at'))->format('d F Y');
         $lastDate = Carbon::parse($barangmasuk->max('created_at'))->format('d F Y');
-        $kepalaKantor = DB::table('kantor_layanan')->where('pop', Auth::user()->pop)->value('kepalakantor');
 
         $pdf = new \Mpdf\Mpdf([
             'format' => [210, 330], // F4
@@ -58,7 +56,7 @@ class LaporanController extends Controller
         $pdf->SetHTMLHeader($headerHTML);
         $pdf->SetHTMLFooter('<div style="text-align: center;">{PAGENO}</div>');
 
-        $htmlContent = view('laporan', compact('barangmasuk', 'firstDate', 'lastDate', 'kepalaKantor'))->render();
+        $htmlContent = view('laporan', compact('barangmasuk', 'firstDate', 'lastDate'))->render();
         $pdf->WriteHTML($htmlContent);
 
         $availableHeight = $pdf->y; // Posisi Y terakhir yang digunakan untuk konten
@@ -79,7 +77,7 @@ class LaporanController extends Controller
                         <p class="signature-header">Pacitan, ' . Carbon::now()->format('d F Y') . '</p>
                         <p class="signature-header">Diketahui oleh</p>
                         <br><br><br><br>
-                        <p class="signature-name" style="font-weight: bold;">' . $kepalaKantor . '</p>
+                        <p class="signature-name" style="font-weight: bold;">Atasan</p>
                         <hr style="width: 70%;">
                         <p>Kepala Kantor</p>
                     </td>
@@ -110,11 +108,10 @@ class LaporanController extends Controller
 
         $startOfMonth = Carbon::now()->startOfMonth()->format('Y-m-d'); // Awal bulan
         $endOfMonth = Carbon::now()->endOfMonth()->format('Y-m-d'); // Akhir bulan
-        $kepalakantor = KLModel::where('pop', Auth::user()->pop)->value('kepalakantor');
 
         $periode = "$startOfMonth s/d $endOfMonth";
 
-        return view('laporanrekap', compact('rekapData', 'periode', 'kepalakantor'));
+        return view('laporanrekap', compact('rekapData', 'periode'));
     }
 
     public function printlaporanrekap()
@@ -123,7 +120,6 @@ class LaporanController extends Controller
 
         $startOfMonth = Carbon::now()->startOfMonth()->format('Y-m-d'); // Awal bulan
         $endOfMonth = Carbon::now()->endOfMonth()->format('Y-m-d'); // Akhir bulan
-        $kepalakantor = KLModel::where('pop', Auth::user()->pop)->value('kepalakantor');
 
         $isPrinting = request()->has('is_printing') ? true : false;
 
@@ -146,7 +142,7 @@ class LaporanController extends Controller
         $pdf->SetHTMLFooter('<div style="text-align: center;">{PAGENO}</div>');
 
         // Render konten utama ke PDF
-        $htmlContent = view('laporanrekap', compact('rekapData', 'periode', 'kepalakantor'))->render();
+        $htmlContent = view('laporanrekap', compact('rekapData', 'periode'))->render();
         $pdf->WriteHTML($htmlContent);
 
         $lokasi = KLModel::where('pop', Auth::user()->pop)->value('lokasi');
@@ -160,7 +156,6 @@ class LaporanController extends Controller
         $result = PengirimanModel::where('tujuan', $lokasi)->get();
 
         $alamat = KLModel::where('pop', Auth::user()->pop)->value('alamat');
-        $kepalakantor = KLModel::where('pop', Auth::user()->pop)->value('kepalakantor');
 
         $tanggal = now(); // Ambil tanggal dan waktu saat ini
         $month = $tanggal->format('m'); // Bulan (01-12)
@@ -175,7 +170,6 @@ class LaporanController extends Controller
             'nomorUrut' => $nomorUrutFormatted,
             'tanggal' => $tanggal,
             'alamat' => $alamat,
-            'kepalakantor' => $kepalakantor,
         ]);
     }
 
@@ -197,7 +191,6 @@ class LaporanController extends Controller
         $lokasi = KLModel::where('pop', Auth::user()->pop)->value('lokasi');
         $result = PengirimanModel::where('tujuan', $lokasi)->get();
         $alamat = KLModel::where('pop', Auth::user()->pop)->value('alamat');
-        $kepalakantor = KLModel::where('pop', Auth::user()->pop)->value('kepalakantor');
 
         $tanggal = now(); // Ambil tanggal dan waktu saat ini
         $month = $tanggal->format('m'); // Bulan (01-12)
@@ -216,7 +209,6 @@ class LaporanController extends Controller
                 'kodePop' => $lokasi,
                 'nomorUrut' => $nomorUrutFormatted,
                 'alamat' => $alamat,
-                'kepalakantor' => $kepalakantor,
             ]
         );
 

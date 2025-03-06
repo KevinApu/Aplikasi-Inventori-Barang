@@ -224,7 +224,7 @@
         <div class="signature-section">
             <div class="signature">
                 <p>Penerima</p>
-                <p>{{ $kepalakantor }}</p>
+                <p>{{ Auth::user()->username }}</p>
                 <hr>
                 <p>Kepala Kantor</p>
             </div>
