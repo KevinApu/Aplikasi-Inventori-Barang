@@ -449,9 +449,9 @@
                     deleteSelectedItems() {
                         this.checkedItems.forEach(itemValue => {
                             // Pisahkan itemValue menjadi bagian-bagian individual
-                            const [itemId, nama_barang, penyebab, kondisi] = itemValue.split('/');
+                            const [itemId] = itemValue.split('/');
 
-                            fetch(`/hapus_barang_rusak/${itemId}/${nama_barang}/${penyebab}/${kondisi}`, {
+                            fetch(`/hapus_barang_rusak/${itemId}`, {
                                 method: 'DELETE',
                                 headers: {
                                     'Content-Type': 'application/json',

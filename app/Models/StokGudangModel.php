@@ -15,11 +15,11 @@ class StokGudangModel extends Model
         'kategori',
         'nama_barang',
         'seri',
-        'jumlah',  
-        'satuan',  
-        'rasio',  
+        'jumlah',
+        'satuan',
+        'rasio',
         'hasil',
-        'detail_jumlah',  
+        'detail_jumlah',
         'lokasi',
         'foto',
         'input_by',
@@ -28,4 +28,25 @@ class StokGudangModel extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function barangKeluar()
+    {
+        return $this->hasMany(BarangKeluarModel::class, 'stok_gudang_id', 'id');
+    }
+
+    // Relasi ke tabel order
+    public function order()
+    {
+        return $this->hasMany(Order::class, 'stok_gudang_id', 'id');
+    }
+
+    public function barangRusak()
+    {
+        return $this->hasMany(BarangRusakModel::class, 'stok_gudang_id', 'id');
+    }
+
+    public function Rekap()
+    {
+        return $this->hasMany(RekapModel::class, 'stok_gudang_id', 'id');
+    }
 }

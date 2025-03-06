@@ -94,16 +94,27 @@ class RekapController extends Controller
      */
     public function show(Request $request)
     {
-        $query = DB::table('rekap')
-        ->where('pop', Auth::user()->pop);
+        $query = RekapModel::with('stokGudang')->where('pop', Auth::user()->pop);
 
-        // Filter berdasarkan kategori, nama barang, dan seri
         if ($request->namabarang) {
-            $query->where('nama_barang', 'like', '%' . $request->namabarang . '%');
+            $query->whereHas('stokGudang', function ($q) use ($request) {
+                $q->where('nama_barang', 'like', '%' . $request->namabarang . '%');
+            });
         }
 
-        $results = $query->get();
-
+        $results = $query->get()->map(function ($rekap) {
+            return [
+                'id' => $rekap->id,
+                'stok_awal' => $rekap->stok_awal,
+                'in' => $rekap->in ?? 0,
+                'out' => $rekap->out ?? 0,
+                'satuan' => $rekap->stokGudang->satuan ?? null, // Ambil dari stokGudang
+                'jumlah' => $rekap->stokGudang->jumlah ?? null, // Ambil dari stokGudang
+                'hasil' => $rekap->stokGudang->hasil ?? null, // Ambil dari stokGudang
+                'nama_barang' => $rekap->stokGudang->nama_barang ?? null,
+                'seri' => $rekap->stokGudang->seri ?? null,
+            ];
+        });
         return response()->json($results);
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BarangKeluarModel;
 use App\Models\BarangMasukModel;
 use App\Models\Order;
+use App\Models\StokGudangModel;
 use Illuminate\Container\Attributes\Auth as AttributesAuth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,15 +16,16 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index() {}
+    public function index() {
+        //
+    }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        $order = Order::where('pop', Auth::user()->pop)->get();
-        return view('Inputview.order', compact('order'));
+        //
     }
 
     /**
@@ -38,7 +40,7 @@ class OrderController extends Controller
         $uniqueCode = $barcodePart[1];
 
         // Mencari barang berdasarkan 'pop' dan 'id' dari barcode
-        $barangMasuk = BarangMasukModel::where('pop', Auth::user()->pop)->where('id', $part1)->first();
+        $barangMasuk = StokGudangModel::where('pop', Auth::user()->pop)->where('id', $part1)->first();
 
         if (!$barangMasuk) {
             return redirect()->route('input_barang_keluar')->with('error', 'Barang tidak ditemukan');
@@ -54,18 +56,10 @@ class OrderController extends Controller
 
         // Menyimpan data order baru
         Order::create([
-            'id' => $barangMasuk->id,
-            'nama_barang' => $barangMasuk->nama_barang,
-            'seri' => $barangMasuk->seri,
-            'foto' => $barangMasuk->foto,
-            'lokasi' => $barangMasuk->lokasi,
+            'stok_gudang_id' => $barangMasuk->id,
             'username' => Auth::user()->username,
             'pop' => Auth::user()->pop,
-            'stok' => ($barangMasuk->satuan == 'roll' || $barangMasuk->satuan == 'pack')
-                ? $barangMasuk->hasil
-                : $barangMasuk->jumlah,
-            'satuan' => $barangMasuk->satuan,
-            'qr_code' => $uniqueCode, // Menyimpan kode unik
+            'qr_code' => $uniqueCode,
         ]);
 
         // Pengarahan setelah sukses
@@ -103,10 +97,7 @@ class OrderController extends Controller
      */
     public function destroy(string $id)
     {
-        // Logika untuk menghapus barang
-        //get product by ID
         Order::where('qr_code', $id)->delete();
-        //redirect to index
         return redirect()->route('input_barang_keluar');
     }
 }

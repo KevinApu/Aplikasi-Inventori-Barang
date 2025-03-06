@@ -12,11 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('barang_rusak', function (Blueprint $table) {
-            $table->unsignedBigInteger('id');
-            $table->string('kode_barang', 30);
-            $table->string('kategori', 30);
-            $table->string('nama_barang', 50);
-            $table->string('seri', 70);
+            $table->id();
             $table->integer('jumlah');
             $table->string('input_by', 20);
             $table->string('foto');
@@ -25,6 +21,7 @@ return new class extends Migration
             $table->string('pop', 12);
             $table->string('qr_code', 255)->nullable();
             $table->string('status', 30);
+            $table->foreignId('stok_gudang_id')->constrained('stok_gudang')->onDelete('restrict');
             $table->timestamps();
         });
     }

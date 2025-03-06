@@ -11,10 +11,6 @@ class BarangRusakModel extends Model
     protected $table = 'barang_rusak'; // Nama tabel
     protected $fillable = [
         'id',
-        'kode_barang',
-        'kategori',
-        'nama_barang',
-        'seri',
         'jumlah',  
         'input_by',
         'foto',
@@ -22,12 +18,12 @@ class BarangRusakModel extends Model
         'penyebab',
         'pop',
         'qr_code',
-        'status'
+        'status',
+        'stok_gudang_id',
     ];
 
-    // Menonaktifkan primary key
-    protected $primaryKey = null;
-
-    // Menonaktifkan auto-increment
-    public $incrementing = false;
+    public function stokGudang()
+    {
+        return $this->belongsTo(StokGudangModel::class, 'stok_gudang_id', 'id');
+    }
 }

@@ -11,20 +11,17 @@ class RekapModel extends Model
     protected $table = 'rekap'; // Nama tabel
     protected $fillable = [
         'id',
-        'kode_barang',
-        'kategori',
-        'nama_barang',
-        'seri',
-        'jumlah',
-        'satuan',
-        'rasio',
-        'hasil',
-        'detail_jumlah',
         'stok_awal',
         'in',
         'out',
         'pop',
+        'stok_gudang_id',
         'created_at',
         'updated_at'
     ];
+
+    public function stokGudang()
+    {
+        return $this->belongsTo(StokGudangModel::class, 'stok_gudang_id', 'id');
+    }
 }

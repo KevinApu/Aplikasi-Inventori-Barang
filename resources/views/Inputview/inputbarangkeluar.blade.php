@@ -1,28 +1,4 @@
 <x-sidebar-layout>
-    <div x-data="{ open: @if(session('error')) true @else false @endif }" x-show="open" @keydown.escape.window="open = false"
-        class="fixed z-50 inset-0 flex items-center justify-center bg-black bg-opacity-30">
-        <div class="relative p-4 sm:ml-64 w-full max-w-md max-h-full">
-            <div class="relative bg-white rounded-lg shadow bg-zinc-800 bg-opacity-50">
-                <div class="p-4 md:p-5 text-center">
-                    <svg class="mx-auto mb-4 text-white w-12 h-12 text-sky-200" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
-                    <h3 class="mb-5 text-lg font-normal text-gray-500 text-white">Produk sudah ditambahkan!</h3>
-                    <button @click="open = false" type="button"
-                        class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                        Yes
-                    </button>
-                    <a href="#order" @click="open = false">
-                        <button type="button"
-                            class="py-2.5 px-5 ms-3 text-sm font-medium text-blue-900 focus:outline-none bg-white rounded-lg border border-sky-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 focus:ring-gray-700 bg-gray-800 text-gray-400 border-gray-600 hover:text-white hover:bg-gray-700">
-                            Buka List
-                        </button>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="container mx-auto px-4">
         <div class="mb-4">
             <h1 class="text-2xl font-semibold font-heading text-gray-500">Input Barang Keluar</h1>
@@ -339,18 +315,23 @@
                     <div class="space-y-4">
                         @foreach ($order as $item)
                         <div class="flex items-center gap-4 p-4 border rounded-lg shadow-sm bg-gray-50">
-                            <img class="h-24 w-24 rounded-md border object-cover" src="{{ asset('storage/' . $item->foto) }}" />
+                            <img class="h-24 w-24 rounded-md border object-cover" src="{{ asset('storage/' . $item->stokGudang->foto) }}" />
                             <div class="flex flex-col flex-1">
-                                <span class="font-medium text-gray-800">{{$item->nama_barang}} - {{$item->seri}}</span>
-                                <span class="text-sm text-gray-500">Stok: {{$item->stok}}</span>
-                                <span class="text-gray-600 font-bold">{{$item->lokasi}}</span>
+                                <span class="font-medium text-gray-800">{{$item->stokGudang->nama_barang}} - {{$item->stokGudang->seri}}</span>
+                                <span class="text-sm text-gray-500">
+                                    Stok:
+                                    {{ ($item->stokGudang->satuan == 'roll' || $item->stokGudang->satuan == 'pack') ? $item->stokGudang->hasil : $item->stokGudang->jumlah }}
+                                </span>
+                                <span class="text-gray-600 font-bold">{{$item->stokGudang->lokasi}}</span>
+                                <input type="hidden" name="qr_code[{{ $item->id }}]" value="{{ $item->qr_code }}">
+                                <input type="hidden" name="stok_gudang_id[{{ $item->id }}]" value="{{ $item->stok_gudang_id }}">
                                 <div class="mt-2 flex items-center space-x-2">
                                     <span class="text-gray-600">Jumlah:</span>
-                                    @if ($item->satuan === 'unit' || $item->satuan === 'pcs')
+                                    @if ($item->stokGudang->satuan === 'unit' || $item->stokGudang->satuan === 'pcs')
                                     <span class="text-gray-800 font-semibold">1</span>
                                     <input type="hidden" name="jumlah[{{ $item->id }}]" value="1" />
                                     @else
-                                    <input type="number" name="jumlah[{{ $item->id }}]" value="1" min="1" max="{{ $item->stok }}" class="w-16 text-center border rounded-md py-1" />
+                                    <input type="number" name="jumlah[{{ $item->id }}]" value="1" min="1" max="{{ $item->stokGudang->stok }}" class="w-16 text-center border rounded-md py-1" />
                                     @endif
                                 </div>
                             </div>

@@ -338,7 +338,7 @@
                                                             </button>
                                                         </div>
                                                         <!-- Modal body -->
-                                                        <form class="p-4 md:p-5" method="POST" x-bind:action="`/input_barang_rusak2/${item.id}/${item.nama_customer}/${item.output_by}/${item.lokasi}`" enctype="multipart/form-data">
+                                                        <form class="p-4 md:p-5" method="POST" x-bind:action="`/input_barang_rusak2/${item.id}`" enctype="multipart/form-data">
                                                             @csrf
                                                             <div class="grid gap-4 mb-4 grid-cols-2">
                                                                 <div class="col-span-2">
@@ -619,9 +619,9 @@
 
                 deleteSelectedItems() {
                     this.checkedItems.forEach(itemValue => {
-                        const [itemId, nama_barang, nama_customer, output_by] = itemValue.split('/');
+                        const [itemId] = itemValue.split('/');
 
-                        fetch(`/tabel_barang_keluar/${itemId}/${nama_barang}/${nama_customer}/${output_by}`, {
+                        fetch(`/tabel_barang_keluar/${itemId}`, {
                             method: 'DELETE',
                             headers: {
                                 'Content-Type': 'application/json',

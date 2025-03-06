@@ -9,10 +9,9 @@ class Order extends Model
 {
     use HasFactory;
     protected $table = 'order';
-    protected $fillable = ['id','nama_barang', 'seri', 'foto', 'lokasi', 'username', 'stok', 'satuan' ,'pop', 'qr_code'];
-    // Menonaktifkan primary key
-    protected $primaryKey = null;
-
-    // Menonaktifkan auto-increment
-    public $incrementing = false;
+    protected $fillable = ['id', 'username', 'pop', 'qr_code', 'stok_gudang_id'];
+    public function stokGudang()
+    {
+        return $this->belongsTo(StokGudangModel::class, 'stok_gudang_id', 'id');
+    }
 }

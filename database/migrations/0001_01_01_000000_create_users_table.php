@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('pop')->nullable();
             $table->string('foto')->nullable();
             $table->timestamps();
-            $table->timestamp('last_login')->nullable()->after('password');
+            $table->timestamp('last_login')->nullable();
         });
         
         Schema::create('sessions', function (Blueprint $table) {

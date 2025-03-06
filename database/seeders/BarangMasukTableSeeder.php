@@ -17,9 +17,9 @@ class BarangMasukTableSeeder extends Seeder
     {
         
 
-        DB::table('barang_masuk')->delete();
+        DB::table('stok_gudang')->delete();
         
-        DB::table('barang_masuk')->insert(array (
+        DB::table('stok_gudang')->insert(array (
             0 => 
             array (
                 'id' => 1,

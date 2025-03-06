@@ -53,7 +53,7 @@ class KLController extends Controller
      */
     public function show(Request $request)
     {
-        $query = DB::table('barang_masuk');
+        $query = DB::table('stok_gudang');
 
         // Filter berdasarkan kategori, nama barang, dan seri
         if ($request->pop) {
@@ -62,6 +62,8 @@ class KLController extends Controller
 
         $results = $query->get();
         return response()->json($results);
+
+        
     }
 
     /**

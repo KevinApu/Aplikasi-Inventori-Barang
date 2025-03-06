@@ -53,7 +53,6 @@ class RequestBarangController extends Controller
             $riwayat = null;
         }
 
-
         return view('Inputview.RequestBarang', compact('result', 'riwayat'));
     }
 

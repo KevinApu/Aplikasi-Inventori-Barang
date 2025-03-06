@@ -23,7 +23,7 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 // Route::get('/tabel_barang_masuk/admin', [KLController::class, 'index'])->name('tabel_barang_masuk.superadmin');
 Route::get('/coba', function () {
-    return view('coba');
+    return view('welcome');
 });
 
 
@@ -43,7 +43,6 @@ Route::middleware(['auth', 'clear.temp_items'])->group(function () {
             Route::get('/input_barang_masuk', [BarangMasukController::class, 'create'])->name('input_barang_masuk.view');
             Route::post('/input_barang_masuk', [BarangMasukController::class, 'store'])->name('input_barang_masuk');
             Route::get('/tabel_barang_masuk', [BarangMasukController::class, 'index'])->name('tabel_barang_masuk');
-            Route::delete('/tabel_barang_masuk.delete/{id}', [BarangMasukController::class, 'destroy']);
             Route::put('/update_barang_masuk/{id}', [BarangMasukController::class, 'update'])->name('update_barang_masuk');
             Route::post('/penambahan_stok/{id}', [BarangMasukController::class, 'penambahan_stok'])->name('penambahan_stok');
             Route::post('/input_barang_rusak/{id}', [BarangRusakController::class, 'store'])->name('barang.rusak');
@@ -94,8 +93,8 @@ Route::middleware(['auth', 'clear.temp_items'])->group(function () {
         Route::get('/input_barang_keluar', [BarangKeluarController::class, 'create'])->name('input_barang_keluar');
         Route::post('/barang_keluar', [BarangKeluarController::class, 'store'])->name('barangkeluar.store');
         Route::get('/hapus_order/{id}', [OrderController::class, 'destroy']);
-        Route::delete('/tabel_barang_keluar/{id}/{nama_barang}/{nama_customer}/{output_by}', [BarangKeluarController::class, 'destroy']);
-        Route::post('/input_barang_rusak2/{id}/{nama_customer}/{output_by}/{lokasi}', [BarangRusakController2::class, 'store']);
+        Route::delete('/tabel_barang_keluar/{id}', [BarangKeluarController::class, 'destroy']);
+        Route::post('/input_barang_rusak2/{id}', [BarangRusakController2::class, 'store']);
 
 
         Route::get('/search/barangmasuk', [BarangMasukController::class, 'show']);
@@ -120,7 +119,7 @@ Route::middleware(['auth', 'clear.temp_items'])->group(function () {
 
         Route::get('/update_rekap_stok', [RekapController::class, 'updateRekapBulanan'])->name('update_rekap_stok');
 
-        Route::delete('/hapus_barang_rusak/{id}/{nama_barang}/{penyebab}/{kondisi}', [BarangRusakController::class, 'destroy']);
+        Route::delete('/hapus_barang_rusak/{id}', [BarangRusakController::class, 'destroy']);
 
         Route::get('/request-access', [LoginUserController::class, 'requestAccess'])->name('request.access');
 

@@ -224,7 +224,7 @@
                     fetch(`/search/rekap?namabarang=${this.namabarang}`)
                         .then(response => response.json())
                         .then(data => {
-                            this.results = data;
+                            this.results = data;    
                         });
                 }
             };

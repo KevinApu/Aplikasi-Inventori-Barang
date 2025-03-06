@@ -584,7 +584,7 @@
                         x-transition:leave="transition transform duration-300"
                         x-transition:leave-start="translate-y-0 scale-100 opacity-100"
                         x-transition:leave-end="translate-y-full scale-50 opacity-0"
-                        class="flex items-center space-x-6 p-4 w-[25rem] mobile:w-[15rem] h-10 bg-white shadow-md rounded-md">
+                        class="flex items-center space-x-6 p-4 w-[16rem] mobile:w-[15rem] h-10 bg-white shadow-md rounded-md">
                         <div class="flex items-center space-x-2 mobile:space-x-1 mobile:w-full">
                             <input type="checkbox" class="w-5 h-5 mobile:w-4 mobile:h-4 cursor-pointer rounded-md mr-2 checked:bg-indigo-500 focus:ring-0 focus:border-0" checked disabled>
                             <span class="text-gray-700" x-text="`${checkedItems.length} Items`"></span>
@@ -617,12 +617,6 @@
                                     <div class="absolute inset-0 h-16 w-16 rounded-full bg-blue-500 opacity-20 blur-xl"></div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="flex items-center space-x-2 cursor-pointer hover:scale-110 duration-300" @click="deleteSelectedItems" title="Remove Items">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7L5 7M10 11V17M14 11V17M7 7L7 19A2 2 0 009 21H15A2 2 0 0017 19V7M9 7V4A2 2 0 0111 2H13A2 2 0 0115 4V7" />
-                            </svg>
-                            <span class="text-gray-700 mobile:hidden">Remove</span>
                         </div>
                     </div>
                 </div>
@@ -826,53 +820,6 @@
         </div>
     </div>
     @endif
-    @if (session('success_hapus'))
-    <!-- Main modal -->
-    <div x-data="{ isOpen: true }" x-init="setTimeout(() => isOpen = false, 2000)">
-        <div
-            x-show="isOpen"
-            @keydown.escape.window="isOpen = false"
-            @click.self="isOpen = false"
-            tabindex="-1"
-            aria-hidden="true"
-            class="overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0 h-screen md:h-full bg-black bg-opacity-30"
-            x-transition:enter="transition-opacity duration-300 ease-out"
-            x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100"
-            x-transition:leave="transition-opacity duration-300 ease-in"
-            x-transition:leave-start="opacity-100"
-            x-transition:leave-end="opacity-0">
-            <div @click.stop
-                class="bg-white rounded-xl shadow-lg p-4 text-center w-48 transition-transform"
-                x-transition:enter="transform transition-transform duration-300 ease-out"
-                x-transition:enter-start="opacity-0 scale-95"
-                x-transition:enter-end="opacity-100 scale-100"
-                x-transition:leave="transform transition-transform duration-200 ease-in"
-                x-transition:leave-start="opacity-100 scale-100"
-                x-transition:leave-end="opacity-0 scale-95">
-                <!-- Icon Success -->
-                <div class="bg-green-100 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3 shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-green-500 animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M5 12l5 5l10-10" />
-                    </svg>
-                </div>
-
-                <!-- Pesan -->
-                <h1 class="text-base font-semibold text-green-600">Success</h1>
-                <p class="text-gray-500 text-xs mb-3 leading-tight">
-                    {{ session('success_hapus') }}
-                </p>
-
-                <!-- Tombol Continue -->
-                <button type="button" @click="isOpen = false"
-                    class="bg-green-500 text-white py-1 px-4 rounded-full text-sm hover:bg-green-600 focus:ring focus:ring-green-300 transition">
-                    Continue
-                </button>
-            </div>
-        </div>
-    </div>
-    @endif
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js" integrity="sha512-r6rDA7W6ZeQhvl8S7yRVQUKVHdexq+GAlNkNNqVC7YyIV+NwqCTJe2hDWCiffTyRNOeGEzRRJ9ifvRm/HCzGYg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         function searchApp() {
@@ -945,28 +892,6 @@
 
                 isChecked(id) {
                     return this.checkedItems.includes(id);
-                },
-
-                deleteSelectedItems() {
-                    this.checkedItems.forEach(itemId => {
-                        fetch(`/tabel_barang_masuk.delete/${itemId}`, {
-                            method: 'DELETE',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            }
-                        }).then(response => {
-                            if (response.ok) {
-                                console.log(`Item ${itemId} berhasil dihapus.`);
-                            } else {
-                                console.error(`Gagal menghapus item ${itemId}.`);
-                            }
-                        });
-                    });
-                    this.checkedItems = []; // Kosongkan setelah dihapus
-                    this.showPrintPopup = false; // Sembunyikan pop-up setelah menghapus
-                    this.search(); // Update hasil pencarian setelah penghapusan
-                    location.reload();
                 },
 
 

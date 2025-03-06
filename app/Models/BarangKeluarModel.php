@@ -9,10 +9,9 @@ class BarangKeluarModel extends Model
 {
     use HasFactory;
     protected $table = 'barang_keluar';
-    protected $fillable = ['id', 'kode_barang', 'kategori' ,'nama_barang', 'seri', 'jumlah', 'foto', 'nama_customer', 'output_by', 'keterangan', 'lokasi', 'pop', 'qr_code'];
-    // Menonaktifkan primary key
-    protected $primaryKey = null;
-
-    // Menonaktifkan auto-increment
-    public $incrementing = false;
+    protected $fillable = ['id', 'jumlah', 'nama_customer', 'output_by', 'keterangan', 'lokasi', 'pop', 'qr_code', 'stok_gudang_id'];
+    public function stokGudang()
+    {
+        return $this->belongsTo(StokGudangModel::class, 'stok_gudang_id', 'id');
+    }
 }

@@ -25,7 +25,7 @@ class BarangMasukController extends Controller
 
     public function index()
     {
-        $barangmasuk = BarangMasukModel::where('pop', Auth::user()->pop)->get();
+        $barangmasuk = StokGudangModel::where('pop', Auth::user()->pop)->get();
         return view('Tabelview.Tabelbarangmasuk', ['barangmasuk' => $barangmasuk]);
     }
 
@@ -77,9 +77,8 @@ class BarangMasukController extends Controller
     {
         $kategoris = kategori::where('pop', Auth::user()->pop)->get();
         $namabarang = nama_barang::where('pop', Auth::user()->pop)->get();
-        $stokGudang = StokGudangModel::where('pop', Auth::user()->pop)->get();
 
-        return view('Inputview.inputbarangmasuk', ['kategoris' => $kategoris, 'nama_barang' => $namabarang, 'stokGudang' => $stokGudang]);
+        return view('Inputview.inputbarangmasuk', ['kategoris' => $kategoris, 'nama_barang' => $namabarang]);
     }
 
     public function store(BarangMasukRequest $request): RedirectResponse
@@ -88,33 +87,41 @@ class BarangMasukController extends Controller
         $foto = $request->file('foto');
         $finalFileName = time() . '-' . $foto->hashName();
         $foto->storeAs('public/img', $finalFileName);
+
     
+
         $barangMasukData = $this->prepareBarangData($request, $inputby, $finalFileName);
-    
-        // Validasi di BarangMasukModel
-        $existsInBarangMasuk = BarangMasukModel::whereRaw("REPLACE(LOWER(kode_barang), ' ', '') = ?", [strtolower(str_replace(' ', '', $request->kodebarang))])
+
+        $existsInStokGudang = StokGudangModel::whereRaw("REPLACE(LOWER(kode_barang), ' ', '') = ?", [strtolower(str_replace(' ', '', $request->kodebarang))])
             ->whereRaw("REPLACE(LOWER(nama_barang), ' ', '') = ?", [strtolower(str_replace(' ', '', $request->namabarang))])
             ->whereRaw("REPLACE(LOWER(kategori), ' ', '') = ?", [strtolower(str_replace(' ', '', $request->kategori))])
             ->whereRaw("REPLACE(LOWER(seri), ' ', '') = ?", [strtolower(str_replace(' ', '', $request->seri))])
-            ->where('pop', Auth::user()->pop) // Menambahkan pengecekan 'pop' yang sedang login
+            ->where('pop', Auth::user()->pop)
             ->first();
-    
-        // Validasi di RekapModel
-        $existsInRekap = RekapModel::whereRaw("REPLACE(LOWER(kode_barang), ' ', '') = ?", [strtolower(str_replace(' ', '', $request->kodebarang))])
-            ->whereRaw("REPLACE(LOWER(nama_barang), ' ', '') = ?", [strtolower(str_replace(' ', '', $request->namabarang))])
-            ->whereRaw("REPLACE(LOWER(kategori), ' ', '') = ?", [strtolower(str_replace(' ', '', $request->kategori))])
-            ->whereRaw("REPLACE(LOWER(seri), ' ', '') = ?", [strtolower(str_replace(' ', '', $request->seri))])
-            ->where('pop', Auth::user()->pop) // Menambahkan pengecekan 'pop' yang sedang login
-            ->first();
-    
+
+        // Jika barang sudah ada di BarangMasuk dan jumlahnya 0, maka update jumlah dan satuan
+        if ($existsInStokGudang && $existsInStokGudang->jumlah == 0) {
+            $updateData = ['jumlah' => $request->jumlah];
+
+            // Jika satuannya Roll atau Pack, tambahkan perhitungan rasio
+            if (in_array($request->satuan, ['Roll', 'Pack'])) {
+                $updateData['rasio'] = $request->rasio;
+                $updateData['hasil'] = $request->jumlah * $request->rasio;
+                $updateData['detail_jumlah'] = $updateData['hasil'] % $request->rasio;
+            }
+
+            $existsInStokGudang->update($updateData);
+            return redirect()->back()->with('success', 'Jumlah barang di BarangMasuk berhasil diperbarui.');
+        }
+
         // Jika barang sudah ada di salah satu tabel
-        if ($existsInBarangMasuk || $existsInRekap) {
+        if ($existsInStokGudang) {
             return redirect()->back()->with('error', 'Data sudah ada di sistem.');
         }
-    
+
         // Lanjutkan proses jika validasi lolos
-        $this->handleNewStok($request, $barangMasukData);
-    
+        $this->handleNewStok($barangMasukData);
+
         return redirect()->route('input_barang_masuk')->with([
             'success' => 'Barang berhasil ditambahkan!',
             'barang' => [
@@ -124,7 +131,7 @@ class BarangMasukController extends Controller
             ],
         ]);
     }
-    
+
     private function prepareBarangData($request, $inputby, $finalFileName)
     {
         $data = [
@@ -142,55 +149,30 @@ class BarangMasukController extends Controller
             'created_at' => $request->tglmasuk . ' ' . now()->format('H:i:s'),
             'updated_at' => $request->tglmasuk . ' ' . now()->format('H:i:s'),
         ];
-    
+
         if (in_array($request->satuan, ['Roll', 'Pack'])) {
             $data['rasio'] = $request->rasio;
             $data['hasil'] = $request->jumlah * $request->rasio;
             $data['detail_jumlah'] = $data['hasil'] % $request->rasio;
         }
-    
+
         return $data;
     }
-    
-    private function handleNewStok($request, $barangMasukData)
+
+    private function handleNewStok($barangMasukData)
     {
-        // Menambahkan pengecekan 'pop' di query
-        $exists = StokGudangModel::whereRaw("REPLACE(LOWER(kode_barang), ' ', '') = ?", [strtolower(str_replace(' ', '', $request->kodebarang))])
-            ->whereRaw("REPLACE(LOWER(nama_barang), ' ', '') = ?", [strtolower(str_replace(' ', '', $request->namabarang))])
-            ->whereRaw("REPLACE(LOWER(kategori), ' ', '') = ?", [strtolower(str_replace(' ', '', $request->kategori))])
-            ->whereRaw("REPLACE(LOWER(seri), ' ', '') = ?", [strtolower(str_replace(' ', '', $request->seri))])
-            ->where('pop', Auth::user()->pop)  // Menambahkan pengecekan 'pop' yang sedang login
-            ->first();
-    
-        if ($exists) {
-            // Jika data sudah ada, perbarui stok dan simpan foto baru jika ada perubahan foto
-            $foto = $request->file('foto');
-            $finalFileName = time() . '-' . $foto->hashName();
-    
-            // Hapus foto lama jika ada
-            if (!empty($exists->foto)) {
-                Storage::delete('public/' . $exists->foto);
-            }
-    
-            // Simpan foto baru
-            $foto->storeAs('public/img', $finalFileName);
-    
-            $barangMasukData['created_at'] = $exists->created_at;
-    
-            // Update data barang di StokGudangModel
-            StokGudangModel::where('id', $exists->id)->update($barangMasukData);
-    
-            // Simpan ke BarangMasukModel dan RekapModel
-            BarangMasukModel::create(['id' => $exists->id] + $barangMasukData);
-            RekapModel::create(['id' => $exists->id, 'stok_awal' => $barangMasukData['hasil'] ?? $barangMasukData['jumlah']] + $barangMasukData);
-        } else {
-            // Jika data belum ada, buat data baru di semua model terkait
-            $barangMasuk = BarangMasukModel::create($barangMasukData);
-            RekapModel::create(['id' => $barangMasuk->id, 'stok_awal' => $barangMasukData['hasil'] ?? $barangMasukData['jumlah']] + $barangMasukData);
-            StokGudangModel::create(['id' => $barangMasuk->id] + $barangMasukData);
-        }
+        $stokGudangModel = StokGudangModel::create($barangMasukData);
+        RekapModel::create([
+            'stok_gudang_id' => $stokGudangModel->id,
+            'stok_awal' => isset($barangMasukData['hasil']) ? $barangMasukData['hasil'] : $barangMasukData['jumlah'],
+            'in' => 0, // Default nilai masuk
+            'out' => 0, // Default nilai keluar
+            'pop' => Auth::user()->pop,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
     }
-    
+
 
 
 
@@ -199,7 +181,7 @@ class BarangMasukController extends Controller
 
     public function show(Request $request)
     {
-        $query = DB::table('barang_masuk')
+        $query = DB::table('stok_gudang')
             ->where('pop', Auth::user()->pop);
 
         // Filter berdasarkan kategori, nama barang, dan seri
@@ -253,155 +235,67 @@ class BarangMasukController extends Controller
 
     public function update(Request $request, string $id)
     {
-        // Logika untuk memperbarui barang
-        $barangMasuk = BarangMasukModel::findOrFail($id);
+        $StokGudangModel = StokGudangModel::findOrFail($id);
+        $data = $request->only(['kodebarang', 'namabarang', 'seri', 'lokasi', 'keterangan']);
 
+        // Jika ada file foto baru
         if ($request->hasFile('foto')) {
-            //upload new image
-            $foto = $request->foto;
+            $foto = $request->file('foto');
             $finalFileName = time() . '-' . $foto->hashName();
 
-            if (!empty($barangMasuk->foto)) {
-                Storage::delete('public/' . $barangMasuk->foto);
+            // Hapus foto lama jika ada
+            if (!empty($StokGudangModel->foto)) {
+                Storage::delete('public/' . $StokGudangModel->foto);
             }
+
             // Simpan foto baru
             $foto->storeAs('public/img', $finalFileName);
-
-            //delete old image
-            Storage::disk('public')->delete($barangMasuk->foto);
-
-            BarangMasukModel::where('id', $id)->update([
-                'foto' => 'img/' . $finalFileName,
-                'kode_barang'         => $request->kodebarang,
-                'nama_barang'   => $request->namabarang,
-                'seri'         => $request->seri,
-                'lokasi'         => $request->lokasi,
-                'keterangan'         => $request->keterangan
-            ]);
-            StokGudangModel::where('id', $id)->update([
-                'foto' => 'img/' . $finalFileName,
-                'kode_barang'         => $request->kodebarang,
-                'nama_barang'   => $request->namabarang,
-                'seri'         => $request->seri,
-                'lokasi'         => $request->lokasi,
-                'keterangan'         => $request->keterangan
-            ]);
-        } else {
-
-            BarangMasukModel::where('id', $id)->update([
-                'kode_barang'         => $request->kodebarang,
-                'nama_barang'   => $request->namabarang,
-                'seri'         => $request->seri,
-                'lokasi'         => $request->lokasi,
-                'keterangan'         => $request->keterangan
-            ]);
-            StokGudangModel::where('id', $id)->update([
-                'kode_barang'         => $request->kodebarang,
-                'nama_barang'   => $request->namabarang,
-                'seri'         => $request->seri,
-                'lokasi'         => $request->lokasi,
-                'keterangan'         => $request->keterangan
-            ]);
-            RekapModel::where('id', $id)->update([
-                'kode_barang'         => $request->kodebarang,
-                'nama_barang'   => $request->namabarang,
-                'seri'         => $request->seri,
-            ]);
+            $data['foto'] = 'img/' . $finalFileName;
         }
-        return redirect()->route('tabel_barang_masuk')->with([
-            'success_update' => 'Barang berhasil diupdate!',
+
+        // Update data
+        $StokGudangModel->update([
+            'kode_barang' => $data['kodebarang'],
+            'nama_barang' => $data['namabarang'],
+            'seri'        => $data['seri'],
+            'lokasi'      => $data['lokasi'],
+            'keterangan'  => $data['keterangan'],
+            'foto'        => $data['foto'] ?? $StokGudangModel->foto, // Gunakan foto lama jika tidak ada perubahan
         ]);
+
+        return redirect()->route('tabel_barang_masuk')->with('success_update', 'Barang berhasil diupdate!');
     }
 
 
 
     public function penambahan_stok(Request $request, string $id)
     {
-        $barangMasuk = BarangMasukModel::findOrFail($id);
-
-        if ($barangMasuk->satuan == 'pack' || $barangMasuk->satuan == 'roll') {
-            // Hitung hasil stok awal
-            $totalHasil = $barangMasuk->hasil;
-
-            // Tambahkan stok baru ke hasil
-            $totalHasil += $request->input('jumlah') * $barangMasuk->rasio;
-
-            $roll = $totalHasil / $barangMasuk->rasio;
-            $barangMasuk->jumlah = ceil($roll);
-            // Hitung jumlah pack/roll dan sisa detail
-            $barangMasuk->detail_jumlah = $totalHasil % $barangMasuk->rasio;
-
-            // Simpan perubahan
-            $barangMasuk->hasil = $totalHasil;
-            $barangMasuk->save();
-
-
-            $rekap = RekapModel::firstOrNew(['id' => $barangMasuk->id]);
-            $rekap->jumlah = $barangMasuk->jumlah; // Update jumlah dengan penambahan
-            // Atur satuan dari barang masuk
-            $rekap->detail_jumlah = $barangMasuk->detail_jumlah; // Atur rasio // Keterangan
-            $rekap->hasil = $barangMasuk->hasil; // Atur rasio // Keterangan
-
-            $total = $request->input('jumlah') * $barangMasuk->rasio;
-            $rekap->in += $total;    // Atur rasio // Keterangan      
-            $rekap->save();
+        $StokGudangModel = StokGudangModel::findOrFail($id);
+        $jumlahBaru = $request->input('jumlah');
+    
+        if (in_array($StokGudangModel->satuan, ['pack', 'roll'])) {
+            $totalHasil = $StokGudangModel->hasil + ($jumlahBaru * $StokGudangModel->rasio);
+            $StokGudangModel->jumlah = ceil($totalHasil / $StokGudangModel->rasio);
+            $StokGudangModel->detail_jumlah = $totalHasil % $StokGudangModel->rasio;
+            $StokGudangModel->hasil = $totalHasil;
         } else {
-            // Jika bukan pack atau roll, langsung tambahkan jumlah
-            $barangMasuk->jumlah += $request->input('jumlah');
-            $barangMasuk->save();
-
-
-            $rekap = RekapModel::firstOrNew(['id' => $barangMasuk->id]);
-            $rekap->jumlah = $barangMasuk->jumlah; // Update jumlah dengan penambahan
-            // Atur satuan dari barang masuk
-            $rekap->detail_jumlah = $barangMasuk->detail_jumlah; // Atur rasio // Keterangan
-            $rekap->hasil = $barangMasuk->hasil; // Atur rasio // Keterangan
-
-            $rekap->in += $request->input('jumlah');    // Atur rasio // Keterangan      
-            $rekap->save();
+            $StokGudangModel->jumlah += $jumlahBaru;
         }
-
-
-        $stokGudang = StokGudangModel::firstOrNew(['id' => $barangMasuk->id]);
-        $stokGudang->jumlah = $barangMasuk->jumlah; // Update jumlah dengan penambahan
-        // Atur satuan dari barang masuk
-        $stokGudang->detail_jumlah = $barangMasuk->detail_jumlah; // Atur rasio // Keterangan
-        $stokGudang->hasil = $barangMasuk->hasil; // Atur rasio // Keterangan
-        $stokGudang->save();
-
-        return redirect()->route('tabel_barang_masuk')->with([
-            'success_addstock' => 'Jumlah Barang berhasil ditambah!',
-        ]);
-    }
+        $StokGudangModel->save();
+    
+        // Update RekapModel
+        $rekap = RekapModel::firstOrNew(['stok_gudang_id' => $StokGudangModel->id]);
+        $rekap->in += $jumlahBaru * ($StokGudangModel->rasio ?? 1);
+        $rekap->save();
+    
+        return redirect()->route('tabel_barang_masuk')->with('success_addstock', 'Jumlah Barang berhasil ditambah!');
+    }    
 
 
 
 
     public function destroy(string $id)
     {
-        // Logika untuk menghapus barang
-        //get product by ID
-        $product = BarangMasukModel::findOrFail($id);
-        //delete product
-        $product->delete();
-
-        $rekap = RekapModel::findOrFail($id);
-        $rekap->delete();
-
-        Order::where('id', $id)->delete();
-        // Cari stok gudang berdasarkan ID
-        $stokGudang = StokGudangModel::findOrFail($id); // Menggunakan findOrFail untuk mendapatkan model
-        // Atur kode_barang
-        $stokGudang->jumlah = 0;
-        $stokGudang->detail_jumlah = null;
-        $stokGudang->hasil = null;
-        $stokGudang->rasio = null;
-
-        // Simpan perubahan ke database
-        $stokGudang->save();
-
-        return redirect()->route('tabel_barang_masuk')->with([
-            'success_hapus' => 'Barang berhasil dihapus!',
-        ]);
+        //
     }
 }

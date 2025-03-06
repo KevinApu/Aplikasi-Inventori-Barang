@@ -13,19 +13,19 @@ return new class extends Migration
     {
         Schema::create('stok_gudang', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_barang', 30);
-            $table->string('kategori', 30);
+            $table->string('kode_barang', 50);
+            $table->string('kategori', 40);
             $table->string('nama_barang', 50);
             $table->string('seri', 70);
             $table->integer('jumlah');
-            $table->enum('satuan', ['pcs', 'roll', 'pack', 'meter', 'unit']);
+            $table->enum('satuan', ['pcs', 'roll', 'pack', 'unit']);
             $table->integer('rasio')->nullable();
             $table->integer('hasil')->nullable();
             $table->integer('detail_jumlah')->nullable();
             $table->string('lokasi', 70);
             $table->string('foto')->nullable();
-            $table->string('input_by', 20);
-            $table->string('keterangan', 50)->nullable();
+            $table->string('input_by', 30);
+            $table->string('keterangan', 70)->nullable();
             $table->string('pop', 12);
             $table->timestamps();
         });

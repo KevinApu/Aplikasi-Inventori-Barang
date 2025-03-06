@@ -86,7 +86,6 @@ class jajal extends Seeder
             [
                 'id' => 1,
                 'pop' => 'G1',
-                'kepalakantor' => 'SALSABILLA SALWA I.W., S.Ak',
                 'lokasi' => 'PCT',
                 'alamat'    => 'Jl P. Sudirman No.3, Barang, Arjowinangun, Kec. Pacitan, Kabupaten Pacitan, Jawa Timur 36516',
                 'password_superadmin' => NULL,
@@ -94,7 +93,6 @@ class jajal extends Seeder
             [
                 'id' => 2,
                 'pop' => NULL,
-                'kepalakantor' => NULL,
                 'lokasi' => 'pusat',
                 'alamat'    => NULL,
                 'password_superadmin' => 'superadmin@sandya.com',

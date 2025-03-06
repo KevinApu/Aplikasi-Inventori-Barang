@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Print;
 
 use App\Http\Controllers\Controller;
 use App\Models\BarangMasukModel;
+use App\Models\StokGudangModel;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,7 +49,7 @@ class PrintControlller extends Controller
 
         // Proses setiap item ID yang ada di dalam array itemIds
         foreach ($itemIds as $id) {
-            $item = BarangMasukModel::find($id);
+            $item = StokGudangModel::find($id);
 
             if ($item) {
                 // Cek apakah jumlah barang lebih dari satu

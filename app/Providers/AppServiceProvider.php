@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use App\Models\BarangMasukModel;
 use App\Models\KLModel;
 use App\Models\NotificationSetting;
 use App\Models\PengirimanModel;
 use App\Models\RequestBarangModel;
+use App\Models\StokGudangModel;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -38,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
             // Barang kurang berdasarkan pop
             $settings = NotificationSetting::first() ?? new NotificationSetting();
 
-            $barangKurang = BarangMasukModel::where('pop', $currentPop)
+            $barangKurang = StokGudangModel::where('pop', $currentPop)
                 ->where(function ($query) use ($settings) {
                     $query->where('jumlah', '<', $settings->roll)->where('satuan', 'roll')
                         ->orWhere('jumlah', '<', $settings->pack)->where('satuan', 'pack')
