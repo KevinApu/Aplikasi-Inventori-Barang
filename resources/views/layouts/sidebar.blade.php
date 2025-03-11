@@ -20,7 +20,7 @@
 <body class="antialiased bg-body" x-data="{ isSidebarOpen: true }">
     <nav class="bg-[#0F0606] shadow-lg fixed top-0 w-full left-0 z-30">
         <div class="w-full px-4 relative flex justify-end h-16 items-center">
-            @if(auth()->user() && auth()->user()->role === 'admin')
+            @if(auth()->user() && auth()->user()->KLUser->role === 'admin')
             <div x-data="{ open: false }" class="relative inline-block">
                 <button type="button" x-on:click="open = ! open" data-dropdown-toggle="notification-dropdown" class="relative p-2 mr-1 text-gray-500 rounded-lg hover:text-white hover:bg-gray-700" title="Notifikasi">
                     <!-- ikon bel -->
@@ -151,7 +151,7 @@
             </div>
             @endif
 
-            @if(auth()->user() && auth()->user()->role === 'superadmin')
+            @if(auth()->user() && auth()->user()->KLUser->role === 'superadmin')
             <div x-data="{ open: false }" class="relative inline-block">
                 <button type="button" x-on:click="open = ! open" data-dropdown-toggle="notification-dropdown" class="relative p-2 mr-8 text-gray-500 rounded-lg hover:text-white hover:bg-gray-700" title="Notifikasi">
                     <!-- ikon bel -->
@@ -215,7 +215,7 @@
                 </div>
             </div>
             @endif
-            @if(auth()->user() && auth()->user()->role === 'user')
+            @if(auth()->user() && auth()->user()->KLUser->role === 'user')
             <div class="relative inline-block p-2 flex justify-center items-center text-gray-500 rounded-lg h-10 hover:text-gray-900 hover:bg-gray-100 text-gray-400 hover:text-white hover:bg-gray-700" title="Permintaan Akses">
                 <a href="javascript:void(0);" onclick="submitRequest()">
                     <svg class="w-7 h-7" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -227,7 +227,7 @@
 
 
 
-            @if(auth()->user() && auth()->user()->role === 'admin' && !auth()->user()->request_access)
+            @if(auth()->user() && auth()->user()->KLUser->role === 'admin' && !auth()->user()->request_access)
             <div x-data="{ open: false }">
                 <div class="relative inline-block p-2 flex justify-center items-center text-gray-500 rounded-lg h-10 hover:text-gray-900 hover:bg-gray-100 text-gray-400 hover:text-white hover:bg-gray-700" title="Permintaan Akses Admin Pengguna">
                     <button x-on:click="open = ! open">
@@ -279,17 +279,17 @@
                                     <p class="text-[10px] text-gray-500 text-gray-400">Pengguna berikut telah mengajukan permintaan untuk mendapatkan akses admin. Silakan tinjau permintaan ini dan beri persetujuan atau tolak berdasarkan kebutuhan dan kriteria akses.</p>
                                     <ul class="my-4 space-y-3">
                                         <li class="flex items-center justify-between p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow bg-gray-600 hover:bg-gray-500 text-white">
-                                            <p class="text-white">{{ $item->username }}</p>
+                                            <p class="text-white">{{ $item->KLUser->username }}</p>
 
                                             <div class="flex items-center space-x-4">
-                                                <label for="toggleThree{{ $item->id }}" class="flex items-center cursor-pointer select-none text-dark text-white">
-                                                    <div x-data="{ isChecked: {{ $item->role === 'admin' ? 'true' : 'false' }} }" class="relative">
+                                                <label for="toggleThree{{ $item->kl_user_id }}" class="flex items-center cursor-pointer select-none text-dark text-white">
+                                                    <div x-data="{ isChecked: {{ $item->KLUser->role === 'admin' ? 'true' : 'false' }} }" class="relative">
                                                         <input
                                                             type="checkbox"
-                                                            :id="'toggleThree' + {{ $item->id }}"
+                                                            :id="'toggleThree' + {{ $item->kl_user_id }}"
                                                             class="peer sr-only"
                                                             x-model="isChecked"
-                                                            @change="toggleAccess({{ $item->id }}, isChecked)" />
+                                                            @change="toggleAccess({{ $item->kl_user_id }}, isChecked)" />
 
                                                         <div class="block h-6 rounded-full bg-gray-300 bg-dark-200 w-10 peer-checked:bg-blue-500 transition"></div>
 
@@ -313,7 +313,7 @@
                                                         </div>
                                                     </div>
                                                 </label>
-                                                <form action="{{ route('admin.delete.access', ['id' => $item->id]) }}" method="POST" class="inline">
+                                                <form action="{{ route('admin.delete.access', ['id' => $item->kl_user_id]) }}" method="POST" class="inline">
                                                     @csrf
                                                     <button type="submit" class="p-1 rounded-full text-red-500 hover:text-red-700 hover:bg-red-200 bg-red-100 transition">
                                                         <svg class="w-3 h-3 stroke-current" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -354,12 +354,12 @@
                         class="flex flex-col transition-all duration-300 ease-in-out"
                         :class="{'opacity-0 scale-95 w-0 overflow-hidden': !isSidebarOpen, 'opacity-100 scale-100 w-auto': isSidebarOpen}">
                         <p class="text-white px-2 whitespace-nowrap capitalize text-[12px] font-semibold">
-                            {{ Auth::user()->username }}
+                            {{ Auth::user()->KLUser->username }}
                         </p>
                         <p class="px-2 py-0.5 text-[10px] rounded-full w-max shadow-sm font-medium
                             {{ Auth::user()->role == 'admin' ? 'text-red-500' : 
                             (Auth::user()->role == 'superadmin' ? 'text-blue-500' : 'text-gray-500') }}" title="Role">
-                            {{ Auth::user()->role == 'admin' ? 'Admin' : (Auth::user()->role == 'superadmin' ? 'Superadmin' : 'User') }}
+                            {{ Auth::user()->KLUser->role == 'admin' ? 'Admin' : (Auth::user()->KLUser->role == 'superadmin' ? 'Superadmin' : 'User') }}
                         </p>
                     </a>
 
@@ -377,7 +377,7 @@
             </div>
 
             <ul class="space-y-2 font-medium">
-                @if(auth()->user() && auth()->user()->role !== 'superadmin')
+                @if(auth()->user() && auth()->user()->KLUser->role !== 'superadmin')
                 <li title="Dashboard">
                     <a href="{{ route('dashboard') }}"
                         class="flex items-center p-2 rounded-lg text-white 
@@ -390,7 +390,7 @@
                     </a>
                 </li>
                 <div x-data="{ openDropdown1: false, openDropdown2: false }">
-                    @if(auth()->user() && auth()->user()->role === 'admin' && (auth()->user()->request_access === 0 || auth()->user()->request_access === 1))
+                    @if(auth()->user() && auth()->user()->KLUser->role === 'admin' && (auth()->user()->request_access === 0 || auth()->user()->request_access === 1))
                     <li class="mb-2" title="Barang Masuk">
                         <div class="rounded-lg text-white">
                             <button @click="openDropdown1 = !openDropdown1; if (!isSidebarOpen) { isSidebarOpen = true;}" class="flex items-center w-full px-2 py-2 rounded-lg {{ request()->routeIs('input_barang_masuk.view') || request()->routeIs('tabel_barang_masuk') ? 'border-l-4 border-red-700 bg-gradient-to-r from-red-500' : 'bg-[#0F0606] hover:bg-gray-600' }}">
@@ -468,7 +468,7 @@
                 @endif
 
                 <!-- Super Admin -->
-                @if(auth()->user() && auth()->user()->role === 'superadmin' && (auth()->user()->request_access === 0))
+                @if(auth()->user() && auth()->user()->KLUser->role === 'superadmin' && (auth()->user()->request_access === 0))
                 <li>
                     <a href="{{ route('tabel_barang_masuk.superadmin') }}"
                         class="flex items-center p-2 rounded-lg text-white 

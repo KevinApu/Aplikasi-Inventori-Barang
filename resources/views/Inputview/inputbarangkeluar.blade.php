@@ -299,7 +299,7 @@
 
 
         @php
-        $item = $order->first(fn($item) => $item->username === Auth::user()->username);
+        $item = $order->first(fn($item) => $item->username === Auth::user()->KLUser->username);
         @endphp
 
         @if ($item)

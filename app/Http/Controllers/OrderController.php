@@ -40,7 +40,7 @@ class OrderController extends Controller
         $uniqueCode = $barcodePart[1];
 
         // Mencari barang berdasarkan 'pop' dan 'id' dari barcode
-        $barangMasuk = StokGudangModel::where('pop', Auth::user()->pop)->where('id', $part1)->first();
+        $barangMasuk = StokGudangModel::where('pop', Auth::user()->KLUser->KLModel->pop)->where('id', $part1)->first();
 
         if (!$barangMasuk) {
             return redirect()->route('input_barang_keluar')->with('error', 'Barang tidak ditemukan');
@@ -57,8 +57,8 @@ class OrderController extends Controller
         // Menyimpan data order baru
         Order::create([
             'stok_gudang_id' => $barangMasuk->id,
-            'username' => Auth::user()->username,
-            'pop' => Auth::user()->pop,
+            'username' => Auth::user()->KLUser->username,
+            'pop' => Auth::user()->KLUser->KLModel->pop,
             'qr_code' => $uniqueCode,
         ]);
 

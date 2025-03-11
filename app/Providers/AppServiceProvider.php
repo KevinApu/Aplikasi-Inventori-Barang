@@ -3,11 +3,11 @@
 namespace App\Providers;
 
 use App\Models\KLModel;
+use App\Models\Login;
 use App\Models\NotificationSetting;
 use App\Models\PengirimanModel;
 use App\Models\RequestBarangModel;
 use App\Models\StokGudangModel;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
@@ -30,7 +30,13 @@ class AppServiceProvider extends ServiceProvider
     {
         view()->composer('*', function ($view) {
             if (Auth::check()) {
-                $currentPop = Auth::user()->pop;
+                $klUser = Auth::user()->KLUser;
+
+                if ($klUser->role === 'superadmin') {
+                    $currentPop = 'Superadmin'; // Atau bisa null tergantung kebutuhan
+                } else {
+                    $currentPop = $klUser->KLModel->pop;
+                }
             } else {
                 $currentPop = null;
             }
@@ -54,11 +60,15 @@ class AppServiceProvider extends ServiceProvider
                     });
                 });
 
-            // Request access berdasarkan pop
-            $request_access = User::where('pop', $currentPop)
+            $request_access = Login::whereHas('KLUser', function ($query) use ($currentPop) {
+                $query->whereHas('KLModel', function ($subQuery) use ($currentPop) {
+                    $subQuery->where('pop', $currentPop);
+                });
+            })
                 ->where('request_access', true)
                 ->get()
-                ->groupBy('pop');
+                ->groupBy(fn($user) => $user->KLUser->KLModel->pop);
+
 
             $request_access_count = $request_access->sum(fn($group) => $group->count());
 

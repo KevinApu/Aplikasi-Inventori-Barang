@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('username', 100);
             $table->string('password');
-            $table->enum('role', ['user', 'admin'])->default('user');
-            $table->string('pop', 12);
+            $table->enum('role', ['user', 'admin', 'superadmin'])->default('user');
+            $table->foreignId('kl_id')->nullable()->constrained('kantor_layanan')->onDelete('cascade');
         });
     }
 

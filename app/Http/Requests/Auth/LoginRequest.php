@@ -30,32 +30,11 @@ class LoginRequest extends FormRequest
     }
 
 
-    public function assignRole()
+    public function messages(): array
     {
-        $password = $this->input('password');
-        $username = $this->input('username');
-
-        $user = KLUsers::where('username', $username)
-            ->where('password', $password)
-            ->first();
-
-        if ($user) {
-            return [
-                'role' => $user->role, // Mengambil role dari KLUsers
-                'pop' => $user->pop,   // Mengambil pop dari KLUsers
-            ];
-        }
-
-        $superadmin = KLModel::where('password_superadmin', $password)->first();
-        if ($superadmin) {
-            if ($superadmin) {
-                return [
-                    'role' => 'superadmin', 
-                    'pop' => null,           
-                ];
-            }
-        }
-
-        return null;
+        return [
+            'username.required' => 'Username wajib diisi.',
+            'password.required' => 'Password wajib diisi.',
+        ];
     }
 }

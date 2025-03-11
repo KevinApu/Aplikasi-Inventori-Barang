@@ -9,7 +9,12 @@ class KLModel extends Model
 {
     use HasFactory;
     protected $table = 'kantor_layanan';
-    protected $fillable = ['id', 'pop', 'lokasi', 'alamat', 'password_superadmin'];
+    protected $fillable = ['id', 'pop', 'lokasi', 'alamat'];
+
+    public function KLUser()
+    {
+        return $this->hasMany(KLUsers::class, 'kl_id', 'id');
+    }
 
     // Menonaktifkan timestamp jika tidak digunakan
     public $timestamps = false;

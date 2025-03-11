@@ -36,7 +36,7 @@ class BarangRusakController extends Controller
      */
     public function store(Request $request, $id)
     {
-        $input_by = Auth::user()->username;
+        $input_by = Auth::user()->KLUser->username;
         $foto = $request->file('foto'); // 'jpg'
         $finalFileName = time() . '-' . $foto->hashName();
         $foto->storeAs('public/img', $finalFileName);
@@ -47,7 +47,7 @@ class BarangRusakController extends Controller
             'input_by' => $input_by,
             'kondisi' => $request->input('kondisi'),
             'penyebab' => $request->input('penyebab'),
-            'pop' => Auth::user()->pop,
+            'pop' => Auth::user()->KLUser->KLModel->pop,
             'status' => 'rusak_sebelum_penggunaan',
             'qr_code' => NULL,
             'stok_gudang_id' => $id,
@@ -70,7 +70,7 @@ class BarangRusakController extends Controller
      */
     public function show(Request $request)
     {
-        $query = BarangRusakModel::with('stokGudang')->where('pop', Auth::user()->pop);
+        $query = BarangRusakModel::with('stokGudang')->where('pop', Auth::user()->KLUser->KLModel->pop);
 
         // Filter berdasarkan nama_barang di tabel stok_gudang (pakai whereHas)
         if ($request->kategori) {

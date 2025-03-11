@@ -10,15 +10,17 @@ class Login extends Authenticatable
     use HasFactory;
     protected $table = "users";
       // Kolom-kolom yang dapat diisi secara massal
-    protected $fillable = [
-        'username',
-        'password',
-        'role',
+      protected $fillable = [
         'request_access',
-        'pop',
         'foto',
-        'last_login',
+        'last_login', 
+        'kl_user_id',
     ];
+
+    public function KLUser()
+    {
+        return $this->belongsTo(KLUsers::class, 'kl_user_id', 'id');
+    }
 
     // Kolom yang disembunyikan saat serialisasi (misal: API response)
     protected $hidden = [

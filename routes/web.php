@@ -75,7 +75,7 @@ Route::middleware(['auth', 'clear.temp_items'])->group(function () {
             Route::put('/password.update', [SettingController::class, 'update_password'])->name('password.update');
 
             Route::post('/tambah_user', [SettingController::class, 'add_user'])->name('add.user');
-            Route::delete('/hapus_user/{id}/{username}/{password}', [SettingController::class, 'destroy_user'])->name('destroy.user');
+            Route::delete('/hapus_user/{id}', [SettingController::class, 'destroy_user'])->name('destroy.user');
         });
         
         

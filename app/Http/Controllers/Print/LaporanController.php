@@ -70,7 +70,7 @@ class LaporanController extends Controller
                     <td style="width: 50%; text-align: center;">
                         <p class="signature-header">Dibuat oleh</p>
                         <br><br><br><br>
-                        <p class="signature-name" style="font-weight: bold;">' . Auth::user()->username . '</p>
+                        <p class="signature-name" style="font-weight: bold;">' . Auth::user()->KLUser->username . '</p>
                         <hr style="width: 70%;">
                     </td>
                     <td style="width: 50%; text-align: center;">
@@ -84,19 +84,19 @@ class LaporanController extends Controller
                 </tr>
             </table>
         </div>';
-        
+
 
         if ($availableHeight + $requiredHeight <= $pageHeight) {
             // Jika ruang cukup, tambahkan footer pada halaman terakhir
             $pdf->WriteHTML($footerHTML);
         } else {
-            // Jika ruang tidak cukup, tambahkan halaman baru dan kemudian footer
+            // Jika ruang tidak cukup, tambahkan halaman baru dan kemudian footerF
             $pdf->AddPage();
             $pdf->SetY($pageHeight - $requiredHeight);  // Set posisi Y footer pada halaman baru
             $pdf->WriteHTML($footerHTML);
         }
 
-        $fileName = Auth::user()->username . now()->format('d-m-Y') . '_laporanbarangmasuk.pdf';
+        $fileName = Auth::user()->KLUser->username . now()->format('d-m-Y') . '_laporanbarangmasuk.pdf';
         return $pdf->Output($fileName, 'I');
     }
 
@@ -104,7 +104,7 @@ class LaporanController extends Controller
 
     public function viewlaporanrekap()
     {
-        $rekapData = RekapModel::where('pop', Auth::user()->pop)->get();
+        $rekapData = RekapModel::where('pop', Auth::user()->KLUser->KLModel->pop)->get();
 
         $startOfMonth = Carbon::now()->startOfMonth()->format('Y-m-d'); // Awal bulan
         $endOfMonth = Carbon::now()->endOfMonth()->format('Y-m-d'); // Akhir bulan
@@ -116,46 +116,63 @@ class LaporanController extends Controller
 
     public function printlaporanrekap()
     {
-        $rekapData = RekapModel::where('pop', Auth::user()->pop)->get();
+        $rekapData = RekapModel::where('pop', Auth::user()->KLUser->KLModel->pop)->with('stokGudang')->get();
 
-        $startOfMonth = Carbon::now()->startOfMonth()->format('Y-m-d'); // Awal bulan
-        $endOfMonth = Carbon::now()->endOfMonth()->format('Y-m-d'); // Akhir bulan
-
-        $isPrinting = request()->has('is_printing') ? true : false;
-
+        $startOfMonth = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $endOfMonth = Carbon::now()->endOfMonth()->format('Y-m-d');
         $periode = "$startOfMonth s/d $endOfMonth";
 
         $pdf = new \Mpdf\Mpdf([
-            'format' => [210, 330],
+            'format' => 'A4',
+            'margin_bottom' => 30, // Pastikan ada space untuk footer
         ]);
 
-        $headerHTML = '
-        <div class="header" style="text-align: center;">
-            <h1>LAPORAN REKAP BARANG</h1>
-            </div>
-            <p class="periode">Periode: ' .
-            ("$periode") .
-            '</p>';
+        $headerHTML = '<div style="text-align: center;"><h1>LAPORAN REKAP BARANG</h1><p>Periode: ' . $periode . '</p></div>';
 
-        // Atur header dan footer awal
+        // Set header
         $pdf->SetHTMLHeader($headerHTML);
-        $pdf->SetHTMLFooter('<div style="text-align: center;">{PAGENO}</div>');
 
-        // Render konten utama ke PDF
+        // Ambil tampilan Blade
         $htmlContent = view('laporanrekap', compact('rekapData', 'periode'))->render();
+
+        // Tulis konten laporan ke PDF
         $pdf->WriteHTML($htmlContent);
 
-        $lokasi = KLModel::where('pop', Auth::user()->pop)->value('lokasi');
-        return $pdf->Output(Auth::user()->username . '_' . $lokasi . '_laporanrekap.pdf', 'D'); // 'I' untuk stream PDF ke browser
+        // FOOTER HANYA DI HALAMAN TERAKHIR
+        $footerHTML = '<div style="text-align: center; font-size: 12px;">
+            <table width="100%">
+                <tr>
+                    <td width="50%" align="center">
+                        Dibuat oleh:<br><br><br><br>
+                        <b>' . Auth::user()->KLUser->username . '</b><br>
+                        <hr style="width: 70%;">
+                    </td>
+                    <td width="50%" align="center">
+                        Pacitan, ' . Carbon::now()->format('d F Y') . '<br>
+                        Diketahui oleh:<br><br><br><br>
+                        <b>Atasan</b><br>
+                        <hr style="width: 70%;">
+                        Kepala Kantor
+                    </td>
+                </tr>
+            </table>
+        </div>';
+
+        // Tambahkan footer hanya di halaman terakhir
+        $pdf->SetHTMLFooter($footerHTML);
+
+        $lokasi = KLModel::where('pop', Auth::user()->KLUser->KLModel->pop)->value('lokasi');
+        return $pdf->Output(Auth::user()->KLUser->username . '_' . $lokasi . '_laporanrekap.pdf', 'D');
     }
+
 
     public function viewsuratjalan()
     {
-        $lokasi = KLModel::where('pop', Auth::user()->pop)->value('lokasi');
+        $lokasi = KLModel::where('pop', Auth::user()->KLUser->KLModel->pop)->value('lokasi');
 
         $result = PengirimanModel::where('tujuan', $lokasi)->get();
 
-        $alamat = KLModel::where('pop', Auth::user()->pop)->value('alamat');
+        $alamat = KLModel::where('pop', Auth::user()->KLUser->KLModel->pop)->value('alamat');
 
         $tanggal = now(); // Ambil tanggal dan waktu saat ini
         $month = $tanggal->format('m'); // Bulan (01-12)
@@ -188,9 +205,9 @@ class LaporanController extends Controller
 
     public function printsuratjalan()
     {
-        $lokasi = KLModel::where('pop', Auth::user()->pop)->value('lokasi');
+        $lokasi = KLModel::where('pop', Auth::user()->KLUser->KLModel->pop)->value('lokasi');
         $result = PengirimanModel::where('tujuan', $lokasi)->get();
-        $alamat = KLModel::where('pop', Auth::user()->pop)->value('alamat');
+        $alamat = KLModel::where('pop', Auth::user()->KLUser->KLModel->pop)->value('alamat');
 
         $tanggal = now(); // Ambil tanggal dan waktu saat ini
         $month = $tanggal->format('m'); // Bulan (01-12)
@@ -202,7 +219,7 @@ class LaporanController extends Controller
         $isPrinting = request()->has('is_printing') ? true : false;
 
 
-        $pdf = Pdf::loadView(   
+        $pdf = Pdf::loadView(
             'suratjalan',
             [
                 'result' => $result,
@@ -213,7 +230,7 @@ class LaporanController extends Controller
         );
 
         $pdf->set_option('defaultPaperSize', 'F4');
-        $lokasi = KLModel::where('pop', Auth::user()->pop)->value('lokasi');
-        return $pdf->download(Auth::user()->username . '_' . $lokasi . '_suratjalan.pdf');
+        $lokasi = KLModel::where('pop', Auth::user()->KLUser->KLModel->pop)->value('lokasi');
+        return $pdf->download(Auth::user()->KLUser->username . '_' . $lokasi . '_suratjalan.pdf');
     }
 }

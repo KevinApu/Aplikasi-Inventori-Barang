@@ -16,12 +16,16 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'username',
-        'password',
-        'role',
-        'request_access',  // Tambahkan kolom role ke fillable
-        'foto', 
+        'request_access',
+        'foto',
+        'last_login', 
+        'kl_user_id',
     ];
+
+    public function KLUser()
+    {
+        return $this->belongsTo(KLUsers::class, 'kl_user_id', 'id');
+    }
     /**
      * The attributes that should be hidden for serialization.
      *

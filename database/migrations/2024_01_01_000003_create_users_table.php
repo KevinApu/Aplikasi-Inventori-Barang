@@ -10,17 +10,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('username', 100);
-            $table->string('role', 12);
-            $table->boolean('request_access')->default(false);
-            $table->string('password');
-            $table->string('pop')->nullable();
-            $table->string('foto')->nullable();
-            $table->timestamps();
-            $table->timestamp('last_login')->nullable();
-        });
+            Schema::create('users', function (Blueprint $table) {
+                $table->id();
+                $table->boolean('request_access')->default(false);
+                $table->string('foto')->nullable();
+                $table->timestamps();
+                $table->timestamp('last_login')->nullable();
+                $table->foreignId('kl_user_id')->constrained('kl_users')->onDelete('cascade');
+            });
         
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();

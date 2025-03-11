@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('pop', 12)->nullable();
             $table->string('lokasi', 20);
             $table->string('alamat', 200)->nullable();
-            $table->string('password_superadmin', 30)->nullable();
         });
     }
 

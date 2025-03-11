@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\KLModel;
+use App\Models\KLUsers;
 use App\Models\Login;
-use App\Models\Users;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\RedirectResponse;
@@ -35,93 +35,91 @@ class LoginUserController extends Controller
      */
     public function store(LoginRequest $request)
     {
-        // Validasi sudah dilakukan oleh StoreUserRequest
-        $username = $request->input('username');
+        $username = strtolower(preg_replace('/\s+/', '', $request->input('username')));
         $password = $request->input('password');
 
-        // Cek apakah pengguna sudah ada di database
-        $inputUsername = strtolower(preg_replace('/\s+/', '', $username)); // Hilangkan semua spasi dan ubah ke huruf kecil
+        // Cari user di KLUsers berdasarkan username
+        $KLUser = KLUsers::whereRaw("REPLACE(LOWER(username), ' ', '') = ?", [$username])->first();
 
-        // Ambil semua username dari database yang sudah diubah ke lowercase dan tanpa spasi
-        $user = Login::get()->first(function ($user) use ($inputUsername) {
-            return strtolower(preg_replace('/\s+/', '', $user->username)) === $inputUsername;
-        });
+        if (!$KLUser) {
+            return redirect()->back()->withErrors([
+                'username_error' => 'Username tidak valid.',
+            ])->withInput();
+        }
 
-        if ($user) {
-            // Cek apakah password sesuai dengan yang di-hash di database
-            if (Hash::check($password, $user->password)) {
-                $user->update(['last_login' => now()]);
-                Auth::login($user);
-                return $user->role === 'superadmin'
-                ? redirect()->route('tabel_barang_masuk.superadmin')
-                : redirect()->route('dashboard');
-            } else {
-                // Jika password tidak sesuai
-                return redirect()->back()->withErrors(['password_error' => 'Password tidak valid.'])->withInput();
-            }
-        } else {
-            $roleData = $request->assignRole($username, $password);
+        if ($KLUser->password != $password) {
+            return redirect()->back()->withErrors([
+                'password_error' => 'Password tidak valid.',
+            ])->withInput();
+        }
 
-            if (!$roleData) {
-                return redirect()->back()->withErrors([
-                    'username_error' => 'Username tidak valid.',
-                    'password_error' => 'Password tidak valid.',
-                ])->withInput();                
-            }
 
-            // Ambil role dan pop
-            $role = $roleData['role'];
-            $pop = $roleData['pop'];
-
-            $newUser = Login::create([
-                'username' => $username,
-                'password' => Hash::make($password),
-                'role' => $role,
-                'pop' => $pop,
+        // Cari user di tabel users berdasarkan kl_user_id
+        $user = Login::where('kl_user_id', $KLUser->id)->first();
+        if (!$user) {
+            // Jika belum ada di users, buat entri baru
+            $user = Login::create([
+                'kl_user_id' => $KLUser->id,
+                'request_access' => false,
+                'foto' => null,
                 'last_login' => now(),
             ]);
+        } else {
+            // Update last_login
+            $user->update(['last_login' => now()]);
+        }
 
-            Auth::login($newUser);
-            return $role === 'superadmin'
+        // Login pengguna
+        Auth::login($user);
+
+        return $KLUser->role === 'superadmin'
             ? redirect()->route('tabel_barang_masuk.superadmin')
             : redirect()->route('dashboard');
-        }
     }
+
 
     public function requestAccess()
     {
-        $userId = Auth::id();
-        $user = User::find($userId);
-
-            if ($user->request_access) {
-                return response()->json(['message' => 'Permintaan akses sudah pernah dikirim.', 'alert_type' => 'warning']);
-            } else {
-                DB::table('users')->where('id', $userId)->update(['request_access' => true]);
-                return response()->json(['message' => 'Permintaan akses telah dikirim.', 'alert_type' => 'success']);
-            }
+        $user = Auth::user();
+        if (!$user) {
+            return response()->json(['message' => 'User tidak ditemukan.', 'alert_type' => 'error']);
+        }
+        if (!$user->KLUser) {
+            return response()->json(['message' => 'Akun ini tidak memiliki akses ke kantor layanan.', 'alert_type' => 'error']);
+        }
+        if ($user->request_access) {
+            return response()->json(['message' => 'Permintaan akses sudah pernah dikirim.', 'alert_type' => 'warning']);
+        }
+        User::where('id', $user->id)->update(['request_access' => true]);
+        return response()->json(['message' => 'Permintaan akses telah dikirim.', 'alert_type' => 'success']);
     }
+
 
     public function approveAccess($userId)
     {
-        $user = User::find($userId);
+        $user = Login::where('kl_user_id', $userId)->with('KLUser')->first();
         if ($user && $user->request_access) {
-            $user->role = 'admin';
-            $user->save();
+            if ($user->KLUser) {
+                $user->KLUser->update(['role' => 'admin']);
+                return redirect()->back()->with('message', 'Permintaan akses telah disetujui.');
+            } else {
+                return redirect()->back()->with('error', 'User tidak memiliki akun di kantor layanan.');
+            }
         }
-
-        return redirect()->back()->with('message', 'Permintaan akses telah disetujui.');
     }
 
 
     public function deleteAccess($userId)
     {
-        $user = User::find($userId);
+        $user = Login::where('kl_user_id', $userId)->with('KLUser')->first();
         if ($user && $user->request_access) {
-            $user->role = 'user';
-            $user->request_access = false;
-            $user->save();
+            if ($user->KLUser) {
+                $user->KLUser->update(['role' => 'user']);
+                $user->update(['request_access' => false]);
+                return redirect()->back()->with('message', 'Permintaan akses telah dihapus.');
+            } else {
+                return redirect()->back()->with('error', 'User tidak memiliki akun di kantor layanan.');
+            }
         }
-
-        return redirect()->back()->with('message', 'Permintaan akses telah disetujui.');
     }
 }

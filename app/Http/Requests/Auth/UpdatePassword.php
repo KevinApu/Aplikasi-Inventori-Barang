@@ -28,7 +28,7 @@ class UpdatePassword extends FormRequest
             'current_password' => [
                 'required',
                 function ($attribute, $value, $fail) {
-                    if (!password_verify($value, Auth::user()->password)) {
+                    if ($value !== Auth::user()->KLUser->password) {
                         $fail('Password admin tidak sesuai.');
                     }
                 },
@@ -47,5 +47,4 @@ class UpdatePassword extends FormRequest
             'new_password.confirmed' => 'Konfirmasi password baru tidak cocok.',
         ];
     }
-    
 }

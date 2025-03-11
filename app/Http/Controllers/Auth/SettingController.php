@@ -7,7 +7,6 @@ use App\Http\Requests\Auth\UpdatePassword;
 use App\Models\KLModel;
 use App\Models\KLUsers;
 use App\Models\Login;
-use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,73 +21,70 @@ class SettingController extends Controller
      */
     public function index()
     {
-        $kantorlayanan = KLModel::where('lokasi', '!=', 'pusat')->get();
-        $kl_users = KLUsers::all()->map(function ($kl_user) {
-            $user = Login::whereRaw('LOWER(username) = ?', [strtolower($kl_user->username)])->first();
+        $user = Auth::user();
+        $foto_profile = $user->foto;
+        $kantorlayanan = KLModel::all();
 
-            // Konversi last_login ke Carbon jika tidak null
-            $kl_user->last_login = $user && !is_null($user->last_login)
-                ? Carbon::parse($user->last_login)
-                : null;
+        $kl_users = KLUsers::where('role', '!=', 'superadmin')
+            ->get()
+            ->map(function ($kl_user) {
+                $user = Login::whereHas('KLUser', function ($query) use ($kl_user) {
+                    $query->whereRaw('LOWER(username) = ?', [strtolower($kl_user->username)]);
+                })->first();
+                $kl_user->last_login = $user && !is_null($user->last_login)
+                    ? Carbon::parse($user->last_login)
+                    : null;
+                $kl_user->status = $kl_user->last_login && $kl_user->last_login->gt(now()->subDays(30))
+                    ? 'Aktif'
+                    : 'Tidak Aktif';
 
-            // Tentukan status aktif/tidak aktif
-            $kl_user->status = $kl_user->last_login && $kl_user->last_login->gt(now()->subDays(30))
-                ? 'Aktif'
-                : 'Tidak Aktif';
+                return $kl_user;
+            });
 
-            return $kl_user;
-        });
-
-        $foto_profile = Auth::user()->foto;
-        return view('auth.setting', ['kantorlayanan' => $kantorlayanan, 'foto_profile' => $foto_profile, 'kl_users' => $kl_users]);
+        return view('auth.setting', [
+            'kantorlayanan' => $kantorlayanan,
+            'foto_profile' => $foto_profile,
+            'kl_users' => $kl_users
+        ]);
     }
+
 
     /**
      * Show the form for creating a new resource.
      */
     public function add_user(Request $request)
     {
-        // Validasi inputan
         $request->validate([
-            'username' => 'required|string|unique:kl_users,username|max:100',
+            'username' => 'required|string|unique:kl_users,username,NULL,NULL,kl_id,' . $request->kantor_id . '|unique:kl_users,username,NULL,NULL,role,' . $request->role . '|max:100',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|in:user,admin',
         ]);
 
-        // Menyimpan data ke dalam tabel KLUsers
         KLUsers::create([
             'username' => $request->username,
             'password' => $request->password,
             'role' => $request->role,
-            'pop' => $request->kantor_id,
+            'kl_id' => $request->kantor_id,
         ]);
 
         return redirect()->back()
             ->with('success', 'Penggantian  username berhasil dilakukan!')
-            ->with('activeTab', 'daftarpop');
+            ->with('activeTab', 'daftarcabang');
     }
 
-    public function destroy_user(Request $request, $id, $username, $password)
+    public function destroy_user(Request $request, $id)
     {
-        KLUsers::where('username', $username)
-            ->where('password', $password)
-            ->where('id', $id)
-            ->delete();
-
-        Login::where('username', $username)
-            ->where('password', $password)
-            ->delete();
-
+        KLUsers::where('id', $id)->delete();
         return redirect()->back()
             ->with('success', 'Penggantian  username berhasil dilakukan!')
-            ->with('activeTab', 'daftarpop');
+            ->with('activeTab', 'daftarcabang');
     }
 
     public function update_username(Request $request)
     {
-        Login::where('id', Auth::user()->id)
-            ->where('username', Auth::user()->username)
-            ->where('password', Auth::user()->password)
+        KLUsers::where('id', Auth::user()->kl_user_id)
+            ->where('username', Auth::user()->KLUser->username)
+            ->where('password', Auth::user()->KLUser->password)
             ->update([
                 'username' => $request->username,
             ]);
@@ -103,19 +99,12 @@ class SettingController extends Controller
      */
     public function update_password(UpdatePassword $request)
     {
-        $hashedPassword = Hash::make($request->new_password);
-        Login::where('id', Auth::user()->id)
-            ->where('username', Auth::user()->username)
+        KLUsers::where('id', Auth::user()->kl_user_id)
+            ->where('username', Auth::user()->KLUser->username)
             ->where('role', 'superadmin')
-            ->where('password', Auth::user()->password)
+            ->where('password', Auth::user()->KLUser->password)
             ->update([
-                'password' => $hashedPassword,
-            ]);
-
-        KLModel::where('lokasi', 'pusat')
-            ->where('password_superadmin', $request->current_password)
-            ->update([
-                'password_superadmin' => $request->new_password,
+                'password' => $request->new_password,
             ]);
 
         return redirect()->back()
@@ -149,7 +138,7 @@ class SettingController extends Controller
             $file->storeAs('public/img/profile', $finalFileName);
 
             // Update path foto profil di tabel user
-            User::where('id', $user->id)->update(['foto' => 'img/profile/' . $finalFileName]);
+            Login::where('id', $user->id)->update(['foto' => 'img/profile/' . $finalFileName]);
         }
 
 

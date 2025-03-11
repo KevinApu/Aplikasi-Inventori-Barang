@@ -29,7 +29,7 @@ class BarangKeluarController extends Controller
     public function create()
     {
         $order = Order::with('stokGudang')
-            ->where('pop', Auth::user()->pop)->get();
+            ->where('pop', Auth::user()->KLUser->KLModel->pop)->get();
         return view('Inputview.inputbarangkeluar', ['order' => $order]);
     }
 
@@ -41,7 +41,7 @@ class BarangKeluarController extends Controller
         $jumlaharray = $request->input('jumlah');
         $qr_code = $request->input('qr_code');
         $stok_gudang_id = $request->input('stok_gudang_id');
-        $output_by = Auth::user()->username;
+        $output_by = Auth::user()->KLUser->username;
 
         foreach ($jumlaharray as $id => $jumlah) {
             $nama_customer = $request->input('ID') . '_' . $request->input('namacustomer');
@@ -52,7 +52,7 @@ class BarangKeluarController extends Controller
 
             $exists = BarangKeluarModel::where('id', $id)
                 ->where('qr_code', $qr_code_value)
-                ->where('pop', Auth::user()->pop) // Memeriksa pop juga
+                ->where('pop', Auth::user()->KLUser->KLModel->pop) // Memeriksa pop juga
                 ->exists();
 
             if ($exists) {
@@ -69,7 +69,7 @@ class BarangKeluarController extends Controller
                 'nama_customer' => $nama_customer,
                 'output_by' => $output_by,
                 'keterangan' => $request->input('keterangan'),
-                'pop' => Auth::user()->pop,
+                'pop' => Auth::user()->KLUser->KLModel->pop,
                 'qr_code' => $qr_code_value,  // Gunakan qr_code yang sesuai
             ]);
 
@@ -115,7 +115,7 @@ class BarangKeluarController extends Controller
     public function show(Request $request)
     {
         $query = BarangKeluarModel::with('stokGudang')
-            ->where('pop', Auth::user()->pop);
+            ->where('pop', Auth::user()->KLUser->KLModel->pop);
 
         // Filter berdasarkan kategori, nama barang, dan seri dari stok_gudang
         if ($request->namabarang) {

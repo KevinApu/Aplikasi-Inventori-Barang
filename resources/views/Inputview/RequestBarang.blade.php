@@ -116,7 +116,7 @@
                                 <td class="border border-gray-200 px-4 py-2 mobile:px-2 mobile:py-1">{{ $request->nama_barang }}</td>
                                 <td class="border border-gray-200 px-4 py-2 mobile:px-2 mobile:py-1">{{ $request->seri }}</td>
                                 <td class="border border-gray-200 px-1 py-2 mobile:px-2 mobile:py-1">{{ $request->jumlah }}</td>
-                                <td class="border border-gray-200 px-4 py-2 mobile:px-2 mobile:py-1">{{ $request->catatan }}</td>
+                                <td class="border border-gray-200 px-4 py-2 mobile:px-2 mobile:py-1">{{ $request->catatan ?? '-' }}</td>
                                 <td class="border border-gray-200 px-4 py-2 mobile:px-2 mobile:py-1">
                                     @php
                                     $statusColors = [

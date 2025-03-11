@@ -73,7 +73,7 @@ class KirimBarangController extends Controller
                 'rasio'       => $item['rasio'],
                 'tujuan'      => $item['lokasi'],
                 'catatan'     => $item['catatan'],
-                'pengirim'    => Auth::user()->username,
+                'pengirim'    => Auth::user()->KLUser->username,
                 'nama_pengaju' => RequestBarangModel::where('pop', $item['lokasi'])
                     ->where('status', 'Setujui')
                     ->value('nama_pengaju'),
@@ -136,18 +136,13 @@ class KirimBarangController extends Controller
      */
     public function update(Request $request, $tujuan)
     {
-        $request->estimasi . ' ' . now()->format('H:i:s');  // Tanggal estimasi
-        $resi = $request->input('resi');  // Resi
+        $tujuanArray = explode(',', $tujuan); 
 
-        // Pisahkan tujuan menjadi array
-        $tujuanArray = explode(',', $tujuan);  // Mengubah string tujuan menjadi array berdasarkan koma
-
-        // Update data yang sesuai dengan tujuan
         PengirimanModel::whereIn('tujuan', $tujuanArray)
             ->update([
                 'status' => 'Sedang Dikirim',
                 'tanggal_estimasi' => $request->tanggal_estimasi . ' ' . now()->format('H:i:s'),
-                'resi' => $resi,
+                'resi' => $request->resi,
                 'namakurir' => $request->namakurir,
                 'updated_at' => now(),
             ]);

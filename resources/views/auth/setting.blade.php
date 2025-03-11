@@ -29,7 +29,7 @@
         <div x-data="{ activeTab: '{{ session('activeTab', 'pengaturanfoto') }}' }">
             <!-- Tabs Menu -->
             <div class="flex space-x-4 border-b border-gray-200 mb-6">
-                @if(auth()->user() && auth()->user()->role === 'superadmin')
+                @if(auth()->user() && auth()->user()->KLUser->role === 'superadmin')
                 <button
                     @click="activeTab = 'tambahcabang'"
                     :class="{'border-b-2 border-blue-500 text-blue-500': activeTab === 'tambahcabang'}"
@@ -58,7 +58,7 @@
             </div>
 
             <!-- Account Settings -->
-            @if(auth()->user() && auth()->user()->role === 'superadmin')
+            @if(auth()->user() && auth()->user()->KLUser->role === 'superadmin')
             <div x-show="activeTab === 'tambahcabang'" class="max-w-4xl mx-auto mt-10 p-8 bg-white shadow-lg rounded-lg">
                 <!-- Header Pengaturan -->
                 <h2 class="text-2xl font-bold text-gray-800 border-b pb-4 mb-6">Pengaturan - Tambah Cabang</h2>
@@ -172,11 +172,6 @@
                                                             @method('PUT')
 
                                                             <div class="mt-4">
-                                                                <label for="kepalakantor" class="block text-sm font-medium text-gray-700">Kepala Kantor</label>
-                                                                <input type="text" name="kepalakantor" id="kepalakantor" class="w-full border rounded-lg px-3 py-2" value="{{ $item->kepalakantor }}" required>
-                                                            </div>
-
-                                                            <div class="mt-4">
                                                                 <label for="lokasi" class="block text-sm font-medium text-gray-700">Lokasi</label>
                                                                 <input type="text" name="lokasi" id="lokasi" class="w-full border rounded-lg px-3 py-2" value="{{ $item->lokasi }}" required>
                                                             </div>
@@ -262,6 +257,7 @@
 
                                                                 <!-- Tabel User -->
                                                                 <div class="overflow-auto max-h-60 border rounded-lg bg-gray-100 shadow-lg">
+
                                                                     <table class="w-full bg-white border rounded-lg">
                                                                         <!-- Header -->
                                                                         <thead class="sticky top-0 bg-gray-900 text-white">
@@ -273,10 +269,10 @@
                                                                                 <th class="py-3 px-6 text-center">Aksi</th>
                                                                             </tr>
                                                                         </thead>
-
+                                                                        <!-- Body -->
                                                                         <!-- Body -->
                                                                         <tbody class="text-sm text-gray-700 divide-y divide-gray-200">
-                                                                            @foreach ($kl_users->where('pop', $item->pop)->groupBy('pop') as $pop => $users)
+                                                                            @foreach ($kl_users->where('kl_id', $item->id)->groupBy('pop') as $pop => $users)                                                                         
                                                                             @foreach ($users as $user)
                                                                             <tr class="hover:bg-gray-100 transition">
                                                                                 <!-- Username -->
@@ -312,8 +308,7 @@
 
                                                                                     <div class="inline-block px-6 py-2 rounded-md w-auto min-w-[160px]">
                                                                                         <!-- Label Status -->
-                                                                                        <span class="block text-sm font-semibold px-3 py-1 rounded-md 
-            {{ $user->status === 'Aktif' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600' }}">
+                                                                                        <span class="block text-sm font-semibold px-3 py-1 rounded-md {{ $user->status === 'Aktif' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600' }}">
                                                                                             {{ $user->status }}
                                                                                         </span>
 
@@ -325,7 +320,7 @@
 
                                                                                 <!-- Aksi -->
                                                                                 <td class="py-3 px-6 text-center">
-                                                                                    <form action="{{ route('destroy.user', ['id' => $user->id, 'username' => $user->username, 'password' => $user->password]) }}"
+                                                                                    <form action="{{ route('destroy.user', ['id' => $user->id]) }}"
                                                                                         method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?');">
                                                                                         @csrf
                                                                                         @method('DELETE')
@@ -358,7 +353,7 @@
                                                                     class="border rounded-lg bg-white p-4 shadow-md max-h-[80vh] overflow-y-auto">
                                                                     <form method="POST" action="{{ route('add.user') }}" class="bg-white shadow-lg rounded-xl p-6 space-y-4">
                                                                         @csrf
-                                                                        <input type="hidden" name="kantor_id" value="{{ $item->pop }}">
+                                                                        <input type="hidden" name="kantor_id" value="{{ $item->id }}">
 
                                                                         <h2 class="text-2xl font-bold text-gray-800 text-center">Tambah User</h2>
 
@@ -444,7 +439,6 @@
                                                                             </button>
                                                                         </div>
                                                                     </form>
-
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -506,7 +500,7 @@
                 <div class="container mx-auto p-8">
                     <div class="max-w-lg mx-auto bg-white rounded-lg shadow-lg p-6" x-data="{ imagePreview: '{{ auth()->user()->profile_picture_url }}' }">
                         <h2 class="text-2xl font-semibold text-gray-700 mb-6">Pengaturan Akun</h2>
-                        @if(auth()->user() && auth()->user()->role === 'superadmin')
+                        @if(auth()->user() && auth()->user()->KLUser->role === 'superadmin')
                         <div class="mb-16">
                             <!-- Form Ganti Username -->
                             <form action="{{ route('username.update') }}" method="POST" class="space-y-4">
@@ -514,7 +508,7 @@
                                 @method('PUT')
                                 <div>
                                     <label for="username" class="block text-sm font-medium text-gray-600">Username</label>
-                                    <input type="text" id="username" name="username" value="{{ auth()->user()->username }}" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                    <input type="text" id="username" name="username" value="{{ auth()->user()->KLUser->username }}" class="mt-1 block w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
                                 </div>
                                 <div>
                                     <button type="submit" class="w-full py-3 px-4 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-medium rounded-lg shadow-lg transform transition hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-400">Ganti Username</button>

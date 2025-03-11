@@ -20,7 +20,7 @@ class KLController extends Controller
      */
     public function index()
     {
-        $kantorlayanan = KLModel::where('lokasi', '!=', 'pusat')->get();
+        $kantorlayanan = KLModel::get();
         return view('SuperAdmin.Tabelbarangmasuk', ['kantorlayanan' => $kantorlayanan]);
     }
 
@@ -55,7 +55,6 @@ class KLController extends Controller
     {
         $query = DB::table('stok_gudang');
 
-        // Filter berdasarkan kategori, nama barang, dan seri
         if ($request->pop) {
             $query->where('pop', 'like', '%' . $request->pop . '%');
         }
@@ -96,11 +95,7 @@ class KLController extends Controller
     public function destroy(string $id)
     {
         $kantorlayanan = KLModel::find($id);
-        KLUsers::where('pop', $kantorlayanan->pop)->delete();
-        Login::where('pop', $kantorlayanan->pop)->delete();
         $kantorlayanan->delete();
-    
-        // Mengalihkan kembali ke halaman sebelumnya dengan pesan sukses
         return redirect()->back()
             ->with('success', 'Penghapusan Kantor beserta user terkait berhasil dilakukan!')
             ->with('activeTab', 'daftarcabang');

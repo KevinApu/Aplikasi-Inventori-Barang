@@ -25,7 +25,7 @@ class BarangMasukController extends Controller
 
     public function index()
     {
-        $barangmasuk = StokGudangModel::where('pop', Auth::user()->pop)->get();
+        $barangmasuk = StokGudangModel::where('pop', Auth::user()->KLUser->KLModel->pop)->get();
         return view('Tabelview.Tabelbarangmasuk', ['barangmasuk' => $barangmasuk]);
     }
 
@@ -36,7 +36,7 @@ class BarangMasukController extends Controller
         $request->validate([
             'kategori_baru' => [
                 'required',
-                Rule::unique('kategori', 'kategori')->where('pop', Auth::user()->pop),
+                Rule::unique('kategori', 'kategori')->where('pop', Auth::user()->KLUser->KLModel->pop),
             ],
         ], [
             'kategori_baru.required' => 'Kategori wajib diisi',
@@ -45,7 +45,7 @@ class BarangMasukController extends Controller
 
         kategori::create([
             'kategori' => $request->input('kategori_baru'),
-            'pop' => Auth::user()->pop
+            'pop' => Auth::user()->KLUser->KLModel->pop
         ]);
         return redirect()->route('input_barang_masuk');
     }
@@ -56,7 +56,7 @@ class BarangMasukController extends Controller
         $request->validate([
             'namabarang_baru' => [
                 'required',
-                Rule::unique('nama_barang', 'nama_barang')->where('pop', Auth::user()->pop),
+                Rule::unique('nama_barang', 'nama_barang')->where('pop', Auth::user()->KLUser->KLModel->pop),
             ],
         ], [
             'namabarang_baru.required' => 'Nama barang wajib diisi',
@@ -67,7 +67,7 @@ class BarangMasukController extends Controller
         // Jika validasi berhasil, simpan data
         nama_barang::create([
             'nama_barang' => $request['namabarang_baru'],
-            'pop' => Auth::user()->pop
+            'pop' => Auth::user()->KLUser->KLModel->pop
         ]);
         return redirect()->route('input_barang_masuk');
     }
@@ -75,15 +75,15 @@ class BarangMasukController extends Controller
 
     public function create()
     {
-        $kategoris = kategori::where('pop', Auth::user()->pop)->get();
-        $namabarang = nama_barang::where('pop', Auth::user()->pop)->get();
+        $kategoris = kategori::where('pop', Auth::user()->KLUser->KLModel->pop)->get();
+        $namabarang = nama_barang::where('pop', Auth::user()->KLUser->KLModel->pop)->get();
 
         return view('Inputview.inputbarangmasuk', ['kategoris' => $kategoris, 'nama_barang' => $namabarang]);
     }
 
     public function store(BarangMasukRequest $request): RedirectResponse
     {
-        $inputby = Auth::user()->username;
+        $inputby = Auth::user()->KLUser->username;
         $foto = $request->file('foto');
         $finalFileName = time() . '-' . $foto->hashName();
         $foto->storeAs('public/img', $finalFileName);
@@ -96,7 +96,7 @@ class BarangMasukController extends Controller
             ->whereRaw("REPLACE(LOWER(nama_barang), ' ', '') = ?", [strtolower(str_replace(' ', '', $request->namabarang))])
             ->whereRaw("REPLACE(LOWER(kategori), ' ', '') = ?", [strtolower(str_replace(' ', '', $request->kategori))])
             ->whereRaw("REPLACE(LOWER(seri), ' ', '') = ?", [strtolower(str_replace(' ', '', $request->seri))])
-            ->where('pop', Auth::user()->pop)
+            ->where('pop', Auth::user()->KLUser->KLModel->pop)
             ->first();
 
         // Jika barang sudah ada di BarangMasuk dan jumlahnya 0, maka update jumlah dan satuan
@@ -145,7 +145,7 @@ class BarangMasukController extends Controller
             'foto' => 'img/' . $finalFileName,
             'input_by' => $inputby,
             'keterangan' => $request->keterangan,
-            'pop' => Auth::user()->pop,
+            'pop' => Auth::user()->KLUser->KLModel->pop,
             'created_at' => $request->tglmasuk . ' ' . now()->format('H:i:s'),
             'updated_at' => $request->tglmasuk . ' ' . now()->format('H:i:s'),
         ];
@@ -167,7 +167,7 @@ class BarangMasukController extends Controller
             'stok_awal' => isset($barangMasukData['hasil']) ? $barangMasukData['hasil'] : $barangMasukData['jumlah'],
             'in' => 0, // Default nilai masuk
             'out' => 0, // Default nilai keluar
-            'pop' => Auth::user()->pop,
+            'pop' => Auth::user()->KLUser->KLModel->pop,
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -176,7 +176,8 @@ class BarangMasukController extends Controller
     public function show(Request $request)
     {
         $query = DB::table('stok_gudang')
-            ->where('pop', Auth::user()->pop);
+            ->where('pop', Auth::user()->KLUser->KLModel->pop)
+            ->where('jumlah', '>', 0);
 
         // Filter berdasarkan kategori, nama barang, dan seri
         if ($request->kategori) {
@@ -213,7 +214,7 @@ class BarangMasukController extends Controller
         $barcode = $request->barcode;
         $item = DB::table('stok_gudang')
             ->where('id', $barcode)
-            ->where('pop', Auth::user()->pop)
+            ->where('pop', Auth::user()->KLUser->KLModel->pop)
             ->first();
         return response()->json($item);
     }

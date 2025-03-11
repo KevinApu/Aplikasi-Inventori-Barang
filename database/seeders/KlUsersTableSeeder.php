@@ -26,8 +26,16 @@ class KlUsersTableSeeder extends Seeder
                 'username' => 'Kevin PKL',
                 'password' => 'adminpacitan@sandya.com',
                 'role' => 'admin',
-                'pop' => 'G1',
+                'kl_id' => 1,
             ),
+            1 => 
+            array (
+                'id' => 2,
+                'username' => 'superadmin',
+                'password' => 'superadmin@sandya.com',
+                'role' => 'superadmin',
+                'kl_id' => NULL,
+            )
         ));
         
         

@@ -19,7 +19,7 @@
                     <div>
                         <div class="mt-8 mb-4">
                             <input type="text" placeholder="Username" class="w-full p-2 border-0 focus:ring-0 border-b bg-transparent placeholder:text-gray-400 placeholder:text-sm" name="username" value="{{ old('username') }}" />
-                            @error('username')
+                            @error('username_error')
                             <p class="text-red-500 text-[10px]">{{$message}}</p>
                             @enderror
                         </div>
@@ -27,9 +27,6 @@
                     <div>
                         <div class="mt-4">
                             <input type="password" placeholder="Password" id="password" class="w-full p-2 border-0 focus:ring-0 border-b bg-transparent placeholder:text-gray-400 placeholder:text-sm" name="password" value="{{ old('password') }}" />
-                            @error('password')
-                            <p class="text-red-500 text-[10px]">{{$message}}</p>
-                            @enderror
                             @error('password_error')
                             <p class="text-red-500 text-[10px]">{{$message}}</p>
                             @enderror

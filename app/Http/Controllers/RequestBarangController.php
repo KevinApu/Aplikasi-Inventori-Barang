@@ -24,7 +24,7 @@ class RequestBarangController extends Controller
      */
     public function create()
     {
-        $lokasi = KLModel::where('pop', Auth::user()->pop)->value('lokasi');
+        $lokasi = KLModel::where('pop', Auth::user()->KLUser->KLModel->pop)->value('lokasi');
         if (
             PengirimanModel::where('tujuan', $lokasi)->exists() && $requestBarang = RequestBarangModel::where('pop', $lokasi)
             ->where('status', 'Setujui')
@@ -66,7 +66,7 @@ class RequestBarangController extends Controller
         $jumlah = $request->input('jumlah');
         $keterangan = $request->input('keterangan');
 
-        $lokasi = KLModel::where('pop', Auth::user()->pop)->value('lokasi');
+        $lokasi = KLModel::where('pop', Auth::user()->KLUser->KLModel->pop)->value('lokasi');
 
         if (RequestBarangModel::where('pop', $lokasi)->where('status', 'Tolak')->exists()) {
             return redirect()->back()->with('error', 'Tidak dapat menginputkan data karena ada permintaan yang ditolak untuk lokasi ini saat ini.');
@@ -88,7 +88,7 @@ class RequestBarangController extends Controller
         foreach ($nama_barang as $index => $nama) {
             RequestBarangModel::create([
                 'pop' => $lokasi,
-                'nama_pengaju' => Auth::user()->username,
+                'nama_pengaju' => Auth::user()->KLUser->username,
                 'nama_barang' => $nama,
                 'seri' => $seri[$index],
                 'jumlah' => $jumlah[$index],
@@ -124,7 +124,7 @@ class RequestBarangController extends Controller
      */
     public function update()
     {
-        $lokasi = KLModel::where('pop', Auth::user()->pop)->value('lokasi');
+        $lokasi = KLModel::where('pop', Auth::user()->KLUser->KLModel->pop)->value('lokasi');
         PengirimanModel::where('tujuan', $lokasi)
             ->delete();
 

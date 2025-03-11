@@ -58,6 +58,7 @@
             border-collapse: collapse;
             margin-top: 8rem;
             margin-bottom: 0;
+            page-break-inside: avoid;
         }
 
         .simple-table th,
@@ -83,6 +84,7 @@
             margin-top: 2rem;   
             /* Posisi footer dari bawah halaman */
             z-index: 10;
+            page-break-before: always;
             /* Pastikan signature-table di atas elemen lain */
         }
 
@@ -169,55 +171,21 @@
                     @foreach ($rekapData as $item)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
-                        <td>{{ $item->nama_barang}}</td>
+                        <td>{{ $item->stokGudang->nama_barang}}</td>
                         <td>{{ $item->stok_awal}}</td>
                         <td>{{ $item->in ?? '0'}}</td>
                         <td>{{ $item->out ?? '0'}}</td>
-                        @if ($item->satuan === 'roll' || $item->satuan === 'pack')
-                        <td>{{ $item->hasil}}</td>
+                        @if ($item->stokGudang->satuan === 'roll' || $item->stokGudang->satuan === 'pack')
+                        <td>{{ $item->stokGudang->hasil}}</td>
                         @else
-                        <td>{{ $item->jumlah}}</td>
+                        <td>{{ $item->stokGudang->jumlah}}</td>
                         @endif
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-        @if(request()->has('is_printing'))
-        <table class="signature-table">
-            <tr>
-                <td>
-                    <p class="signature-header">Dibuat oleh</p>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <p class="signature-name">{{ auth()->user()->username }}</p>
-                    <hr class="signature-hr">
-                </td>
-                <td>
-                    <p class="signature-header">Pacitan, {{ \Carbon\Carbon::now()->format('d F Y') }}</p>
-                    <p class="signature-header">Diketahui oleh</p>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <p class="signature-name">Atasan</p>
-                    <hr class="signature-hr">
-                    <p>Kepala Kantor</p>
-                </td>
-            </tr>
-        </table>
-        @endif
     </div>
-
-
-
-
 
     @if(!request()->has('is_printing'))
     <a class="print-button" href="{{ route('print.laporan.rekap') }}?is_printing=true">Print</a>

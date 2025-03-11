@@ -26,15 +26,6 @@ class KantorLayananTableSeeder extends Seeder
                 'pop' => 'G1',
                 'lokasi' => 'PCT',
                 'alamat' => 'Jl P. Sudirman No.3, Barang, Arjowinangun, Kec. Pacitan, Kabupaten Pacitan, Jawa Timur 36516',
-                'password_superadmin' => NULL,
-            ),
-            1 => 
-            array (
-                'id' => 2,
-                'pop' => NULL,
-                'lokasi' => 'pusat',
-                'alamat' => NULL,
-                'password_superadmin' => 'superadmin@sandya.com',
             ),
         ));
         

@@ -76,23 +76,18 @@
                                     <th class="px-4 py-2 text-left">Nama Barang</th>
                                     <th class="px-4 py-2 text-left">Seri</th>
                                     <th class="px-4 py-2 text-left">Jumlah</th>
-                                    <template x-if="item.rasio !== null">
-                                        <th class="px-4 py-2 text-left">Satuan</th>
-                                    </template>
+                                    <th class="px-4 py-2 text-left" x-show="results.some(item => item.rasio !== null)">Satuan</th>
                                     <th class="px-4 py-2 text-left">Catatan</th>
                                     <th class="px-4 py-2 text-left">Lokasi Tujuan</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- Loop untuk menampilkan semua item -->
                                 <template x-for="item in results" :key="item.id">
                                     <tr>
                                         <td class="px-4 py-2" x-text="item.nama_barang"></td>
                                         <td class="px-4 py-2" x-text="item.seri"></td>
-                                        <td class="px-4 py-2" x-text="`${item.jumlah} ${item.satuan}`"></td>
-                                        <template x-if="item.rasio !== null">
-                                            <td class="px-4 py-2" x-text="item.rasio"></td>
-                                        </template>
+                                        <td class="px-4 py-2" x-text="item.satuan ? `${item.jumlah} ${item.satuan}` : item.jumlah"></td>
+                                        <td class="px-4 py-2" x-text="item.rasio !== null ? item.rasio : '-'"></td>
                                         <td class="px-4 py-2" x-text="item.catatan ? item.catatan : '-'"></td>
                                         <td class="px-4 py-2" x-text="item.tujuan"></td>
                                     </tr>
@@ -188,9 +183,20 @@
                                     <div class="flex-1">
                                         <p class="text-gray-700 font-medium">Barang dalam perjalanan</p>
                                         <p class="text-sm text-gray-500 mb-2" x-text="item.formatted_updated_at"></p>
-                                        <div class="bg-gray-50 p-3 border border-dashed border-blue-300 rounded-lg">
-                                            <p class="text-sm text-gray-600 font-semibold">Nomor Resi</p>
-                                            <p class="text-lg text-blue-600 font-bold" x-text="item.resi || 'Resi tidak tersedia'"></p>
+                                        <div class="bg-gray-50 p-3 border border-dashed border-blue-300 rounded-lg flex items-center justify-between">
+                                            <div>
+                                                <p class="text-sm mobile:text-[10px] text-gray-600 font-semibold">Nomor Resi</p>
+                                                <p class="text-lg text-blue-600 font-bold" x-text="item.resi || 'Resi tidak tersedia'" id="resiText"></p>
+                                            </div>
+                                            <button @click="navigator.clipboard.writeText(document.getElementById('resiText').innerText); copied = true; setTimeout(() => copied = false, 2000)"
+                                                class="p-2 rounded-md text-blue-600 hover:bg-gray-200 transition" x-data="{ copied: false }">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-copy">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                    <path d="M7 7m0 2.667a2.667 2.667 0 0 1 2.667 -2.667h8.666a2.667 2.667 0 0 1 2.667 2.667v8.666a2.667 2.667 0 0 1 -2.667 2.667h-8.666a2.667 2.667 0 0 1 -2.667 -2.667z" />
+                                                    <path d="M4.012 16.737a2.005 2.005 0 0 1 -1.012 -1.737v-10c0 -1.1 .9 -2 2 -2h10c.75 0 1.158 .385 1.5 1" />
+                                                </svg>
+                                                <span x-show="copied" class="text-xs text-green-600 absolute mt-1">Copied!</span>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -261,7 +267,6 @@
                 </div>
             </div>
         </div>
-
         @endif
 
 
