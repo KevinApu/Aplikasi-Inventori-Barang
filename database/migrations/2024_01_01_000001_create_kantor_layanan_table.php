@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('kantor_layanan', function (Blueprint $table) {
-            $table->id();
-            $table->string('pop', 12)->nullable();
+            $table->string('pop', 12)->primary();
             $table->string('lokasi', 20);
             $table->string('alamat', 200)->nullable();
         });

@@ -38,24 +38,6 @@ class NamaBarangTableSeeder extends Seeder
                 'nama_barang' => 'Kabel Ties',
                 'pop' => 'G1',
             ),
-            3 => 
-            array (
-                'id' => 4,
-                'nama_barang' => 'Tp-Link',
-                'pop' => 'A1',
-            ),
-            4 => 
-            array (
-                'id' => 5,
-                'nama_barang' => 'ZTE',
-                'pop' => 'A1',
-            ),
-            5 => 
-            array (
-                'id' => 6,
-                'nama_barang' => 'Adaptor 12v 1A',
-                'pop' => 'A1',
-            ),
         ));
         
         

@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('input_by', 30);
             $table->string('keterangan', 70)->nullable();
             $table->string('pop', 12);
+            $table->foreign('pop')->references('pop')->on('kantor_layanan')->onDelete('cascade');
             $table->timestamps();
         });
     }

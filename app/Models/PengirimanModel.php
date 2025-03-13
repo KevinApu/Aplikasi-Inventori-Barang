@@ -28,4 +28,9 @@ class PengirimanModel extends Model
         'created_at',
         'updated_at'
     ];
+
+    public function KLModel()
+    {
+        return $this->belongsTo(KLModel::class, 'tujuan', 'pop');
+    }
 }

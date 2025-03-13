@@ -43,27 +43,25 @@ class OrderController extends Controller
         $barangMasuk = StokGudangModel::where('pop', Auth::user()->KLUser->KLModel->pop)->where('id', $part1)->first();
 
         if (!$barangMasuk) {
-            return redirect()->route('input_barang_keluar')->with('error', 'Barang tidak ditemukan');
+            return response()->json(['message' => 'Barang tidak ditemukan.', 'alert_type' => 'error']);
         }
 
-        if (($barangMasuk->satuan == 'roll' || $barangMasuk->satuan == 'pack') && Order::where('id', $barangMasuk->id)->exists()) {
-            return redirect()->route('input_barang_keluar')->with('error', 'Barang sudah ditambahkan');
+        if (($barangMasuk->satuan == 'roll' || $barangMasuk->satuan == 'pack') && Order::where('stok_gudang_id', $barangMasuk->id)->exists()) {
+            return response()->json(['message' => 'Barang sudah ditambahkan.', 'alert_type' => 'error']);
         }
 
         if (($barangMasuk->satuan == 'pcs' || $barangMasuk->satuan == 'unit') && Order::where('qr_code', $uniqueCode)->exists()) {
-            return redirect()->route('input_barang_keluar')->with('error', 'Barang sudah ditambahkan');
+            return response()->json(['message' => 'Barang sudah ditambahkan.', 'alert_type' => 'error']);
         }
 
         // Menyimpan data order baru
         Order::create([
             'stok_gudang_id' => $barangMasuk->id,
-            'username' => Auth::user()->KLUser->username,
-            'pop' => Auth::user()->KLUser->KLModel->pop,
+            'users_id' => Auth::user()->id,
             'qr_code' => $uniqueCode,
         ]);
 
-        // Pengarahan setelah sukses
-        return redirect()->route('input_barang_keluar')->with('success', 'Barang berhasil ditambahkan');
+        return response()->json(['message' => 'Barang berhasil ditambahkan.', 'alert_type' => 'success']);
     }
 
 
@@ -97,7 +95,7 @@ class OrderController extends Controller
      */
     public function destroy(string $id)
     {
-        Order::where('qr_code', $id)->delete();
+        Order::where('id', $id)->delete();
         return redirect()->route('input_barang_keluar');
     }
 }

@@ -38,18 +38,6 @@ class KategoriTableSeeder extends Seeder
                 'kategori' => 'Router',
                 'pop' => 'G1',
             ),
-            3 => 
-            array (
-                'id' => 4,
-                'kategori' => 'Aksesoris',
-                'pop' => 'A1',
-            ),
-            4 => 
-            array (
-                'id' => 5,
-                'kategori' => 'Lainnya',
-                'pop' => 'A1',
-            ),
         ));
         
         

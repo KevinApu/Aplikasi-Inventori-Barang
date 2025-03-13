@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('rasio')->nullable();
             $table->string('catatan', 50)->nullable();
             $table->string('pop', 12);
+            $table->foreign('pop')->references('pop')->on('kantor_layanan')->onDelete('cascade');
             $table->string('nama_pengaju', 20);
             $table->enum('status', ['Pending', 'Setujui', 'Tolak', 'Dikirim'])->default('Pending');
             $table->string('ket_status', 50)->nullable();

@@ -25,14 +25,19 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                    @php $groupedRequests = $daftarpermintaan->groupBy('pop'); @endphp
+                    @php 
+                    $groupedRequests = $daftarpermintaan->groupBy('pop'); 
+                    @endphp
+
                     @foreach ($groupedRequests as $kantorLayanan => $requests)
+
                     @php
                     $requestIds = $requests->pluck('id')->toArray();
                     $requestIdsJson = json_encode($requestIds);
+                    $lokasi = optional($requests->first()->KLModel)->lokasi; 
                     @endphp
                     <tr class="bg-white hover:bg-gray-100">
-                        <td class="py-3 px-4 text-gray-800 font-medium">{{ $kantorLayanan }}</td>
+                        <td class="py-3 px-4 text-gray-800 font-medium">{{ $lokasi }}</td>
                         <td class="py-3 px-4 text-gray-600">{{ $requests->first()->created_at }}</td>
                         <td class="py-3 px-4">
                             <span class="px-3 py-1 text-sm text-white rounded-full 
@@ -93,7 +98,7 @@
                                         <td class="py-2 px-4 text-gray-700">{{ $request->nama_barang }}</td>
                                         <td class="py-2 px-4 text-gray-700">{{ $request->seri }}</td>
                                         <td class="py-2 px-4 text-gray-700">{{ $request->jumlah }}</td>
-                                        <td class="py-2 px-4 text-gray-700">{{ $request->keterangan }}</td>
+                                        <td class="py-2 px-4 text-gray-700">{{ $request->keterangan ?? '-' }}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>

@@ -48,7 +48,7 @@ Route::middleware(['auth', 'clear.temp_items'])->group(function () {
             Route::post('/input_barang_rusak/{id}', [BarangRusakController::class, 'store'])->name('barang.rusak');
             Route::get('/request_barang', [RequestBarangController::class, 'create'])->name('request_barang');
             Route::post('/request_barang/post', [RequestBarangController::class, 'store'])->name('request_barang.post');
-            Route::post('/terima_barang', [RequestBarangController::class, 'update'])->name('terima_barang');
+            Route::post('/terima_barang/{pop}', [RequestBarangController::class, 'update'])->name('terima_barang');
         });
 
 
@@ -69,12 +69,12 @@ Route::middleware(['auth', 'clear.temp_items'])->group(function () {
             Route::get('/permintaan_barang/admin', [PermintaanBarangController::class, 'index'])->name('permintaan_barang.superadmin');
 
             Route::post('/setting/pop', [KLController::class, 'store'])->name('setting.pop');
-            Route::put('/setting/pop/update/{id}', [KLController::class, 'update'])->name('setting.pop.update');
-            Route::delete('/setting/pop/delete/{id}', [KLController::class, 'destroy'])->name('setting.pop.destroy');
+            Route::put('/setting/pop/update/{pop}', [KLController::class, 'update'])->name('setting.pop.update');
+            Route::delete('/setting/pop/delete/{pop}', [KLController::class, 'destroy'])->name('setting.pop.destroy');
             
             Route::put('/password.update', [SettingController::class, 'update_password'])->name('password.update');
 
-            Route::post('/tambah_user', [SettingController::class, 'add_user'])->name('add.user');
+            Route::post('/tambah_user/{pop}', [SettingController::class, 'add_user'])->name('add.user');
             Route::delete('/hapus_user/{id}', [SettingController::class, 'destroy_user'])->name('destroy.user');
         });
         

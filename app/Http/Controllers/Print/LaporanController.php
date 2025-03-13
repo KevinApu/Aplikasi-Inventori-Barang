@@ -161,24 +161,23 @@ class LaporanController extends Controller
         // Tambahkan footer hanya di halaman terakhir
         $pdf->SetHTMLFooter($footerHTML);
 
-        $lokasi = KLModel::where('pop', Auth::user()->KLUser->KLModel->pop)->value('lokasi');
+        $lokasi = Auth::user()->KLUser->KLModel->lokasi;
         return $pdf->Output(Auth::user()->KLUser->username . '_' . $lokasi . '_laporanrekap.pdf', 'D');
     }
 
 
     public function viewsuratjalan()
     {
-        $lokasi = KLModel::where('pop', Auth::user()->KLUser->KLModel->pop)->value('lokasi');
-
-        $result = PengirimanModel::where('tujuan', $lokasi)->get();
-
-        $alamat = KLModel::where('pop', Auth::user()->KLUser->KLModel->pop)->value('alamat');
+        $lokasi = Auth::user()->KLUser->KLModel->lokasi;
+        $pop = Auth::user()->KLUser->KLModel->pop;
+        $result = PengirimanModel::where('tujuan', $pop)->get();
+        $alamat = Auth::user()->KLUser->KLModel->alamat;
 
         $tanggal = now(); // Ambil tanggal dan waktu saat ini
         $month = $tanggal->format('m'); // Bulan (01-12)
         $year = $tanggal->format('Y');
 
-        $nomorUrutFormatted = $this->getNomorUrut($lokasi, $month, $year);
+        $nomorUrutFormatted = $this->getNomorUrut($pop, $month, $year);
         $tanggal = now(); // Ambil tanggal dan waktu saat ini
 
         return view('suratjalan', [
@@ -190,9 +189,9 @@ class LaporanController extends Controller
         ]);
     }
 
-    private function getNomorUrut($lokasi, $month, $year)
+    private function getNomorUrut($pop, $month, $year)
     {
-        $nomorUrut = RequestBarangModel::where('pop', $lokasi)
+        $nomorUrut = RequestBarangModel::where('pop', $pop)
             ->whereMonth('created_at', $month)
             ->whereYear('created_at', $year)
             ->distinct('created_at')
@@ -205,15 +204,16 @@ class LaporanController extends Controller
 
     public function printsuratjalan()
     {
-        $lokasi = KLModel::where('pop', Auth::user()->KLUser->KLModel->pop)->value('lokasi');
-        $result = PengirimanModel::where('tujuan', $lokasi)->get();
-        $alamat = KLModel::where('pop', Auth::user()->KLUser->KLModel->pop)->value('alamat');
+        $lokasi = Auth::user()->KLUser->KLModel->lokasi;
+        $pop = Auth::user()->KLUser->KLModel->pop;
+        $result = PengirimanModel::where('tujuan', $pop)->get();
+        $alamat = Auth::user()->KLUser->KLModel->alamat;
 
         $tanggal = now(); // Ambil tanggal dan waktu saat ini
         $month = $tanggal->format('m'); // Bulan (01-12)
         $year = $tanggal->format('Y');
 
-        $nomorUrutFormatted = $this->getNomorUrut($lokasi, $month, $year);
+        $nomorUrutFormatted = $this->getNomorUrut($pop, $month, $year);
         $tanggal = now();
         // Ambil tanggal dan waktu saat ini
         $isPrinting = request()->has('is_printing') ? true : false;
@@ -230,7 +230,6 @@ class LaporanController extends Controller
         );
 
         $pdf->set_option('defaultPaperSize', 'F4');
-        $lokasi = KLModel::where('pop', Auth::user()->KLUser->KLModel->pop)->value('lokasi');
         return $pdf->download(Auth::user()->KLUser->username . '_' . $lokasi . '_suratjalan.pdf');
     }
 }

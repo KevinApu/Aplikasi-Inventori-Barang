@@ -29,7 +29,7 @@ class BarangKeluarController extends Controller
     public function create()
     {
         $order = Order::with('stokGudang')
-            ->where('pop', Auth::user()->KLUser->KLModel->pop)->get();
+            ->where('users_id', Auth::user()->id)->get();
         return view('Inputview.inputbarangkeluar', ['order' => $order]);
     }
 
@@ -39,43 +39,31 @@ class BarangKeluarController extends Controller
     public function store(BarangKeluarRequest $request)
     {
         $jumlaharray = $request->input('jumlah');
-        $qr_code = $request->input('qr_code');
-        $stok_gudang_id = $request->input('stok_gudang_id');
-        $output_by = Auth::user()->KLUser->username;
 
         foreach ($jumlaharray as $id => $jumlah) {
             $nama_customer = $request->input('ID') . '_' . $request->input('namacustomer');
-            $qr_code_value = isset($qr_code[$id]) ? $qr_code[$id] : null;
-            $stok_gudang = isset($stok_gudang_id[$id]) ? $stok_gudang_id[$id] : null;
-            $StokGudangModel = StokGudangModel::find($stok_gudang);
-            
-
-            $exists = BarangKeluarModel::where('id', $id)
-                ->where('qr_code', $qr_code_value)
-                ->where('pop', Auth::user()->KLUser->KLModel->pop) // Memeriksa pop juga
+            $order = Order::where('id', $id)->first();
+            $StokGudangModel = StokGudangModel::find($order->stok_gudang_id);
+            $exists = BarangKeluarModel::where('qr_code', $order->qr_code)
+                ->where('pop', Auth::user()->KLUser->KLModel->pop)
                 ->exists();
 
             if ($exists) {
-                // Jika kombinasi ID dan QR Code sudah ada, tampilkan error
                 return redirect()->back()->with('error', 'Barang sudah tercatat sebagai barang yang telah dikeluarkan.');
             }
-
-
-            // Simpan data ke database untuk setiap barang
             BarangKeluarModel::create([
-                'stok_gudang_id' => $stok_gudang,
-                'jumlah' => $jumlah,  // Jumlah dari input
-                'lokasi' => $request->input('lokasi'),
+                'stok_gudang_id' => $order->stok_gudang_id,
+                'jumlah' => $jumlah, 
+                'lokasi' => $request->lokasi,
                 'nama_customer' => $nama_customer,
-                'output_by' => $output_by,
-                'keterangan' => $request->input('keterangan'),
+                'output_by' => Auth::user()->KLUser->username,
+                'keterangan' => $request->keterangan,
                 'pop' => Auth::user()->KLUser->KLModel->pop,
-                'qr_code' => $qr_code_value,  // Gunakan qr_code yang sesuai
+                'qr_code' => $order->qr_code,
             ]);
 
-            // Hapus order berdasarkan qr_code
-            if ($qr_code_value) {
-                Order::where('qr_code', $qr_code_value)->delete();
+            if ($id) {
+                Order::where('id', $id)->delete();
             }
 
             if ($StokGudangModel->satuan == 'pack' || $StokGudangModel->satuan == 'roll') {
@@ -87,7 +75,7 @@ class BarangKeluarController extends Controller
                 $StokGudangModel->save();
 
 
-                $rekap = RekapModel::where('stok_gudang_id', $stok_gudang)->first();
+                $rekap = RekapModel::where('stok_gudang_id', $order->stok_gudang_id)->first();
                 if ($rekap) {
                     $rekap->out += $jumlah;
                     $rekap->save();
@@ -96,7 +84,7 @@ class BarangKeluarController extends Controller
                 $StokGudangModel->jumlah -= $jumlah;
                 $StokGudangModel->save();
 
-                $rekap = RekapModel::where('stok_gudang_id', $stok_gudang)->first();
+                $rekap = RekapModel::where('stok_gudang_id', $order->stok_gudang_id)->first();
                 if ($rekap) {
                     $rekap->out += $jumlah; // Update jumlah dengan penambahan
                     $rekap->save();

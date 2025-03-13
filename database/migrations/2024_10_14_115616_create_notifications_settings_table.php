@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('unit')->default(5);
             $table->integer('pcs')->default(5);
             $table->string('pop', 12);
+            $table->foreign('pop')->references('pop')->on('kantor_layanan')->onDelete('cascade');
         });
     }
 

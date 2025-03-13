@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('rasio')->nullable();
             $table->string('catatan', 50)->nullable();
             $table->string('tujuan', 12);
+            $table->foreign('tujuan')->references('pop')->on('kantor_layanan')->onDelete('cascade');
             $table->string('nama_pengaju', 20);
             $table->enum('status', ['Menunggu Pengiriman','Sedang Dikirim', 'Terkirim', 'Dibatalkan'])->default('Menunggu Pengiriman');
             $table->datetime('tanggal_terima')->nullable();

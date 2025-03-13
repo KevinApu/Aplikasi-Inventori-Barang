@@ -26,7 +26,7 @@ class KlUsersTableSeeder extends Seeder
                 'username' => 'Kevin PKL',
                 'password' => 'adminpacitan@sandya.com',
                 'role' => 'admin',
-                'kl_id' => 1,
+                'pop_id' => 'G1',
             ),
             1 => 
             array (
@@ -34,7 +34,7 @@ class KlUsersTableSeeder extends Seeder
                 'username' => 'superadmin',
                 'password' => 'superadmin@sandya.com',
                 'role' => 'superadmin',
-                'kl_id' => NULL,
+                'pop_id' => NULL,
             )
         ));
         

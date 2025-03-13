@@ -28,7 +28,7 @@ class KirimBarangController extends Controller
      */
     public function create()
     {
-        $kantorlayanan = KLModel::where('lokasi', '!=', 'pusat')->get();
+        $kantorlayanan = KLModel::get();
         return view('SuperAdmin.InputKirimBarang', ['kantorlayanan' => $kantorlayanan]);
     }
 
@@ -38,7 +38,6 @@ class KirimBarangController extends Controller
     public function store(Request $request)
     {
         $lokasiList = collect($request->items)->pluck('lokasi')->unique();
-
         $sedangDikirim = PengirimanModel::whereIn('tujuan', $lokasiList)
             ->whereIn('status', ['Sedang Dikirim', 'Menunggu Pengiriman'])
             ->exists();
@@ -54,7 +53,6 @@ class KirimBarangController extends Controller
         if ($sedangPending) {
             return redirect()->back()->with('error', 'Proses input dibatalkan karena masih ada barang dengan status Pending untuk kantor layanan terkait. Harap selesaikan atau setujui permintaan sebelumnya sebelum melanjutkan.');
         }
-
 
         $sedangTolak = RequestBarangModel::whereIn('pop', $lokasiList)
             ->where('status', 'Tolak')
@@ -94,29 +92,31 @@ class KirimBarangController extends Controller
      */
     public function show(Request $request)
     {
-        $query = DB::table('riwayat_pengiriman');
-
-        // Menambahkan filter jika ada parameter 'pop'
+        $query = PengirimanModel::with('KLModel')->where('status', '!=', 'Dikirim');
         if ($request->pop) {
             $query->where('tujuan', $request->pop);
         }
-
-        // Mengambil data dari query
         $results = $query->get();
-
-        // Memformat tanggal setelah data diambil
-        foreach ($results as $riwayat) {
-            $riwayat->formatted_created_at = Carbon::parse($riwayat->created_at)->format('d M Y, H:i');
-            if ($riwayat->status == 'Sedang Dikirim') {
-                $riwayat->formatted_updated_at = Carbon::parse($riwayat->updated_at)->format('d M Y, H:i');
-            }
-            $riwayat->formatted_tanggal_terima = $riwayat->tanggal_terima
-                ? Carbon::parse($riwayat->tanggal_terima)->format('d M Y, H:i')
-                : null;
-            $riwayat->formatted_tanggal_estimasi = $riwayat->tanggal_estimasi
-                ? Carbon::parse($riwayat->tanggal_estimasi)->format('d M Y, H:i')
-                : null;
-        }
+        $results = $query->get()->map(function ($riwayat) {
+            return [
+                'id' => $riwayat->id,
+                'nama_barang' => $riwayat->nama_barang,
+                'seri' => $riwayat->seri,
+                'jumlah' => $riwayat->jumlah,
+                'satuan' => $riwayat->satuan,
+                'rasio' => $riwayat->rasio,
+                'catatan' => $riwayat->catatan,
+                'lokasi' => $riwayat->KLModel->lokasi,
+                'tujuan' => $riwayat->tujuan,
+                'status' => $riwayat->status,
+                'pengirim' => $riwayat->pengirim,
+                'resi' => $riwayat->resi,
+                'formatted_created_at' => Carbon::parse($riwayat->created_at)->format('d M Y, H:i'),
+                'formatted_updated_at' => $riwayat->status == 'Sedang Dikirim' ? Carbon::parse($riwayat->updated_at)->format('d M Y, H:i') : null,
+                'formatted_tanggal_terima' => $riwayat->tanggal_terima ? Carbon::parse($riwayat->tanggal_terima)->format('d M Y, H:i') : null,
+                'formatted_tanggal_estimasi' => $riwayat->tanggal_estimasi ? Carbon::parse($riwayat->tanggal_estimasi)->format('d M Y, H:i') : null,
+            ];
+        });
 
         // Mengembalikan hasil sebagai JSON
         return response()->json($results);
@@ -136,8 +136,7 @@ class KirimBarangController extends Controller
      */
     public function update(Request $request, $tujuan)
     {
-        $tujuanArray = explode(',', $tujuan); 
-
+        $tujuanArray = explode(',', $tujuan);
         PengirimanModel::whereIn('tujuan', $tujuanArray)
             ->update([
                 'status' => 'Sedang Dikirim',

@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\KLRequest;
 use App\Models\KLModel;
 use App\Models\KLUsers;
 use App\Models\Login;
+use App\Models\PengirimanModel;
 use App\Models\RequestBarangModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -61,8 +62,6 @@ class KLController extends Controller
 
         $results = $query->get();
         return response()->json($results);
-
-        
     }
 
     /**
@@ -76,29 +75,36 @@ class KLController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $pop)
     {
-        KLModel::where('id', $id)->update([
-            'kepalakantor' => $request->kepalakantor,
+        KLModel::where('pop', $pop)->update([
             'lokasi' => $request->lokasi,
-            'alamat' => $request->alamat,   
+            'alamat' => $request->alamat,
         ]);
 
         return redirect()->back()
-        ->with('success', 'Penggantian data Kantor berhasil dilakukan!')
-        ->with('activeTab', 'daftarcabang');
+            ->with('success', 'Penggantian data Kantor berhasil dilakukan!')
+            ->with('activeTab', 'daftarcabang');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $pop)
     {
-        $kantorlayanan = KLModel::find($id);
+
+        $pengirimanTerkait = PengirimanModel::where('tujuan', $pop)->exists();
+
+        if ($pengirimanTerkait) {
+            return redirect()->back()
+                ->with('error', 'Gagal menghapus! Masih ada pengiriman terkait dengan kantor ini.')
+                ->with('activeTab', 'daftarcabang');
+        }
+
+        $kantorlayanan = KLModel::find($pop);
         $kantorlayanan->delete();
         return redirect()->back()
             ->with('success', 'Penghapusan Kantor beserta user terkait berhasil dilakukan!')
             ->with('activeTab', 'daftarcabang');
     }
-    
 }

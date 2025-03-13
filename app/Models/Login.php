@@ -9,17 +9,23 @@ class Login extends Authenticatable
 {
     use HasFactory;
     protected $table = "users";
-      // Kolom-kolom yang dapat diisi secara massal
-      protected $fillable = [
+    // Kolom-kolom yang dapat diisi secara massal
+    protected $fillable = [
+        'id',
         'request_access',
         'foto',
-        'last_login', 
+        'last_login',
         'kl_user_id',
     ];
 
     public function KLUser()
     {
         return $this->belongsTo(KLUsers::class, 'kl_user_id', 'id');
+    }
+
+    public function order()
+    {
+        return $this->hasMany(Order::class, 'user_id', 'id');
     }
 
     // Kolom yang disembunyikan saat serialisasi (misal: API response)

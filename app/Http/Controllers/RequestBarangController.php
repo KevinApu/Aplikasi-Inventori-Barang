@@ -24,14 +24,14 @@ class RequestBarangController extends Controller
      */
     public function create()
     {
-        $lokasi = KLModel::where('pop', Auth::user()->KLUser->KLModel->pop)->value('lokasi');
+        $pop = Auth::user()->KLUser->KLModel->pop;
         if (
-            PengirimanModel::where('tujuan', $lokasi)->exists() && $requestBarang = RequestBarangModel::where('pop', $lokasi)
+            PengirimanModel::where('tujuan', $pop)->exists() && $requestBarang = RequestBarangModel::where('pop', $pop)
             ->where('status', 'Setujui')
             ->get()
         ) {
-            $result = PengirimanModel::where('tujuan', $lokasi)->get();
-            $riwayat = PengirimanModel::where('tujuan', $lokasi)->first();
+            $result = PengirimanModel::where('tujuan', $pop)->get();
+            $riwayat = PengirimanModel::where('tujuan', $pop)->first();
 
             if ($riwayat) {
                 $riwayat->formatted_created_at = Carbon::parse($riwayat->created_at)->format('d M Y, H:i');
@@ -46,13 +46,12 @@ class RequestBarangController extends Controller
                     : null;
             }
         } else {
-            $result = RequestBarangModel::where('pop', $lokasi)
+            $result = RequestBarangModel::where('pop', $pop)
                 ->where('status', '!=', 'Dikirim')
                 ->get();
 
             $riwayat = null;
         }
-
         return view('Inputview.RequestBarang', compact('result', 'riwayat'));
     }
 
@@ -65,29 +64,27 @@ class RequestBarangController extends Controller
         $seri = $request->input('seri');
         $jumlah = $request->input('jumlah');
         $keterangan = $request->input('keterangan');
+        $pop = Auth::user()->KLUser->KLModel->pop;
 
-        $lokasi = KLModel::where('pop', Auth::user()->KLUser->KLModel->pop)->value('lokasi');
-
-        if (RequestBarangModel::where('pop', $lokasi)->where('status', 'Tolak')->exists()) {
+        if (RequestBarangModel::where('pop', $pop)->where('status', 'Tolak')->exists()) {
             return redirect()->back()->with('error', 'Tidak dapat menginputkan data karena ada permintaan yang ditolak untuk lokasi ini saat ini.');
         }
-        if (RequestBarangModel::where('pop', $lokasi)->where('status', 'Pending')->exists()) {
+        if (RequestBarangModel::where('pop', $pop)->where('status', 'Pending')->exists()) {
             return redirect()->back()->with('error', 'Tidak dapat mengajukan permintaan baru karena ada permintaan yang masih pending untuk lokasi ini.');
         }
 
-        $hasApproved = RequestBarangModel::where('pop', $lokasi)
+        $hasApproved = RequestBarangModel::where('pop', $pop)
             ->where('status', 'Setujui')
             ->exists();
 
         if ($hasApproved) {
-            // Jika ada, ubah semua status terkait pop menjadi "Pending"
-            RequestBarangModel::where('pop', $lokasi)
+            RequestBarangModel::where('pop', $pop)
                 ->update(['status' => 'Pending']);
         }
 
         foreach ($nama_barang as $index => $nama) {
             RequestBarangModel::create([
-                'pop' => $lokasi,
+                'pop' => $pop,
                 'nama_pengaju' => Auth::user()->KLUser->username,
                 'nama_barang' => $nama,
                 'seri' => $seri[$index],
@@ -122,12 +119,10 @@ class RequestBarangController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update()
+    public function update($pop)
     {
-        $lokasi = KLModel::where('pop', Auth::user()->KLUser->KLModel->pop)->value('lokasi');
-        PengirimanModel::where('tujuan', $lokasi)
-            ->delete();
-
+        PengirimanModel::where('tujuan', $pop)->delete();
+        RequestBarangModel::where('pop', $pop)->delete();
         return redirect()->back()->with('success', 'Data berhasil diupdate.');
     }
 

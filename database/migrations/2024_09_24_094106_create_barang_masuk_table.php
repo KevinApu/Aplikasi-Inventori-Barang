@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('kategori', 50);
             $table->string('pop', 12);
+            $table->foreign('pop')->references('pop')->on('kantor_layanan')->onDelete('cascade');
         });
 
 
@@ -22,6 +23,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama_barang', 70);
             $table->string('pop', 12);
+            $table->foreign('pop')->references('pop')->on('kantor_layanan')->onDelete('cascade');
         });
     }
 

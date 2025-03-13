@@ -167,7 +167,7 @@
                                                         </div>
 
                                                         <!-- Form untuk Update Data -->
-                                                        <form method="POST" action="{{ route('setting.pop.update', $item->id) }}">
+                                                        <form method="POST" action="{{ route('setting.pop.update', $item->pop) }}">
                                                             @csrf
                                                             @method('PUT')
 
@@ -190,7 +190,7 @@
                                                 </div>
                                             </div>
 
-                                            <form action="{{ route('setting.pop.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kantor ini?');">
+                                            <form action="{{ route('setting.pop.destroy', $item->pop) }}" method="POST" onsubmit="return confirm('⚠️ Peringatan! Jika Anda menghapus cabang ini, semua data terkait akan ikut terhapus. Tindakan ini tidak dapat dibatalkan.\n\nApakah Anda yakin ingin melanjutkan?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="text-red-500 hover:text-red-700 focus:outline-none" title="Delete">
@@ -351,12 +351,9 @@
                                                                     x-transition:leave-start="opacity-100"
                                                                     x-transition:leave-end="opacity-0"
                                                                     class="border rounded-lg bg-white p-4 shadow-md max-h-[80vh] overflow-y-auto">
-                                                                    <form method="POST" action="{{ route('add.user') }}" class="bg-white shadow-lg rounded-xl p-6 space-y-4">
-                                                                        @csrf
-                                                                        <input type="hidden" name="kantor_id" value="{{ $item->id }}">
-
+                                                                    <form method="POST" action="{{ route('add.user', $item->pop) }}" class="bg-white shadow-lg rounded-xl p-6 space-y-4">
+                                                                        @csrfS
                                                                         <h2 class="text-2xl font-bold text-gray-800 text-center">Tambah User</h2>
-
                                                                         <div class="space-y-4">
                                                                             <!-- Username -->
                                                                             <div>
@@ -616,7 +613,6 @@
             </div>
         </div>
     </div>
-
     @endif
 
 

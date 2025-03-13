@@ -20,7 +20,6 @@ class PrintControlller extends Controller
     public function index()
     {
         $items = session('temp_items', []);
-
         return view('barcode', compact('items'));
     }
 
@@ -52,17 +51,11 @@ class PrintControlller extends Controller
             $item = StokGudangModel::find($id);
 
             if ($item) {
-                // Cek apakah jumlah barang lebih dari satu
-                $jumlahBarang = max(1, intval($item->jumlah)); // Default ke 1 jika jumlah tidak valid
-
-                // Loop untuk membuat barcode sebanyak jumlah barang
+                $jumlahBarang = max(1, intval($item->jumlah));
                 for ($i = 1; $i <= $jumlahBarang; $i++) {
-                    $uuid = Str::of(Str::uuid())->replace('-', '');
-                    $uniqueIdentifier = "{$item->id}-" . $uuid;
-
+                    $uniqueIdentifier = "{$item->id}-" . Str::random(14) . time();
                     $barcodeHtml = $dns2d->getBarcodeHTML($uniqueIdentifier, 'QRCODE', 4, 4);
 
-                    // Tambahkan ke sesi, tanpa perlu cek duplikasi per item
                     session()->push('temp_items', [
                         'id' => $item->id,
                         'nama_barang' => $item->nama_barang,
@@ -70,7 +63,7 @@ class PrintControlller extends Controller
                         'lokasi' => $item->lokasi,
                         'foto' => $item->foto,
                         'barcodeHtml' => $barcodeHtml,
-                        'barcode_no' => $i, // Simpan nomor barcode untuk setiap iterasi
+                        'barcode_no' => $i,
                     ]);
                 }
             }
@@ -93,11 +86,11 @@ class PrintControlller extends Controller
 
         $items = session('temp_items', []);
         $pdf = Pdf::loadView('barcode', compact('items'))
-        ->set_option('defaultPaperSize', 'F4')
-        ->set_option('dpi', 150)  // Mengatur dpi gambar untuk mengurangi ukuran file
-        ->set_option('isHtml5ParserEnabled', true) // Menggunakan parser HTML5
-        ->set_option('isPhpEnabled', false); // Menonaktifkan PHP di dalam dompdf (jika tidak diperlukan)
-    
+            ->set_option('defaultPaperSize', 'F4')
+            ->set_option('dpi', 150)  // Mengatur dpi gambar untuk mengurangi ukuran file
+            ->set_option('isHtml5ParserEnabled', true) // Menggunakan parser HTML5
+            ->set_option('isPhpEnabled', false); // Menonaktifkan PHP di dalam dompdf (jika tidak diperlukan)
+
 
         $pdf->set_option('defaultPaperSize', 'F4');
 

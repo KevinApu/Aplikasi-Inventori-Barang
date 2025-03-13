@@ -8,7 +8,7 @@
                     <option value="" class="bg-gray-400 hover:bg-gray-300" selected>Pilih Cabang...</option>
                     @foreach ($kantorlayanan as $item)
                     <option value="{{ $item->tujuan }}">
-                        {{ $item->tujuan }}
+                        {{ $item->KLModel->lokasi }}
                     </option>
                     @endforeach
                 </select>
@@ -87,9 +87,9 @@
                                         <td class="px-4 py-2" x-text="item.nama_barang"></td>
                                         <td class="px-4 py-2" x-text="item.seri"></td>
                                         <td class="px-4 py-2" x-text="item.satuan ? `${item.jumlah} ${item.satuan}` : item.jumlah"></td>
-                                        <td class="px-4 py-2" x-text="item.rasio !== null ? item.rasio : '-'"></td>
+                                        <td class="px-4 py-2" x-text="item.rasio" x-show="item.rasio !== null"></td>
                                         <td class="px-4 py-2" x-text="item.catatan ? item.catatan : '-'"></td>
-                                        <td class="px-4 py-2" x-text="item.tujuan"></td>
+                                        <td class="px-4 py-2" x-text="item.lokasi"></td>
                                     </tr>
                                 </template>
                             </tbody>

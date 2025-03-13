@@ -159,7 +159,7 @@
                                 <select x-model="item.lokasi" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" required>
                                     <option value="" selected>Pilih lokasi...</option>
                                     @foreach ($kantorlayanan as $lokasi)
-                                    <option value="{{ $lokasi->lokasi }}">{{ $lokasi->pop }} - {{ $lokasi->lokasi }}</option>
+                                    <option value="{{ $lokasi->pop }}">{{ $lokasi->pop }} - {{ $lokasi->lokasi }}</option>
                                     @endforeach
                                 </select>
                             </div>

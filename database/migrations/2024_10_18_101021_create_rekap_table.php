@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('in')->nullable();
             $table->integer('out')->nullable();
             $table->string('pop', 12);
+            $table->foreign('pop')->references('pop')->on('kantor_layanan')->onDelete('cascade');
             $table->foreignId('stok_gudang_id')->constrained('stok_gudang')->onDelete('restrict');
             $table->timestamps();
         });

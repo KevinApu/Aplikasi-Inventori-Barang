@@ -371,7 +371,7 @@
 
                             <!-- Tombol Aksi -->
                             <div class="mt-6 flex justify-end space-x-3">
-                                <form action="{{ route('terima_barang') }}" method="POST">
+                                <form action="{{ route('terima_barang', auth()->user()->KLUser->KLModel->pop) }}" method="POST">
                                     @csrf
                                     <button
                                         @click="open = false"

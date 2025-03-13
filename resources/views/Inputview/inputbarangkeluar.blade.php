@@ -297,17 +297,14 @@
             </div>
         </div>
 
-
         @php
-        $item = $order->first(fn($item) => $item->username === Auth::user()->KLUser->username);
+        $item = $order->first(fn($item) => $item->users_id === Auth::user()->id);
         @endphp
 
         @if ($item)
         <form id="order" action="{{ route('barangkeluar.store') }}" method="POST" enctype="multipart/form-data" class="w-full mx-auto mt-16 bg-white p-6 rounded-lg shadow-md">
             @csrf
-
             <h2 class="text-3xl font-bold text-gray-800 border-b pb-4 mb-6">Order</h2>
-
             <div class="grid lg:grid-cols-2 gap-8">
                 <!-- Ringkasan Pesanan -->
                 <div>
@@ -323,8 +320,6 @@
                                     {{ ($item->stokGudang->satuan == 'roll' || $item->stokGudang->satuan == 'pack') ? $item->stokGudang->hasil : $item->stokGudang->jumlah }}
                                 </span>
                                 <span class="text-gray-600 font-bold">{{$item->stokGudang->lokasi}}</span>
-                                <input type="hidden" name="qr_code[{{ $item->id }}]" value="{{ $item->qr_code }}">
-                                <input type="hidden" name="stok_gudang_id[{{ $item->id }}]" value="{{ $item->stok_gudang_id }}">
                                 <div class="mt-2 flex items-center space-x-2">
                                     <span class="text-gray-600">Jumlah:</span>
                                     @if ($item->stokGudang->satuan === 'unit' || $item->stokGudang->satuan === 'pcs')
@@ -335,7 +330,7 @@
                                     @endif
                                 </div>
                             </div>
-                            <a href="{{ url('/hapus_order/' . $item->qr_code) }}" class="text-red-500 hover:text-red-700">
+                            <a href="{{ url('/hapus_order/' . $item->id) }}" class="text-red-500 hover:text-red-700">
                                 &#10005;
                             </a>
                         </div>
@@ -364,8 +359,8 @@
                 </div>
             </div>
         </form>
+        @endif
     </div>
-    @endif
 
     @if (session('success'))
     <div x-data="{ isOpen: true }" x-init="setTimeout(() => isOpen = false, 2000)">
@@ -588,7 +583,7 @@
                         if (response.ok) {
                             location.reload();
                         } else {
-                            alert('Barcode tidak terdaftar dalam sistem.'); // Tetap arahkan walau error
+                            alert('Barcode tidak terdaftar dalam sistem.');
                         }
                     } catch (error) {
                         alert('Terjadi kesalahan pada jaringan atau server.');
@@ -600,8 +595,6 @@
 
 
 
-
-        // Variabel untuk mencegah scanning berulang
         let isProcessing = false;
 
         async function onScanSuccess(decodedText) {
@@ -632,8 +625,6 @@
             } catch (error) {
                 console.log(error);
             }
-
-            // Reset status setelah beberapa detik (misalnya 3 detik)
             setTimeout(() => {
                 isProcessing = false;
             }, 3000);
@@ -648,16 +639,16 @@
             };
         } else if (window.innerWidth < 1024) { // Tablet
             qrboxSize = {
-                width: 250,
-                height: 250
+                width: 200,
+                height: 200
             };
         }
 
         const html5QrcodeScanner = new Html5QrcodeScanner(
             "reader", {
-                fps: 60,
+                fps: 30,
                 qrbox: qrboxSize,
-                supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+                supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA, Html5QrcodeScanType.SCAN_TYPE_FILE],
             }
         );
         // Render scanner dengan fungsi onScanSuccess

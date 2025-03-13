@@ -14,9 +14,6 @@ class BarcodeController extends Controller
         $nama_barang = $request->input('nama_barang');
         $seri = $request->input('seri');
 
-        // // Generate barcode
-        // $barcode = Barcode::generate('C128', $kode_barang);
-
         return view('barcode', compact('kode_barang', 'nama_barang', 'seri', 'barcode'));
     }
 }

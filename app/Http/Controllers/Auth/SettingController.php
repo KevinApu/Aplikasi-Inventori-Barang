@@ -52,10 +52,10 @@ class SettingController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function add_user(Request $request)
+    public function add_user(Request $request, $pop)
     {
         $request->validate([
-            'username' => 'required|string|unique:kl_users,username,NULL,NULL,kl_id,' . $request->kantor_id . '|unique:kl_users,username,NULL,NULL,role,' . $request->role . '|max:100',
+            'username' => 'required|string|unique:kl_users,username,NULL,NULL,pop_id,' . $pop . '|unique:kl_users,username,NULL,NULL,role,' . $request->role . '|max:100',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|in:user,admin',
         ]);
@@ -64,7 +64,7 @@ class SettingController extends Controller
             'username' => $request->username,
             'password' => $request->password,
             'role' => $request->role,
-            'kl_id' => $request->kantor_id,
+            'pop_id' => $pop,
         ]);
 
         return redirect()->back()

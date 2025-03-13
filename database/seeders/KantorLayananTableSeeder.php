@@ -22,7 +22,6 @@ class KantorLayananTableSeeder extends Seeder
         DB::table('kantor_layanan')->insert(array (
             0 => 
             array (
-                'id' => 1,
                 'pop' => 'G1',
                 'lokasi' => 'PCT',
                 'alamat' => 'Jl P. Sudirman No.3, Barang, Arjowinangun, Kec. Pacitan, Kabupaten Pacitan, Jawa Timur 36516',
