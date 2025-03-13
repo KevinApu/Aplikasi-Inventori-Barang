@@ -8,7 +8,6 @@ use App\Http\Controllers\BarangRusakController;
 use App\Http\Controllers\BarangRusakController2;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Print\LaporanController;
 use App\Http\Controllers\Print\PrintControlller;
 use App\Http\Controllers\ProfileController;
@@ -18,6 +17,7 @@ use App\Http\Controllers\StokGudangController;
 use App\Http\Controllers\SuperAdmin\KirimBarangController;
 use App\Http\Controllers\SuperAdmin\KLController;
 use App\Http\Controllers\SuperAdmin\PermintaanBarangController;
+use App\Models\BarangKeluarModel;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -92,7 +92,7 @@ Route::middleware(['auth', 'clear.temp_items'])->group(function () {
         Route::get('/tabel_barang_keluar', [BarangKeluarController::class, 'index'])->name('tabel_barang_keluar');
         Route::get('/input_barang_keluar', [BarangKeluarController::class, 'create'])->name('input_barang_keluar');
         Route::post('/barang_keluar', [BarangKeluarController::class, 'store'])->name('barangkeluar.store');
-        Route::get('/hapus_order/{id}', [OrderController::class, 'destroy']);
+        Route::get('/hapus_order/{id}', [BarangKeluarController::class, 'destroy_order']);
         Route::delete('/tabel_barang_keluar/{id}', [BarangKeluarController::class, 'destroy']);
         Route::post('/input_barang_rusak2/{id}', [BarangRusakController2::class, 'store']);
 
@@ -104,8 +104,7 @@ Route::middleware(['auth', 'clear.temp_items'])->group(function () {
         Route::get('/search/rekap', [RekapController::class, 'show']);
         Route::get('/search/kl', [KLController::class, 'show']);
 
-        Route::get('/order', [OrderController::class, 'create'])->name('order.view');
-        Route::post('/order/{id}', [OrderController::class, 'store'])->name('order');
+        Route::post('/order/{id}', [BarangKeluarController::class, 'order'])->name('order');
 
 
 

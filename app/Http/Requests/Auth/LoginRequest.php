@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Auth;
 
 use App\Models\KLModel;
-use App\Models\KLUsers;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LoginRequest extends FormRequest

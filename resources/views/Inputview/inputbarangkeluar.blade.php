@@ -298,7 +298,7 @@
         </div>
 
         @php
-        $item = $order->first(fn($item) => $item->users_id === Auth::user()->id);
+        $item = $order->first(fn($item) => $item->output_by === Auth::user()->username);
         @endphp
 
         @if ($item)
@@ -646,7 +646,7 @@
 
         const html5QrcodeScanner = new Html5QrcodeScanner(
             "reader", {
-                fps: 30,
+                fps: 60,
                 qrbox: qrboxSize,
                 supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA, Html5QrcodeScanType.SCAN_TYPE_FILE],
             }

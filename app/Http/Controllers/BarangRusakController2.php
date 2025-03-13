@@ -35,7 +35,7 @@ class BarangRusakController2 extends Controller
      */
     public function store(Request $request, $id)
     {
-        $input_by = Auth::user()->KLUser->username;
+        $input_by = Auth::user()->username;
         $foto = $request->file('foto');
         $finalFileName = time() . '-' . $foto->hashName();
         $foto->storeAs('public/img', $finalFileName);
@@ -48,7 +48,7 @@ class BarangRusakController2 extends Controller
             'input_by' => $input_by,
             'kondisi' => $request->input('kondisi'),
             'penyebab' => $request->input('penyebab'),
-            'pop' => Auth::user()->KLUser->KLModel->pop,
+            'pop' => Auth::user()->KLModel->pop,
             'qr_code' => $barangKeluar->qr_code,
             'status' => 'rusak_sesudah_penggunaan',
             'stok_gudang_id' => $barangKeluar->stok_gudang_id,

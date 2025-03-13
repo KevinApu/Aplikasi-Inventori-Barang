@@ -12,24 +12,18 @@ class Login extends Authenticatable
     // Kolom-kolom yang dapat diisi secara massal
     protected $fillable = [
         'id',
+        'username',
+        'password',
+        'role',
         'request_access',
         'foto',
         'last_login',
-        'kl_user_id',
+        'pop_id',
     ];
 
-    public function KLUser()
+    public function KLModel()
     {
-        return $this->belongsTo(KLUsers::class, 'kl_user_id', 'id');
+        return $this->belongsTo(KLModel::class, 'pop_id', 'pop');
     }
-
-    public function order()
-    {
-        return $this->hasMany(Order::class, 'user_id', 'id');
-    }
-
     // Kolom yang disembunyikan saat serialisasi (misal: API response)
-    protected $hidden = [
-        'password',  // Sembunyikan password saat mengirim data ke client
-    ];
 }

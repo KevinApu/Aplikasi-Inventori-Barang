@@ -13,7 +13,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $pop = Auth::user()->KLUser->KLModel->pop;
+        $pop = Auth::user()->KLModel->pop;
         $barang_masuk = StokGudangModel::where('pop', $pop)->sum('jumlah');
         $barang_keluar = BarangKeluarModel::where('pop', $pop)->sum('jumlah');
         $barang_rusak = BarangRusakModel::where('pop', $pop)->sum('jumlah');

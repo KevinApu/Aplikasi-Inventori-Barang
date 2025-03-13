@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\KLModel;
-use App\Models\KLUsers;
 use App\Models\Login;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Auth\User;
@@ -39,7 +38,7 @@ class LoginUserController extends Controller
         $password = $request->input('password');
 
         // Cari user di KLUsers berdasarkan username
-        $KLUser = KLUsers::whereRaw("REPLACE(LOWER(username), ' ', '') = ?", [$username])->first();
+        $KLUser = Login::whereRaw("REPLACE(LOWER(username), ' ', '') = ?", [$username])->first();
 
         if (!$KLUser) {
             return redirect()->back()->withErrors([
@@ -53,13 +52,11 @@ class LoginUserController extends Controller
             ])->withInput();
         }
 
-
-        // Cari user di tabel users berdasarkan kl_user_id
-        $user = Login::where('kl_user_id', $KLUser->id)->first();
+        $user = Login::where('id', $KLUser->id)->first();
         if (!$user) {
             // Jika belum ada di users, buat entri baru
             $user = Login::create([
-                'kl_user_id' => $KLUser->id,
+                'id' => $KLUser->id,
                 'request_access' => false,
                 'foto' => null,
                 'last_login' => now(),
@@ -84,7 +81,7 @@ class LoginUserController extends Controller
         if (!$user) {
             return response()->json(['message' => 'User tidak ditemukan.', 'alert_type' => 'error']);
         }
-        if (!$user->KLUser) {
+        if (!$user) {
             return response()->json(['message' => 'Akun ini tidak memiliki akses ke kantor layanan.', 'alert_type' => 'error']);
         }
         if ($user->request_access) {
@@ -97,10 +94,10 @@ class LoginUserController extends Controller
 
     public function approveAccess($userId)
     {
-        $user = Login::where('kl_user_id', $userId)->with('KLUser')->first();
+        $user = Login::where('id', $userId)->first();
         if ($user && $user->request_access) {
-            if ($user->KLUser) {
-                $user->KLUser->update(['role' => 'admin']);
+            if ($user) {
+                $user->update(['role' => 'admin']);
                 return redirect()->back()->with('message', 'Permintaan akses telah disetujui.');
             } else {
                 return redirect()->back()->with('error', 'User tidak memiliki akun di kantor layanan.');
@@ -111,10 +108,10 @@ class LoginUserController extends Controller
 
     public function deleteAccess($userId)
     {
-        $user = Login::where('kl_user_id', $userId)->with('KLUser')->first();
+        $user = Login::where('id', $userId)->first();
         if ($user && $user->request_access) {
-            if ($user->KLUser) {
-                $user->KLUser->update(['role' => 'user']);
+            if ($user) {
+                $user->update(['role' => 'user']);
                 $user->update(['request_access' => false]);
                 return redirect()->back()->with('message', 'Permintaan akses telah dihapus.');
             } else {

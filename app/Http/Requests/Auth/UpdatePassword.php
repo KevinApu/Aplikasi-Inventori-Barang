@@ -28,7 +28,7 @@ class UpdatePassword extends FormRequest
             'current_password' => [
                 'required',
                 function ($attribute, $value, $fail) {
-                    if ($value !== Auth::user()->KLUser->password) {
+                    if ($value !== Auth::user()->password) {
                         $fail('Password admin tidak sesuai.');
                     }
                 },

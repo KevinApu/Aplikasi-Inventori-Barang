@@ -18,7 +18,7 @@ class NotificationController extends Controller
             'unit' => 'required|integer|min:1',
         ]);
 
-        $pop = Auth::user()->KLUser->KLModel->pop;
+        $pop = Auth::user()->KLModel->pop;
         $setting = NotificationSetting::where('pop', $pop)->first();
 
         if (!$setting) {
@@ -45,7 +45,7 @@ class NotificationController extends Controller
 
     public function resetSettings(Request $request)
     {
-        $pop = Auth::user()->KLUser->KLModel->pop;
+        $pop = Auth::user()->KLModel->pop;
         $setting = NotificationSetting::where('pop', $pop)->first();
         if (
             $setting->roll == 5 &&

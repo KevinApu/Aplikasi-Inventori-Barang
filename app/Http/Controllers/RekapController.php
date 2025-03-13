@@ -97,7 +97,7 @@ class RekapController extends Controller
         $query = RekapModel::whereHas('stokGudang', function ($query) {
             $query->where('jumlah', '>=', 1);
         })->with('stokGudang')
-            ->where('pop', Auth::user()->KLUser->KLModel->pop);
+            ->where('pop', Auth::user()->KLModel->pop);
 
 
 

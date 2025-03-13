@@ -71,7 +71,7 @@ class KirimBarangController extends Controller
                 'rasio'       => $item['rasio'],
                 'tujuan'      => $item['lokasi'],
                 'catatan'     => $item['catatan'],
-                'pengirim'    => Auth::user()->KLUser->username,
+                'pengirim'    => Auth::user()->username,
                 'nama_pengaju' => RequestBarangModel::where('pop', $item['lokasi'])
                     ->where('status', 'Setujui')
                     ->value('nama_pengaju'),

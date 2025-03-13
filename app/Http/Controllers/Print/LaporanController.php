@@ -70,7 +70,7 @@ class LaporanController extends Controller
                     <td style="width: 50%; text-align: center;">
                         <p class="signature-header">Dibuat oleh</p>
                         <br><br><br><br>
-                        <p class="signature-name" style="font-weight: bold;">' . Auth::user()->KLUser->username . '</p>
+                        <p class="signature-name" style="font-weight: bold;">' . Auth::user()->username . '</p>
                         <hr style="width: 70%;">
                     </td>
                     <td style="width: 50%; text-align: center;">
@@ -96,7 +96,7 @@ class LaporanController extends Controller
             $pdf->WriteHTML($footerHTML);
         }
 
-        $fileName = Auth::user()->KLUser->username . now()->format('d-m-Y') . '_laporanbarangmasuk.pdf';
+        $fileName = Auth::user()->username . now()->format('d-m-Y') . '_laporanbarangmasuk.pdf';
         return $pdf->Output($fileName, 'I');
     }
 
@@ -104,7 +104,7 @@ class LaporanController extends Controller
 
     public function viewlaporanrekap()
     {
-        $rekapData = RekapModel::where('pop', Auth::user()->KLUser->KLModel->pop)->get();
+        $rekapData = RekapModel::where('pop', Auth::user()->KLModel->pop)->get();
 
         $startOfMonth = Carbon::now()->startOfMonth()->format('Y-m-d'); // Awal bulan
         $endOfMonth = Carbon::now()->endOfMonth()->format('Y-m-d'); // Akhir bulan
@@ -116,7 +116,7 @@ class LaporanController extends Controller
 
     public function printlaporanrekap()
     {
-        $rekapData = RekapModel::where('pop', Auth::user()->KLUser->KLModel->pop)->with('stokGudang')->get();
+        $rekapData = RekapModel::where('pop', Auth::user()->KLModel->pop)->with('stokGudang')->get();
 
         $startOfMonth = Carbon::now()->startOfMonth()->format('Y-m-d');
         $endOfMonth = Carbon::now()->endOfMonth()->format('Y-m-d');
@@ -144,7 +144,7 @@ class LaporanController extends Controller
                 <tr>
                     <td width="50%" align="center">
                         Dibuat oleh:<br><br><br><br>
-                        <b>' . Auth::user()->KLUser->username . '</b><br>
+                        <b>' . Auth::user()->username . '</b><br>
                         <hr style="width: 70%;">
                     </td>
                     <td width="50%" align="center">
@@ -161,17 +161,17 @@ class LaporanController extends Controller
         // Tambahkan footer hanya di halaman terakhir
         $pdf->SetHTMLFooter($footerHTML);
 
-        $lokasi = Auth::user()->KLUser->KLModel->lokasi;
-        return $pdf->Output(Auth::user()->KLUser->username . '_' . $lokasi . '_laporanrekap.pdf', 'D');
+        $lokasi = Auth::user()->KLModel->lokasi;
+        return $pdf->Output(Auth::user()->username . '_' . $lokasi . '_laporanrekap.pdf', 'D');
     }
 
 
     public function viewsuratjalan()
     {
-        $lokasi = Auth::user()->KLUser->KLModel->lokasi;
-        $pop = Auth::user()->KLUser->KLModel->pop;
+        $lokasi = Auth::user()->KLModel->lokasi;
+        $pop = Auth::user()->KLModel->pop;
         $result = PengirimanModel::where('tujuan', $pop)->get();
-        $alamat = Auth::user()->KLUser->KLModel->alamat;
+        $alamat = Auth::user()->KLModel->alamat;
 
         $tanggal = now(); // Ambil tanggal dan waktu saat ini
         $month = $tanggal->format('m'); // Bulan (01-12)
@@ -204,10 +204,10 @@ class LaporanController extends Controller
 
     public function printsuratjalan()
     {
-        $lokasi = Auth::user()->KLUser->KLModel->lokasi;
-        $pop = Auth::user()->KLUser->KLModel->pop;
+        $lokasi = Auth::user()->KLModel->lokasi;
+        $pop = Auth::user()->KLModel->pop;
         $result = PengirimanModel::where('tujuan', $pop)->get();
-        $alamat = Auth::user()->KLUser->KLModel->alamat;
+        $alamat = Auth::user()->KLModel->alamat;
 
         $tanggal = now(); // Ambil tanggal dan waktu saat ini
         $month = $tanggal->format('m'); // Bulan (01-12)
@@ -230,6 +230,6 @@ class LaporanController extends Controller
         );
 
         $pdf->set_option('defaultPaperSize', 'F4');
-        return $pdf->download(Auth::user()->KLUser->username . '_' . $lokasi . '_suratjalan.pdf');
+        return $pdf->download(Auth::user()->username . '_' . $lokasi . '_suratjalan.pdf');
     }
 }

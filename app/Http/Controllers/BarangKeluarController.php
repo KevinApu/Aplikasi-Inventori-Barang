@@ -6,7 +6,6 @@ use App\Http\Requests\BarangKeluarRequest;
 use App\Models\BarangKeluarModel;
 use App\Models\StokGudangModel\kategori;
 use App\Models\StokGudangModelModel;
-use App\Models\Order;
 use App\Models\RekapModel;
 use App\Models\StokGudangModel;
 use Illuminate\Http\Request;
@@ -28,9 +27,49 @@ class BarangKeluarController extends Controller
      */
     public function create()
     {
-        $order = Order::with('stokGudang')
-            ->where('users_id', Auth::user()->id)->get();
+        $order = BarangKeluarModel::with('stokGudang')
+            ->where('status_order', 0)
+            ->where('output_by', Auth::user()->username)->get();
         return view('Inputview.inputbarangkeluar', ['order' => $order]);
+    }
+
+    public function order($id)
+    {
+        $barcodePart = explode('-', $id);
+        $part1 = $barcodePart[0]; // Bagian pertama dari barcode (ID)
+        $uniqueCode = $barcodePart[1];
+
+        // Mencari barang berdasarkan 'pop' dan 'id' dari barcode
+        $barangMasuk = StokGudangModel::where('pop', Auth::user()->KLModel->pop)->where('id', $part1)->first();
+
+        if (!$barangMasuk) {
+            return response()->json(['message' => 'Barang tidak ditemukan.', 'alert_type' => 'error']);
+        }
+
+        if (($barangMasuk->satuan == 'roll' || $barangMasuk->satuan == 'pack') && BarangKeluarModel::where('stok_gudang_id', $barangMasuk->id)->exists()) {
+            return response()->json(['message' => 'Barang sudah ditambahkan.', 'alert_type' => 'error']);
+        }
+
+        if (($barangMasuk->satuan == 'pcs' || $barangMasuk->satuan == 'unit') && BarangKeluarModel::where('qr_code', $uniqueCode)->exists()) {
+            return response()->json(['message' => 'Barang sudah ditambahkan.', 'alert_type' => 'error']);
+        }
+
+        $exists = BarangKeluarModel::where('qr_code', $id)
+            ->where('pop', Auth::user()->KLModel->pop)
+            ->exists();
+
+        if ($exists) {
+            return response()->json(['message' => 'Barang sudah tercatat sebagai barang yang telah dikeluarkan.', 'alert_type' => 'error']);
+        }
+
+        BarangKeluarModel::create([
+            'stok_gudang_id' => $barangMasuk->id,
+            'output_by' => Auth::user()->username,
+            'pop' => Auth::user()->KLModel->pop,
+            'qr_code' => $id,
+        ]);
+
+        return response()->json(['message' => 'Barang berhasil ditambahkan.', 'alert_type' => 'success']);
     }
 
     /**
@@ -42,29 +81,16 @@ class BarangKeluarController extends Controller
 
         foreach ($jumlaharray as $id => $jumlah) {
             $nama_customer = $request->input('ID') . '_' . $request->input('namacustomer');
-            $order = Order::where('id', $id)->first();
-            $StokGudangModel = StokGudangModel::find($order->stok_gudang_id);
-            $exists = BarangKeluarModel::where('qr_code', $order->qr_code)
-                ->where('pop', Auth::user()->KLUser->KLModel->pop)
-                ->exists();
+            $barangKeluar = BarangKeluarModel::where('id', $id)->first();
+            $StokGudangModel = StokGudangModel::find($barangKeluar->stok_gudang_id);
 
-            if ($exists) {
-                return redirect()->back()->with('error', 'Barang sudah tercatat sebagai barang yang telah dikeluarkan.');
-            }
-            BarangKeluarModel::create([
-                'stok_gudang_id' => $order->stok_gudang_id,
-                'jumlah' => $jumlah, 
+            BarangKeluarModel::where('id', $id)->update([
+                'jumlah' => $jumlah,
                 'lokasi' => $request->lokasi,
                 'nama_customer' => $nama_customer,
-                'output_by' => Auth::user()->KLUser->username,
                 'keterangan' => $request->keterangan,
-                'pop' => Auth::user()->KLUser->KLModel->pop,
-                'qr_code' => $order->qr_code,
+                'status_order' => 1,
             ]);
-
-            if ($id) {
-                Order::where('id', $id)->delete();
-            }
 
             if ($StokGudangModel->satuan == 'pack' || $StokGudangModel->satuan == 'roll') {
                 $StokGudangModel->hasil = $StokGudangModel->hasil - $jumlah;
@@ -75,7 +101,7 @@ class BarangKeluarController extends Controller
                 $StokGudangModel->save();
 
 
-                $rekap = RekapModel::where('stok_gudang_id', $order->stok_gudang_id)->first();
+                $rekap = RekapModel::where('stok_gudang_id', $barangKeluar->stok_gudang_id)->first();
                 if ($rekap) {
                     $rekap->out += $jumlah;
                     $rekap->save();
@@ -84,7 +110,7 @@ class BarangKeluarController extends Controller
                 $StokGudangModel->jumlah -= $jumlah;
                 $StokGudangModel->save();
 
-                $rekap = RekapModel::where('stok_gudang_id', $order->stok_gudang_id)->first();
+                $rekap = RekapModel::where('stok_gudang_id', $barangKeluar->stok_gudang_id)->first();
                 if ($rekap) {
                     $rekap->out += $jumlah; // Update jumlah dengan penambahan
                     $rekap->save();
@@ -103,7 +129,8 @@ class BarangKeluarController extends Controller
     public function show(Request $request)
     {
         $query = BarangKeluarModel::with('stokGudang')
-            ->where('pop', Auth::user()->KLUser->KLModel->pop);
+            ->where('status_order', 1)
+            ->where('pop', Auth::user()->KLModel->pop);
 
         // Filter berdasarkan kategori, nama barang, dan seri dari stok_gudang
         if ($request->namabarang) {
@@ -177,9 +204,20 @@ class BarangKeluarController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
+    public function destroy_order($id)
+    {
+        BarangKeluarModel::where('id', $id)
+            ->where('status_order', 0)
+            ->delete();
+        return redirect()->route('input_barang_keluar');
+    }
+
     public function destroy($id)
     {
-        BarangKeluarModel::where('id', $id)->delete();
+        BarangKeluarModel::where('id', $id)
+            ->where('status_order', 1)
+            ->delete();
         return redirect()->route('tabel_barang_keluar')->with(['success_hapus' => 'Data Berhasil Dihapus!']);
     }
 }

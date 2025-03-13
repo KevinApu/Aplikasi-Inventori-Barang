@@ -5,7 +5,6 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\KLRequest;
 use App\Models\KLModel;
-use App\Models\KLUsers;
 use App\Models\Login;
 use App\Models\PengirimanModel;
 use App\Models\RequestBarangModel;

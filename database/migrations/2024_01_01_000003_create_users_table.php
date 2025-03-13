@@ -12,11 +12,15 @@ return new class extends Migration
     {
             Schema::create('users', function (Blueprint $table) {
                 $table->id();
+                $table->string('username', 100);
+                $table->string('password');
+                $table->enum('role', ['user', 'admin', 'superadmin'])->default('user');
                 $table->boolean('request_access')->default(false);
                 $table->string('foto')->nullable();
                 $table->timestamps();
                 $table->timestamp('last_login')->nullable();
-                $table->foreignId('kl_user_id')->constrained('kl_users')->onDelete('cascade');
+                $table->string('pop_id', 12)->nullable();
+                $table->foreign('pop_id')->references('pop')->on('kantor_layanan')->onDelete('cascade');
             });
         
         Schema::create('sessions', function (Blueprint $table) {

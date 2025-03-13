@@ -18,9 +18,15 @@ class KantorLayananTableSeeder extends Seeder
         
 
         DB::table('kantor_layanan')->delete();
-        
+    
         DB::table('kantor_layanan')->insert(array (
             0 => 
+            array (
+                'pop' => 'A1',
+                'lokasi' => 'PNG',
+                'alamat' => 'Ponorogo Kota',
+            ),
+            1 => 
             array (
                 'pop' => 'G1',
                 'lokasi' => 'PCT',

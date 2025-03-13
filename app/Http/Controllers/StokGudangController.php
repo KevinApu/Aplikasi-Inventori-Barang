@@ -39,7 +39,7 @@ class StokGudangController extends Controller
     public function show(Request $request)
     {
         $query = DB::table('stok_gudang')
-        ->where('pop', Auth::user()->KLUser->KLModel->pop);
+        ->where('pop', Auth::user()->KLModel->pop);
 
         // Filter berdasarkan kategori, nama barang, dan seri
         if ($request->kategori) {

@@ -30,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
     {
         view()->composer('*', function ($view) {
             if (Auth::check()) {
-                $klUser = Auth::user()->KLUser;
+                $klUser = Auth::user();
 
                 if ($klUser->role === 'superadmin') {
                     $currentPop = 'Superadmin'; // Atau bisa null tergantung kebutuhan
@@ -60,14 +60,12 @@ class AppServiceProvider extends ServiceProvider
                     });
                 });
 
-            $request_access = Login::whereHas('KLUser', function ($query) use ($currentPop) {
-                $query->whereHas('KLModel', function ($subQuery) use ($currentPop) {
-                    $subQuery->where('pop', $currentPop);
-                });
+            $request_access = Login::whereHas('KLModel', function ($query) use ($currentPop) {
+                $query->where('pop', $currentPop);
             })
                 ->where('request_access', true)
                 ->get()
-                ->groupBy(fn($user) => $user->KLUser->KLModel->pop);
+                ->groupBy(fn($user) => $user->KLModel->pop);
 
 
             $request_access_count = $request_access->sum(fn($group) => $group->count());

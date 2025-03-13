@@ -16,15 +16,18 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
+        'username',
+        'password',
+        'role',
         'request_access',
         'foto',
-        'last_login', 
-        'kl_user_id',
+        'last_login',
+        'pop_id',
     ];
-
-    public function KLUser()
+    public function KLModel()
     {
-        return $this->belongsTo(KLUsers::class, 'kl_user_id', 'id');
+        return $this->belongsTo(KLModel::class, 'pop_id', 'pop');
     }
     /**
      * The attributes that should be hidden for serialization.

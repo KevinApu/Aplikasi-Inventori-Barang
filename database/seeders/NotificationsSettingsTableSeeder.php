@@ -18,7 +18,7 @@ class NotificationsSettingsTableSeeder extends Seeder
         
 
         DB::table('notifications_settings')->delete();
-        
+    
         DB::table('notifications_settings')->insert(array (
             0 => 
             array (

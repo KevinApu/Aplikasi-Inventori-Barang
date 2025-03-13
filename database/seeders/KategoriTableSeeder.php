@@ -18,7 +18,7 @@ class KategoriTableSeeder extends Seeder
         
 
         DB::table('kategori')->delete();
-        
+    
         DB::table('kategori')->insert(array (
             0 => 
             array (

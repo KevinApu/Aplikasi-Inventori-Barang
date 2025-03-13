@@ -11,19 +11,15 @@ class KLModel extends Model
     protected $table = 'kantor_layanan';
     protected $fillable = ['pop', 'lokasi', 'alamat'];
 
-    public function KLUser()
+
+    public function User()
     {
-        return $this->hasMany(KLUsers::class, 'pop_id', 'pop');
+        return $this->hasMany(Login::class, 'pop_id', 'id');
     }
 
     public function RequestBarang()
     {
         return $this->hasMany(RequestBarangModel::class, 'pop', 'pop');
-    }
-
-    public function RiwayatPengiriman()
-    {
-        return $this->hasMany(KLUsers::class, 'tujuan', 'pop');
     }
 
     // Menonaktifkan timestamp jika tidak digunakan

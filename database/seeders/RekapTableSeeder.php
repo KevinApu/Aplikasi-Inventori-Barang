@@ -18,7 +18,7 @@ class RekapTableSeeder extends Seeder
         
 
         DB::table('rekap')->delete();
-        
+    
         DB::table('rekap')->insert(array (
             0 => 
             array (
