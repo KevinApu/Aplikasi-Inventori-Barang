@@ -63,7 +63,7 @@ Route::middleware(['auth', 'clear.temp_items'])->group(function () {
             Route::get('/pengiriman_barang/input/admin', [KirimBarangController::class, 'create'])->name('pengiriman_barang.input.superadmin');
             Route::post('/pengiriman_barang/input/admin/post', [KirimBarangController::class, 'store'])->name('pengiriman_barang.input.post.superadmin');
             Route::get('/pengiriman_barang/admin', [KirimBarangController::class, 'index'])->name('pengiriman_barang.superadmin');
-            Route::post('/update-shipping/{tujuan}', [KirimBarangController::class, 'update'])->name('update-shipping');
+            Route::post('/update-shipping/{pop}', [KirimBarangController::class, 'update'])->name('update-shipping');
 
 
             Route::get('/permintaan_barang/admin', [PermintaanBarangController::class, 'index'])->name('permintaan_barang.superadmin');

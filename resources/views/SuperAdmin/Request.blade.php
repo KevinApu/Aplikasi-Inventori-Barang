@@ -25,8 +25,8 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                    @php 
-                    $groupedRequests = $daftarpermintaan->groupBy('pop'); 
+                    @php
+                    $groupedRequests = $daftarpermintaan->groupBy('pop');
                     @endphp
 
                     @foreach ($groupedRequests as $kantorLayanan => $requests)
@@ -34,7 +34,7 @@
                     @php
                     $requestIds = $requests->pluck('id')->toArray();
                     $requestIdsJson = json_encode($requestIds);
-                    $lokasi = optional($requests->first()->KLModel)->lokasi; 
+                    $lokasi = optional($requests->first()->KLModel)->lokasi;
                     @endphp
                     <tr class="bg-white hover:bg-gray-100">
                         <td class="py-3 px-4 text-gray-800 font-medium">{{ $lokasi }}</td>
@@ -44,8 +44,7 @@
                         @if($requests->first()->status == 'Pending') bg-yellow-500
                         @elseif($requests->first()->status == 'Setujui') bg-green-500
                         @elseif($requests->first()->status == 'Tolak') bg-red-500
-                        @elseif($requests->first()->status == 'Dikirim') bg-blue-500
-                        @endif">
+                       @elseif($requests->first()->status == 'Menunggu Dikirim' || $requests->first()->status == 'Sedang Dikirim') bg-blue-500 @endif">
                                 {{ $requests->first()->status }}
                             </span>
                         </td>
@@ -58,17 +57,17 @@
 
                             <!-- Tombol Setujui -->
                             <button @click="setujuiSemua({{ $requestIdsJson }})"
-                                :disabled="['Setujui', 'Dikirim'].includes('{{ $requests->first()->status }}')"
+                                :disabled="['Setujui', 'Menunggu Dikirim', 'Sedang Dikirim'].includes('{{ $requests->first()->status }}')"
                                 :class="['text-white text-sm px-4 py-2 rounded-lg shadow-md transition-transform transform',
-            ['Setujui', 'Dikirim'].includes('{{ $requests->first()->status }}') ? 'bg-gray-400 cursor-not-allowed opacity-50' : 'bg-green-500 hover:bg-green-600 hover:scale-105']">
+            ['Setujui', 'Menunggu Dikirim', 'Sedang Dikirim'].includes('{{ $requests->first()->status }}') ? 'bg-gray-400 cursor-not-allowed opacity-50' : 'bg-green-500 hover:bg-green-600 hover:scale-105']">
                                 Setujui
                             </button>
 
                             <!-- Tombol Tolak -->
                             <button @click="openModal('Tolak', {{ $requestIdsJson }})"
-                                :disabled="['Tolak', 'Dikirim'].includes('{{ $requests->first()->status }}')"
+                                :disabled="['Tolak', 'Menunggu Dikirim', 'Sedang Dikirim'].includes('{{ $requests->first()->status }}')"
                                 :class="['text-white text-sm px-4 py-2 rounded-lg shadow-md transition-transform transform',
-            ['Tolak', 'Dikirim'].includes('{{ $requests->first()->status }}') ? 'bg-gray-400 cursor-not-allowed opacity-50' : 'bg-red-500 hover:bg-red-600 hover:scale-105']">
+            ['Tolak', 'Menunggu Dikirim', 'Sedang Dikirim'].includes('{{ $requests->first()->status }}') ? 'bg-gray-400 cursor-not-allowed opacity-50' : 'bg-red-500 hover:bg-red-600 hover:scale-105']">
                                 Tolak
                             </button>
                         </td>

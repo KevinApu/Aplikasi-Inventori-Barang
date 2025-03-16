@@ -5,7 +5,7 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\KirimBarangRequest;
 use App\Models\KLModel;
-use App\Models\PengirimanModel;
+use App\Models\Login;
 use App\Models\RequestBarangModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -19,7 +19,10 @@ class KirimBarangController extends Controller
      */
     public function index()
     {
-        $kantorlayanan = PengirimanModel::select('tujuan')->distinct()->get();
+        $kantorlayanan = RequestBarangModel::select('pop')
+            ->whereIn('status', ['Menunggu Pengiriman', 'Sedang Dikirim'])
+            ->distinct()
+            ->get();
         return view('SuperAdmin.KirimBarang', ['kantorlayanan' => $kantorlayanan]);
     }
 
@@ -29,7 +32,12 @@ class KirimBarangController extends Controller
     public function create()
     {
         $kantorlayanan = KLModel::get();
-        return view('SuperAdmin.InputKirimBarang', ['kantorlayanan' => $kantorlayanan]);
+        $requestBarang = RequestBarangModel::where('status', 'Setujui')->get();
+
+        return view('SuperAdmin.InputKirimBarang', [
+            'kantorlayanan' => $kantorlayanan,
+            'requestBarang' => $requestBarang,
+        ]);
     }
 
     /**
@@ -37,8 +45,9 @@ class KirimBarangController extends Controller
      */
     public function store(Request $request)
     {
-        $lokasiList = collect($request->items)->pluck('lokasi')->unique();
-        $sedangDikirim = PengirimanModel::whereIn('tujuan', $lokasiList)
+        $popList = collect($request->items)->pluck('pop')->unique();
+
+        $sedangDikirim = RequestBarangModel::whereIn('pop', $popList)
             ->whereIn('status', ['Sedang Dikirim', 'Menunggu Pengiriman'])
             ->exists();
 
@@ -46,7 +55,7 @@ class KirimBarangController extends Controller
             return redirect()->back()->with('error', 'Ada barang yang sedang dikirim ke lokasi terkait. Proses input dibatalkan.');
         }
 
-        $sedangPending = RequestBarangModel::whereIn('pop', $lokasiList)
+        $sedangPending = RequestBarangModel::whereIn('pop', $popList)
             ->where('status', 'Pending')
             ->exists();
 
@@ -54,7 +63,7 @@ class KirimBarangController extends Controller
             return redirect()->back()->with('error', 'Proses input dibatalkan karena masih ada barang dengan status Pending untuk kantor layanan terkait. Harap selesaikan atau setujui permintaan sebelumnya sebelum melanjutkan.');
         }
 
-        $sedangTolak = RequestBarangModel::whereIn('pop', $lokasiList)
+        $sedangTolak = RequestBarangModel::whereIn('pop', $popList)
             ->where('status', 'Tolak')
             ->exists();
 
@@ -63,25 +72,39 @@ class KirimBarangController extends Controller
         }
 
         foreach ($request->items as $item) {
-            PengirimanModel::create([
-                'nama_barang' => $item['nama_barang'],
-                'seri'        => $item['seri'],
-                'jumlah'      => $item['jumlah'],
-                'satuan'      => $item['satuan'],
-                'rasio'       => $item['rasio'],
-                'tujuan'      => $item['lokasi'],
-                'catatan'     => $item['catatan'],
-                'pengirim'    => Auth::user()->username,
-                'nama_pengaju' => RequestBarangModel::where('pop', $item['lokasi'])
-                    ->where('status', 'Setujui')
-                    ->value('nama_pengaju'),
-            ]);
+            $namaPengaju = RequestBarangModel::where('pop', $item['pop'])
+                ->where('status', 'Setujui')
+                ->value('nama_pengaju');
+
+            if (!$namaPengaju) {
+                $namaPengaju = Login::whereHas('KLModel', function ($query) use ($item) {
+                    $query->where('pop', $item['pop']);
+                })
+                    ->orderBy('last_login', 'desc')
+                    ->value('username');
+            }
+
+            RequestBarangModel::updateOrCreate(
+                [
+                    'nama_barang' => $item['nama_barang'],
+                    'seri'         => $item['seri'],
+                    'pop'         => $item['pop']
+                ], // Kriteria pencarian
+                [
+                    'jumlah'       => $item['jumlah'],
+                    'satuan'       => $item['satuan'],
+                    'rasio'        => $item['rasio'],
+                    'catatan'      => $item['catatan'],
+                    'pengirim'     => Auth::user()->username,
+                    'nama_pengaju' => $namaPengaju,
+                ] // Data yang akan diperbarui atau dibuat
+            );
         }
 
-        foreach ($lokasiList as $lokasiNama) {
-            // Jika lokasi ditemukan di RequestBarangModel, perbarui status
+
+        foreach ($popList as $lokasiNama) {
             if (RequestBarangModel::where('pop', $lokasiNama)->exists()) {
-                RequestBarangModel::where('pop', $lokasiNama)->update(['status' => 'Dikirim']);
+                RequestBarangModel::where('pop', $lokasiNama)->update(['status' => 'Menunggu Pengiriman']);
             }
         }
         return redirect()->back()->with('success', 'Data barang berhasil dikirim.');
@@ -92,9 +115,9 @@ class KirimBarangController extends Controller
      */
     public function show(Request $request)
     {
-        $query = PengirimanModel::with('KLModel')->where('status', '!=', 'Dikirim');
+        $query = RequestBarangModel::with('KLModel')->whereIn('status', ['Menunggu Pengiriman', 'Sedang Dikirim']);
         if ($request->pop) {
-            $query->where('tujuan', $request->pop);
+            $query->where('pop', $request->pop);
         }
         $results = $query->get();
         $results = $query->get()->map(function ($riwayat) {
@@ -107,7 +130,7 @@ class KirimBarangController extends Controller
                 'rasio' => $riwayat->rasio,
                 'catatan' => $riwayat->catatan,
                 'lokasi' => $riwayat->KLModel->lokasi,
-                'tujuan' => $riwayat->tujuan,
+                'pop' => $riwayat->pop,
                 'status' => $riwayat->status,
                 'pengirim' => $riwayat->pengirim,
                 'resi' => $riwayat->resi,
@@ -118,7 +141,6 @@ class KirimBarangController extends Controller
             ];
         });
 
-        // Mengembalikan hasil sebagai JSON
         return response()->json($results);
     }
 
@@ -134,10 +156,10 @@ class KirimBarangController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $tujuan)
+    public function update(Request $request, $pop)
     {
-        $tujuanArray = explode(',', $tujuan);
-        PengirimanModel::whereIn('tujuan', $tujuanArray)
+        $popArray = explode(',', $pop);
+        RequestBarangModel::whereIn('pop', $popArray)
             ->update([
                 'status' => 'Sedang Dikirim',
                 'tanggal_estimasi' => $request->tanggal_estimasi . ' ' . now()->format('H:i:s'),

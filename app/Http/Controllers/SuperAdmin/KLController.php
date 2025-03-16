@@ -92,7 +92,7 @@ class KLController extends Controller
     public function destroy(string $pop)
     {
 
-        $pengirimanTerkait = PengirimanModel::where('tujuan', $pop)->exists();
+        $pengirimanTerkait = RequestBarangModel::where('pop', $pop)->exists();
 
         if ($pengirimanTerkait) {
             return redirect()->back()

@@ -7,7 +7,7 @@
                 <select x-model="pop" @change="search()" class="block appearance-none w-full bg-white border border-purple-600 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
                     <option value="" class="bg-gray-400 hover:bg-gray-300" selected>Pilih Cabang...</option>
                     @foreach ($kantorlayanan as $item)
-                    <option value="{{ $item->tujuan }}">
+                    <option value="{{ $item->pop }}">
                         {{ $item->KLModel->lokasi }}
                     </option>
                     @endforeach
@@ -125,7 +125,7 @@
                                     x-cloak>
                                     <div class="bg-white rounded-lg shadow-lg p-6 w-96">
                                         <h2 class="text-xl font-semibold text-gray-700 mb-4">Input Resi & Estimasi</h2>
-                                        <form :action="`/update-shipping/${item.tujuan}`" method="POST">
+                                        <form :action="`/update-shipping/${item.pop}`" method="POST">
                                             @csrf
                                             <div class="mb-4">
                                                 <label for="resi" class="block text-sm font-medium text-gray-700">Nomor Resi</label>

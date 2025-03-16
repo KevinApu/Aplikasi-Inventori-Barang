@@ -112,161 +112,168 @@
 
         <!-- Step 1: Input Barang -->
         <div x-data="formData()">
-            <div x-show="step === 1" class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">Step 1: Input Barang</h2>
-
-                <template x-for="(item, index) in items" :key="index">
-                    <div class="bg-gray-50 border border-gray-300 p-4 rounded-lg shadow-md mb-6">
-                        <h3 class="text-lg font-semibold text-gray-700 mb-3">Data Barang - <span x-text="index + 1"></span></h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Nama Barang</label>
-                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" x-model="item.nama_barang" required>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Seri</label>
-                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" x-model="item.seri" required>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Jumlah</label>
-                                <input type="number"
-                                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
-                                    x-model.number="item.jumlah"
-                                    min="1"
-                                    inputmode="numeric"
-                                    pattern="[0-9]*"
-                                    onkeypress="return event.charCode >= 48 && event.charCode <= 57"
-                                    required>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700">Satuan</label>
-                                <select x-model="item.satuan" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" @change="updateRasio(index)">
-                                    <option value="" selected>Pilih satuan...</option>
-                                    <option value="Pcs">Pcs</option>
-                                    <option value="Roll">Roll</option>
-                                    <option value="Pack">Pack</option>
-                                    <option value="Unit">Unit</option>
-                                </select>
-                            </div>
-
-                            <div x-show="item.showRasio" class="col-span-2">
-                                <label class="block text-sm font-medium text-gray-700">Rasio</label>
-                                <input type="number" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" x-model="item.rasio" :placeholder="item.placeholder" :required="item.rasioRequired">
-                            </div>
-
-                            <div class="col-span-2">
-                                <label class="block text-sm font-medium text-gray-700">Lokasi</label>
-                                <select x-model="item.lokasi" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" required>
-                                    <option value="" selected>Pilih lokasi...</option>
-                                    @foreach ($kantorlayanan as $lokasi)
-                                    <option value="{{ $lokasi->pop }}">{{ $lokasi->pop }} - {{ $lokasi->lokasi }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="col-span-2">
-                                <label class="block text-sm font-medium text-gray-700">Catatan (Opsional)</label>
-                                <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" x-model="item.catatan">
-                            </div>
-                        </div>
-
-                        <button type="button" @click="removeItem(index)" class="bg-red-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-red-600 transition" x-show="index > 0">
-                            Hapus Data
-                        </button>
-                    </div>
-                </template>
-
-                <div class="flex justify-between items-center mt-4">
-                    <button type="button" @click="addItem" class="bg-green-500 hover:bg-green-600 text-white py-2 px-5 rounded-lg shadow-md border border-green-600 transition-transform transform hover:scale-105 flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
-                        </svg>
-                        Tambah Data
-                    </button>
-                </div>
-
-                <div class="flex justify-end mt-6">
-                    <button type="button" @click="step = 2" :disabled="!isFormValid()" class="bg-blue-500 hover:bg-blue-600 text-white py-3 px-8 text-lg rounded-lg shadow-md border border-blue-700 transition-transform transform hover:scale-105 flex items-center gap-2">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
-                        </svg>
-                        Lanjut ke Pengiriman
-                    </button>
-                </div>
-
-            </div>
-
-
-            <!-- Step 2: Kirim Barang -->
-            <div x-show="step === 2" class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-2xl font-semibold text-gray-800 mb-6">Step 2: Kirim Barang</h2>
-
-                <form action="{{ route('pengiriman_barang.input.post.superadmin') }}" method="POST">
-                    @csrf
-
+            <div x-data="{ items: [] }" x-init="items = {{ json_encode($requestBarang->toArray()) }};
+            items.forEach((_, i) => updateRasio(i));">
+                <div x-show="step === 1" class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6 border-b pb-2">Step 1: Input Barang</h2>
                     <template x-for="(item, index) in items" :key="index">
-                        <div class="bg-gray-100 p-4 rounded-lg shadow-sm mb-4 border border-gray-200">
-                            <input type="hidden" :name="'items[' + index + '][nama_barang]'" :value="item.nama_barang">
-                            <input type="hidden" :name="'items[' + index + '][seri]'" :value="item.seri">
-                            <input type="hidden" :name="'items[' + index + '][jumlah]'" :value="item.jumlah">
-                            <input type="hidden" :name="'items[' + index + '][satuan]'" :value="item.satuan">
-                            <input type="hidden" :name="'items[' + index + '][rasio]'" :value="item.rasio">
-                            <input type="hidden" :name="'items[' + index + '][lokasi]'" :value="item.lokasi">
-                            <input type="hidden" :name="'items[' + index + '][catatan]'" :value="item.catatan">
-
-                            <h3 class="text-lg font-semibold text-gray-700 mb-2">Barang <span x-text="index + 1"></span></h3>
-
+                        <div class="bg-gray-50 border border-gray-300 p-4 rounded-lg shadow-md mb-6">
+                            <h3 class="text-lg font-semibold text-gray-700 mb-3">
+                                Data Barang - <span x-text="index + 1"></span>
+                            </h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <p>
-                                    <span class="font-medium text-gray-600">Nama Barang:</span>
-                                    <span class="text-gray-800 font-semibold" x-text="item.nama_barang"></span>
-                                </p>
-                                <p>
-                                    <span class="font-medium text-gray-600">Seri:</span>
-                                    <span class="text-gray-800 font-semibold" x-text="item.seri"></span>
-                                </p>
-                                <p>
-                                    <span class="font-medium text-gray-600">Jumlah:</span>
-                                    <span class="text-gray-800 font-semibold" x-text="item.jumlah"></span>
-                                </p>
-                                <p>
-                                    <span class="font-medium text-gray-600">Satuan:</span>
-                                    <span class="text-gray-800 font-semibold" x-text="item.satuan"></span>
-                                </p>
-                                <p x-show="item.rasio">
-                                    <span class="font-medium text-gray-600">Rasio:</span>
-                                    <span class="text-gray-800 font-semibold" x-text="item.rasio"></span>
-                                </p>
-                                <p>
-                                    <span class="font-medium text-gray-600">Lokasi Tujuan:</span>
-                                    <span class="text-gray-800 font-semibold" x-text="item.lokasi"></span>
-                                </p>
-                                <p x-show="item.catatan">
-                                    <span class="font-medium text-gray-600">Catatan:</span>
-                                    <span class="text-gray-800 font-semibold" x-text="item.catatan"></span>
-                                </p>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Nama Barang</label>
+                                    <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                        x-model="item.nama_barang"
+                                        required>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Seri</label>
+                                    <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                        x-model="item.seri"
+                                        required>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Jumlah</label>
+                                    <input type="number" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                        x-model="item.jumlah"
+                                        min="1"
+                                        required>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Satuan</label>
+                                    <select x-model="item.satuan" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" @change="updateRasio(index)">
+                                        <option value="" selected>Pilih satuan...</option>
+                                        <option value="Pcs">Pcs</option>
+                                        <option value="Roll">Roll</option>
+                                        <option value="Pack">Pack</option>
+                                        <option value="Unit">Unit</option>
+                                    </select>
+                                </div>
+
+                                <div x-show="item.showRasio" class="col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700">Rasio</label>
+                                    <input type="text" x-show="item.showRasio" x-model="item.rasio" :placeholder="item.placeholder"
+                                        x-bind:required="item.rasioRequired" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                                </div>
+
+                                <div class="col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700">Lokasi</label>
+                                    <select x-model="item.pop" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500" required>
+                                        <option value="" disabled>Pilih lokasi...</option>
+                                        @foreach ($kantorlayanan as $lokasi)
+                                        <option value="{{ $lokasi->pop }}">{{ $lokasi->pop }} - {{ $lokasi->lokasi }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="col-span-2">
+                                    <label class="block text-sm font-medium text-gray-700">Catatan (Opsional)</label>
+                                    <input type="text" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                                        x-model="item.catatan">
+                                </div>
+
+                                <button type="button" @click="items.splice(index, 1)" class="bg-red-500 text-white px-4 py-2 rounded-lg mt-4 hover:bg-red-600 transition" x-show="index > 0">
+                                    Hapus Data
+                                </button>
                             </div>
                         </div>
                     </template>
-
-                    <div class="flex justify-between mt-6">
-                        <button type="button" @click="step = 1"
-                            class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-5 py-2 rounded-lg shadow-md border border-gray-400 transition-transform transform hover:scale-105 flex items-center gap-2">
+                    <div class="flex justify-between items-center mt-4">
+                        <button type="button" @click="addItem" class="bg-green-500 hover:bg-green-600 text-white py-2 px-5 rounded-lg shadow-md border border-green-600 transition-transform transform hover:scale-105 flex items-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
                             </svg>
-                            Kembali
+                            Tambah Data
                         </button>
+                    </div>
 
-                        <button type="submit"
-                            class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 text-lg rounded-lg shadow-md border border-green-700 transition-transform transform hover:scale-105 flex items-center gap-2">
+                    <div class="flex justify-end mt-6">
+                        <button type="button" @click="step = 2" :disabled="!isFormValid()" class="bg-blue-500 hover:bg-blue-600 text-white py-3 px-8 text-lg rounded-lg shadow-md border border-blue-700 transition-transform transform hover:scale-105 flex items-center gap-2">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                             </svg>
-                            Kirim Barang
+                            Lanjut ke Pengiriman
                         </button>
                     </div>
-                </form>
+                </div>
+
+
+                <!-- Step 2: Kirim Barang -->
+                <div x-show="step === 2" class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6">Step 2: Kirim Barang</h2>
+
+                    <form action="{{ route('pengiriman_barang.input.post.superadmin') }}" method="POST">
+                        @csrf
+
+                        <template x-for="(item, index) in items" :key="index">
+                            <div class="bg-gray-100 p-4 rounded-lg shadow-sm mb-4 border border-gray-200">
+                                <input type="hidden" :name="'items[' + index + '][nama_barang]'" :value="item.nama_barang">
+                                <input type="hidden" :name="'items[' + index + '][seri]'" :value="item.seri">
+                                <input type="hidden" :name="'items[' + index + '][jumlah]'" :value="item.jumlah">
+                                <input type="hidden" :name="'items[' + index + '][satuan]'" :value="item.satuan">
+                                <input type="hidden" :name="'items[' + index + '][rasio]'" :value="item.rasio">
+                                <input type="hidden" :name="'items[' + index + '][pop]'" :value="item.pop">
+                                <input type="hidden" :name="'items[' + index + '][catatan]'" :value="item.catatan">
+
+                                <h3 class="text-lg font-semibold text-gray-700 mb-2">Barang <span x-text="index + 1"></span></h3>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <p>
+                                        <span class="font-medium text-gray-600">Nama Barang:</span>
+                                        <span class="text-gray-800 font-semibold" x-text="item.nama_barang"></span>
+                                    </p>
+                                    <p>
+                                        <span class="font-medium text-gray-600">Seri:</span>
+                                        <span class="text-gray-800 font-semibold" x-text="item.seri"></span>
+                                    </p>
+                                    <p>
+                                        <span class="font-medium text-gray-600">Jumlah:</span>
+                                        <span class="text-gray-800 font-semibold" x-text="item.jumlah"></span>
+                                    </p>
+                                    <p>
+                                        <span class="font-medium text-gray-600">Satuan:</span>
+                                        <span class="text-gray-800 font-semibold" x-text="item.satuan"></span>
+                                    </p>
+                                    <p x-show="item.rasio">
+                                        <span class="font-medium text-gray-600">Rasio:</span>
+                                        <span class="text-gray-800 font-semibold" x-text="item.rasio"></span>
+                                    </p>
+                                    <p>
+                                        <span class="font-medium text-gray-600">Lokasi Tujuan:</span>
+                                        <span class="text-gray-800 font-semibold" x-text="item.pop"></span>
+                                    </p>
+                                    <p x-show="item.catatan">
+                                        <span class="font-medium text-gray-600">Catatan:</span>
+                                        <span class="text-gray-800 font-semibold" x-text="item.catatan"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </template>
+
+                        <div class="flex justify-between mt-6">
+                            <button type="button" @click="step = 1"
+                                class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-5 py-2 rounded-lg shadow-md border border-gray-400 transition-transform transform hover:scale-105 flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+                                </svg>
+                                Kembali
+                            </button>
+
+                            <button type="submit"
+                                class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 text-lg rounded-lg shadow-md border border-green-700 transition-transform transform hover:scale-105 flex items-center gap-2">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Kirim Barang
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
 
         </div>
@@ -282,7 +289,7 @@
                     satuan: '',
                     rasio: '',
                     catatan: '',
-                    lokasi: '',
+                    pop: '',
                     showRasio: false,
                     placeholder: '',
                     rasioRequired: false
@@ -295,7 +302,7 @@
                         satuan: '',
                         rasio: '',
                         catatan: '',
-                        lokasi: '',
+                        pop: '',
                         showRasio: false,
                         placeholder: '',
                         rasioRequired: false
@@ -314,11 +321,12 @@
                 },
                 isFormValid() {
                     return this.items.every(item =>
-                        item.nama_barang.trim() &&
-                        item.seri.trim() &&
-                        item.jumlah.trim() &&
-                        item.satuan.trim() &&
-                        item.lokasi.trim()
+                        item.nama_barang?.trim() &&
+                        item.seri?.trim() &&
+                        item.jumlah !== '' && // Pastikan jumlah tidak kosong
+                        item.satuan?.trim() && // Pastikan satuan tidak null atau kosong
+                        (!item.showRasio || item.rasio !== '') && // Validasi rasio jika dibutuhkan
+                        item.pop?.trim()
                     );
                 }
             }

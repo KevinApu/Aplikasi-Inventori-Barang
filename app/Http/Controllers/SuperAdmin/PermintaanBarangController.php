@@ -14,7 +14,7 @@ class PermintaanBarangController extends Controller
      */
     public function index()
     {
-        $daftarpermintaan = RequestBarangModel::where('status', '!=', 'Dikirim')
+        $daftarpermintaan = RequestBarangModel::whereNotIn('status', ['Menunggu Pengiriman', 'Sedang Dikirim'])
         ->with('KLModel')
         ->get();
         return view('SuperAdmin.Request', ['daftarpermintaan' => $daftarpermintaan]);

@@ -5,10 +5,10 @@ namespace App\Providers;
 use App\Models\KLModel;
 use App\Models\Login;
 use App\Models\NotificationSetting;
-use App\Models\PengirimanModel;
 use App\Models\RequestBarangModel;
 use App\Models\StokGudangModel;
 use Carbon\Carbon;
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -87,18 +87,18 @@ class AppServiceProvider extends ServiceProvider
 
 
         View::composer('layouts.sidebar', function ($view) {
-            $menunggu_pengiriman = PengirimanModel::where('status', 'Menunggu Pengiriman')
+            $menunggu_pengiriman = RequestBarangModel::where('status', 'Menunggu Pengiriman')
                 ->get()
-                ->groupBy('tujuan')
+                ->groupBy('pop')
                 ->map(function ($items) {
-                    $tujuan = $items->first()->tujuan;
-                    $Pop = KLModel::where('lokasi', $tujuan)->pluck('pop')->first();
+                    $pop = $items->first()->pop;
+                    $kl = KLModel::where('pop', $pop)->first();
 
                     return (object) [
-                        'tujuan' => $Pop,
-                        'tujuan_lokasi' => $tujuan,
+                        'tujuan' => $pop,
+                        'tujuan_lokasi' => optional($kl)->lokasi,
                         'status' => 'Menunggu Pengiriman',
-                        'waktu' => $items->first()->waktu,
+                        'waktu' => Carbon::parse($items->first()->updated_at)->diffForHumans(),
                     ];
                 });
 
@@ -107,31 +107,33 @@ class AppServiceProvider extends ServiceProvider
 
             $lokasiNama = RequestBarangModel::where('status', 'Setujui')->get();
             $lokasiUnik = $lokasiNama->unique('pop');
+
             $gabungan = $lokasiUnik->map(function ($item) {
-                $pop = KLModel::where('lokasi', $item->pop)->value('pop');
+                // Ambil data KLModel berdasarkan pop
+                $kl = KLModel::where('pop', $item->pop)->first();
 
                 return (object) [
-                    'tujuan' => $pop,
-                    'tujuan_lokasi' => $item->pop,
+                    'tujuan' => $item->pop,
+                    'tujuan_lokasi' => optional($kl)->lokasi,
                     'status' => 'Menunggu penginputan barang',
-                    'waktu' => now()->toDateTimeString(),
+                    'waktu' => Carbon::parse($item->first()->updated_at)->diffForHumans(),
                 ];
             });
+
+            // Menggabungkan data menunggu pengiriman dengan data gabungan
             $data_tergabung = $menunggu_pengiriman->concat($gabungan);
             $data_tergabung_count = $data_tergabung->count();
 
-
+            // Menghitung jumlah request barang yang masih pending
             $request_barang_all = RequestBarangModel::where('status', 'Pending')->get();
             $request_barang = $request_barang_all->unique('pop');
             $request_barang_count = $request_barang->count();
 
-
-            $foto_profile = Auth::user()->foto;
-
             $view->with('data_tergabung', $data_tergabung);
             $view->with('data_tergabung_count', $data_tergabung_count);
-
             $view->with('request_barang_count', $request_barang_count);
+
+            $foto_profile = Auth::user()->foto;
             $view->with('foto_profile', $foto_profile);
         });
     }

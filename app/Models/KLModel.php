@@ -21,7 +21,5 @@ class KLModel extends Model
     {
         return $this->hasMany(RequestBarangModel::class, 'pop', 'pop');
     }
-
-    // Menonaktifkan timestamp jika tidak digunakan
     public $timestamps = false;
 }

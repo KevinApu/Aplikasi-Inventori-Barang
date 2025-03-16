@@ -9,8 +9,26 @@ class RequestBarangModel extends Model
 {
     use HasFactory;
     protected $table = 'request_barang';
-    protected $fillable = ['nama_barang', 'seri', 'jumlah', 'satuan', 'rasio', 'catatan', 'pop', 'nama_pengaju', 'status', 'ket_status'];
-
+    protected $fillable = [
+        'id',
+        'nama_barang',
+        'seri',
+        'jumlah',
+        'satuan',
+        'rasio',
+        'catatan',
+        'pop',
+        'nama_pengaju',
+        'status',
+        'ket_status',
+        'tanggal_terima',
+        'tanggal_estimasi',
+        'resi',
+        'namakurir',
+        'pengirim',
+        'created_at',
+        'updated_at'
+    ];
     public function KLModel()
     {
         return $this->belongsTo(KLModel::class, 'pop', 'pop');
