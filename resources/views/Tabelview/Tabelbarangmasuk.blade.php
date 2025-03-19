@@ -131,7 +131,7 @@
                     </select>
                 </div>
                 <div class="flex justify-between">
-                    <button @click="resetFilter()" class="hidden md:block bg-gray-500 text-white py-1 px-2 ml-2 h-9 text-xs rounded-md hover:bg-gray-600" title="Reset Filter">
+                    <button @click="resetFilter()" class="hidden md:block bg-gray-700 text-white py-1 px-2 ml-2 h-9 text-xs rounded-md hover:bg-gray-600" title="Reset Filter">
                         Reset
                     </button>
                 </div>
@@ -247,7 +247,7 @@
             </div>
             <div class="overflow-x-auto shadow-md rounded-t-lg overscroll-x-none transition-shadow duration-900 ease-in-out shadow hover:shadow-2xl hover:shadow-header-1">
                 <table class="w-full text-left rtl:text-right font-roboto">
-                    <thead class="text-sm mobile:text-xs uppercase whitespace-nowrap bg-header-1 text-center bg-opacity-30 text-gray-500 shadow-inner">
+                    <thead class="text-sm mobile:text-xs uppercase whitespaces-nowrap bg-gray-600 text-center text-white">
                         <tr>
                             <th scope="col" class="px-1 py-3" x-show="paginatedResults.length > 0">
                                 <input type="checkbox"

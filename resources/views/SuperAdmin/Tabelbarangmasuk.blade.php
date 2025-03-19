@@ -25,7 +25,7 @@
             </div>
             <div class="overflow-x-auto shadow-md rounded-t-lg overscroll-x-none transition-shadow duration-900 ease-in-out shadow hover:shadow-2xl hover:shadow-header-1">
                 <table class="w-full text-left rtl:text-right font-roboto">
-                    <thead class="text-sm uppercase whitespace-nowrap bg-header-1 text-center bg-opacity-30 text-gray-500 shadow-inner">
+                    <thead class="text-sm mobile:text-xs uppercase whitespaces-nowrap bg-gray-600 text-center text-white">
                         <tr>
                             <th scope="col" class="px-6 py-3">
                                 Kode

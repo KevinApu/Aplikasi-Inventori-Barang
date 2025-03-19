@@ -1,7 +1,7 @@
 <x-sidebar-layout>
     <div class="container mx-auto px-4">
         <div class="mb-6">
-            <h1 class="text-2xl font-semibold font-heading text-gray-800">Data Stok Gudang</h1>
+            <h1 class="text-2xl font-semibold font-heading text-gray-500">Data Stok Gudang</h1>
         </div>
         <div x-data="searchApp()" x-init="search()" class="relative mt-12 bottom-8">
 
