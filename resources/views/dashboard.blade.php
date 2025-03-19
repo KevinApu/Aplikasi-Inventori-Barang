@@ -58,7 +58,13 @@
             </div>
         </div>
 
-
+        
+        <div class="max-w-sm w-full bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6">
+            <div class="flex justify-between mb-5">
+                <div id="line-chart"></div>
+            </div>
+        </div>
+  
 
         <div x-data="searchApp()" x-init="search()" class="relative mt-12 bottom-8">
             <div class="flex justify-start h-12">
@@ -229,5 +235,31 @@
                 }
             };
         }
+        
+        document.addEventListener("DOMContentLoaded", function () {
+            const ctx = document.getElementById("barangKeluarChart").getContext("2d");
+
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: {!! json_encode($labels) !!}, // Nama bulan
+                    datasets: [{
+                        label: "Jumlah Barang Keluar",
+                        data: {!! json_encode($data) !!}, // Jumlah barang keluar per bulan
+                        backgroundColor: "white",
+                        borderColor: "green",
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
     </script>
 </x-sidebar-layout>

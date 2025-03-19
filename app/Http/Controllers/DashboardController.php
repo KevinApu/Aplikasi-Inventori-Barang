@@ -17,6 +17,22 @@ class DashboardController extends Controller
         $barang_masuk = StokGudangModel::where('pop', $pop)->sum('jumlah');
         $barang_keluar = BarangKeluarModel::where('pop', $pop)->sum('jumlah');
         $barang_rusak = BarangRusakModel::where('pop', $pop)->sum('jumlah');
-        return view('dashboard', compact('barang_masuk', 'barang_keluar', 'barang_rusak'));
+
+        // Data barang keluar per bulan
+        $barangKeluarPerBulan = BarangKeluarModel::selectRaw('MONTH(created_at) as bulan, SUM(jumlah) as total')
+            ->where('pop', $pop)
+            ->groupBy('bulan')
+            ->orderBy('bulan')
+            ->get();
+
+        // Format data untuk chart
+        $labels = [];
+        $data = [];
+        foreach ($barangKeluarPerBulan as $row) {
+            $labels[] = date("F", mktime(0, 0, 0, $row->bulan, 1)); // Konversi bulan ke nama (Januari, Februari, dll)
+            $data[] = $row->total;
+        }
+
+        return view('dashboard', compact('barang_masuk', 'barang_keluar', 'barang_rusak', 'labels', 'data'));
     }
 }
