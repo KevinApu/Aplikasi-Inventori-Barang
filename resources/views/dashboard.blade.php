@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between border-b border-primary-darker">
             <h1 class="text-2xl font-semibold font-heading text-gray-500">Dashboard</h1>
         </div>
-        
+
         <!-- <a href="{{ route('update_rekap_stok') }}" class="block p-4 rounded-md bg-red-600">refresh</a> -->
 
 
@@ -58,64 +58,62 @@
             </div>
         </div>
 
-        
-        <div class="max-w-sm w-full bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6">
-            <div class="flex justify-between mb-5">
-                <div id="line-chart"></div>
+        <div class="flex laptop:flex-row flex-col gap-6">
+            <div class="w-full laptop:flex-1 bg-white rounded-lg shadow-sm p-4 md:p-6">
+                <canvas id="myChart"></canvas>
             </div>
-        </div>
-  
 
-        <div x-data="searchApp()" x-init="search()" class="relative mt-12 bottom-8">
-            <div class="flex justify-start h-12">
-                <div class="relative">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <svg class="w-4 h-4 mobile:w-3 mobile:h-3 mb-2 mobile:mb-4 text-gray-500 text-gray-400" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                        </svg>
-                    </div>
-                    <input type="search" x-model="namabarang" @input="search()"
-                        class="block rounded-md w-full ps-10 text-sm mobile:text-[10px] text-gray-900 border-0 focus:ring-0 focus:border-b focus:border-zinc-700"
-                        placeholder="Nama barang..." required />
-                </div>
-                <div x-data="{ isLoading: false }">
-                    <!-- Tombol Cetak Laporan -->
-                    <div>
-                        <a href="{{ route('view.laporan.rekap') }}"
-                            @click.prevent="isLoading = true; window.location.href = '{{ route('view.laporan.rekap') }}';"
-                            class="block py-1 px-2 transform transition-transform duration-200 hover:scale-110"
-                            title="Print Laporan">
-                            <svg class="w-8 h-8 text-black" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M16.444 18H19a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h2.556M17 11V5a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v6h10ZM7 15h10v4a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-4Z" />
-                            </svg>
-                        </a>
-                    </div>
-
-                    <!-- Overlay Loading -->
-                    <div x-show="isLoading"
-                        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 transition-opacity duration-300"
-                        x-transition:enter="opacity-0"
-                        x-transition:enter-start="opacity-0"
-                        x-transition:enter-end="opacity-100"
-                        x-transition:leave="opacity-100"
-                        x-transition:leave-start="opacity-100"
-                        x-transition:leave-end="opacity-0">
-                        <!-- Spinner -->
+            <div class="w-full laptop:w-2/5 bg-white shadow-md sm:rounded-lg p-4">
+                <div x-data="searchApp()" x-init="search()" class="relative mt-12 bottom-8">
+                    <div class="flex justify-start h-12">
                         <div class="relative">
-                            <svg class="h-16 w-16 animate-spin text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                            </svg>
-                            <!-- Glow Effect -->
-                            <div class="absolute inset-0 h-16 w-16 rounded-full bg-blue-500 opacity-20 blur-xl"></div>
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-4 h-4 mobile:w-3 mobile:h-3 mb-2 mobile:mb-4 text-gray-500 text-gray-400" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                </svg>
+                            </div>
+                            <input type="search" x-model="namabarang" @input="search()"
+                                class="block rounded-md w-full ps-10 text-sm mobile:text-[10px] text-gray-900 border-0 focus:ring-0 focus:border-b focus:border-zinc-700"
+                                placeholder="Nama barang..." required />
+                        </div>
+                        <div x-data="{ isLoading: false }">
+                            <!-- Tombol Cetak Laporan -->
+                            <div>
+                                <a href="{{ route('view.laporan.rekap') }}"
+                                    @click.prevent="isLoading = true; window.location.href = '{{ route('view.laporan.rekap') }}';"
+                                    class="block py-1 px-2 transform transition-transform duration-200 hover:scale-110"
+                                    title="Print Laporan">
+                                    <svg class="w-8 h-8 text-black" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linejoin="round" stroke-width="2" d="M16.444 18H19a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h2.556M17 11V5a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v6h10ZM7 15h10v4a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-4Z" />
+                                    </svg>
+                                </a>
+                            </div>
+
+                            <!-- Overlay Loading -->
+                            <div x-show="isLoading"
+                                class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 transition-opacity duration-300"
+                                x-transition:enter="opacity-0"
+                                x-transition:enter-start="opacity-0"
+                                x-transition:enter-end="opacity-100"
+                                x-transition:leave="opacity-100"
+                                x-transition:leave-start="opacity-100"
+                                x-transition:leave-end="opacity-0">
+                                <!-- Spinner -->
+                                <div class="relative">
+                                    <svg class="h-16 w-16 animate-spin text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                                    </svg>
+                                    <!-- Glow Effect -->
+                                    <div class="absolute inset-0 h-16 w-16 rounded-full bg-blue-500 opacity-20 blur-xl"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div x-data="{
+                    <div x-data="{
             currentPage: 1,
             perPage: 10,
             get totalPages() {
@@ -128,96 +126,96 @@
                 return results.slice(start, end);
             },
             }" class="relative shadow-md sm:rounded-lg bg-white">
-                <table class="w-full text-sm text-left text-gray-900 rounded-t-lg">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-100 border-b">
-                        <tr>
-                            <th scope="col" class="px-6 py-3 font-semibold">Nama Barang</th>
-                            <th scope="col" class="px-6 py-3 font-semibold">Stok Awal</th>
-                            <th scope="col" class="px-6 py-3 font-semibold">In</th>
-                            <th scope="col" class="px-6 py-3 font-semibold">Out</th>
-                            <th scope="col" class="px-6 py-3 font-semibold">Sisa</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <template x-for="item in paginatedResults" :key="item.id">
-                            <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 cursor-pointer transition-colors duration-300">
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                    <span x-text="item.nama_barang"></span> - <span x-text="item.seri"></span>
-                                </th>
-                                <td class="px-6 py-4" x-text="item.stok_awal"></td>
-                                <td class="px-6 py-4" x-text="item.in ?? 0"></td>
-                                <td class="px-6 py-4" x-text="item.out ?? 0"></td>
-                                <td class="px-6 py-4">
-                                    <span>
-                                        <template x-if="item.satuan === 'pcs' || item.satuan === 'unit'">
-                                            <span x-text="item.jumlah"></span>
-                                        </template>
-                                        <template x-if="item.satuan === 'roll' || item.satuan === 'pack'">
-                                            <span x-text="item.hasil"></span>
-                                        </template>
-                                    </span>
-                                </td>
-                            </tr>
-                        </template>
-                    </tbody>
-                </table>
-                <!-- Pagination -->
-                <div class="absolute mb-12 mobile:mb-8 rounded-md bg-zinc-200 flex justify-between w-full px-6 py-4 shadow-md">
-                    <div>
-                        <span class="text-sm tablet:text-xs mobile:text-[10px] text-gray-700">
-                            <template x-if="results.length > 0">
-                                <span>
-                                    Menampilkan
-                                    <span x-text="perPage ? (currentPage - 1) * perPage + 1 : 1"></span> - <span x-text="perPage ? Math.min(currentPage * perPage, results.length) : results.length"></span>
-                                    dari <span x-text="results.length"></span> barang
+                        <table class="w-full text-sm text-left text-gray-900 rounded-t-lg">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-100 border-b">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 font-semibold">Nama Barang</th>
+                                    <th scope="col" class="px-6 py-3 font-semibold">Stok Awal</th>
+                                    <th scope="col" class="px-6 py-3 font-semibold">In</th>
+                                    <th scope="col" class="px-6 py-3 font-semibold">Out</th>
+                                    <th scope="col" class="px-6 py-3 font-semibold">Sisa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template x-for="item in paginatedResults" :key="item.id">
+                                    <tr class="bg-white border-b border-gray-200 hover:bg-gray-100 cursor-pointer transition-colors duration-300">
+                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                            <span x-text="item.nama_barang"></span> - <span x-text="item.seri"></span>
+                                        </th>
+                                        <td class="px-6 py-4" x-text="item.stok_awal"></td>
+                                        <td class="px-6 py-4" x-text="item.in ?? 0"></td>
+                                        <td class="px-6 py-4" x-text="item.out ?? 0"></td>
+                                        <td class="px-6 py-4">
+                                            <span>
+                                                <template x-if="item.satuan === 'pcs' || item.satuan === 'unit'">
+                                                    <span x-text="item.jumlah"></span>
+                                                </template>
+                                                <template x-if="item.satuan === 'roll' || item.satuan === 'pack'">
+                                                    <span x-text="item.hasil"></span>
+                                                </template>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                        <!-- Pagination -->
+                        <div class="absolute mb-12 mobile:mb-8 rounded-md bg-zinc-200 flex justify-between w-full px-6 py-4 shadow-md">
+                            <div>
+                                <span class="text-sm tablet:text-xs mobile:text-[10px] text-gray-700">
+                                    <template x-if="results.length > 0">
+                                        <span>
+                                            Menampilkan
+                                            <span x-text="perPage ? (currentPage - 1) * perPage + 1 : 1"></span> - <span x-text="perPage ? Math.min(currentPage * perPage, results.length) : results.length"></span>
+                                            dari <span x-text="results.length"></span> barang
+                                        </span>
+                                    </template>
+                                    <template x-if="results.length === 0">
+                                        <span>Tidak ada data</span>
+                                    </template>
                                 </span>
-                            </template>
-                            <template x-if="results.length === 0">
-                                <span>Tidak ada data</span>
-                            </template>
-                        </span>
-                    </div>
-                    <div class="flex space-x-2 mobile:space-x-1 items-center justify-center">
-                        <button @click="currentPage = Math.max(currentPage - 1, 1)"
-                            class="bg-gray-200 text-gray-600 text-xl tablet:text-lg mobile:text-sm hover:bg-blue-400 hover:text-white transition-colors duration-200 rounded-full laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 tablet:w-8 tablet:h-8 mobile:px-1 mobile:py-0 mobile:w-6 mobile:h-6"
-                            :class="{'opacity-50 cursor-not-allowed': currentPage === 1}">
-                        </button>
-                        <template x-if="currentPage > 3">
-                            <span class="laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 tablet:w-8 tablet:h-8 mobile:px-1 mobile:py-0 mobile:w-6 mobile:h-6">...</span>
-                        </template>
-                        <template x-for="page in totalPages" :key="page">
-                            <template x-if="page >= Math.max(currentPage - 2, 1) && page <= Math.min(currentPage + 2, totalPages)">
-                                <button @click="currentPage = page"
-                                    class="laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 tablet:w-7 tablet:h-7 tablet:text-xs mobile:px-1 mobile:py-0 mobile:w-6 mobile:h-6 mobile:text-[10px] rounded-full border text-gray-700"
-                                    :class="{'bg-blue-500 text-white': currentPage === page, 
-                                            'bg-white hover:bg-gray-200': currentPage !== page}">
-                                    <span x-text="page"></span>
+                            </div>
+                            <div class="flex space-x-2 mobile:space-x-1 items-center justify-center">
+                                <button @click="currentPage = Math.max(currentPage - 1, 1)"
+                                    class="bg-gray-200 text-gray-600 text-xl tablet:text-lg mobile:text-sm hover:bg-blue-400 hover:text-white transition-colors duration-200 rounded-full laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 tablet:w-8 tablet:h-8 mobile:px-1 mobile:py-0 mobile:w-6 mobile:h-6"
+                                    :class="{'opacity-50 cursor-not-allowed': currentPage === 1}">
                                 </button>
-                            </template>
-                        </template>
-                        <template x-if="currentPage < totalPages - 3">
-                            <span class="laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 tablet:w-8 tablet:h-8 mobile:px-1 mobile:py-0 mobile:w-6 mobile:h-6">...</span>
-                        </template>
-                        <button @click="currentPage = Math.min(currentPage + 1, totalPages)"
-                            class="bg-gray-200 text-gray-600 text-xl tablet:text-lg mobile:text-sm hover:bg-blue-400 hover:text-white transition-colors duration-200 rounded-full laptop:px-3 tablet:px-2 tablet:py-0.5 tablet:w-8 tablet:h-8 laptop:py-1 mobile:px-1 mobile:py-0 mobile:w-6 mobile:h-6"
-                            :class="{'opacity-50 cursor-not-allowed': currentPage === totalPages}">
-                            >
-                        </button>
-                        <button @click="perPage = null; currentPage = 1"
-                            x-show="perPage"
-                            class="laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 mobile:px-1 mobile:py-0 ml-2 border text-sm tablet:text-xs mobile:text-[10px] font-medium focus:outline-none bg-white text-gray-700 hover:bg-gray-200 bg-gray-700 text-black rounded-full transition-colors duration-200">
-                            All
-                        </button>
-                        <button @click="perPage = 10; currentPage = 1"
-                            x-show="!perPage"
-                            class="laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 mobile:px-1 mobile:py-0 ml-2 border text-sm tablet:text-xs mobile:text-[10px] font-medium focus:outline-none bg-blue-500 text-white rounded-full transition-colors duration-200">
-                            Page
-                        </button>
+                                <template x-if="currentPage > 3">
+                                    <span class="laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 tablet:w-8 tablet:h-8 mobile:px-1 mobile:py-0 mobile:w-6 mobile:h-6">...</span>
+                                </template>
+                                <template x-for="page in totalPages" :key="page">
+                                    <template x-if="page >= Math.max(currentPage - 2, 1) && page <= Math.min(currentPage + 2, totalPages)">
+                                        <button @click="currentPage = page"
+                                            class="laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 tablet:w-7 tablet:h-7 tablet:text-xs mobile:px-1 mobile:py-0 mobile:w-6 mobile:h-6 mobile:text-[10px] rounded-full border text-gray-700"
+                                            :class="{'bg-blue-500 text-white': currentPage === page, 
+                                            'bg-white hover:bg-gray-200': currentPage !== page}">
+                                            <span x-text="page"></span>
+                                        </button>
+                                    </template>
+                                </template>
+                                <template x-if="currentPage < totalPages - 3">
+                                    <span class="laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 tablet:w-8 tablet:h-8 mobile:px-1 mobile:py-0 mobile:w-6 mobile:h-6">...</span>
+                                </template>
+                                <button @click="currentPage = Math.min(currentPage + 1, totalPages)"
+                                    class="bg-gray-200 text-gray-600 text-xl tablet:text-lg mobile:text-sm hover:bg-blue-400 hover:text-white transition-colors duration-200 rounded-full laptop:px-3 tablet:px-2 tablet:py-0.5 tablet:w-8 tablet:h-8 laptop:py-1 mobile:px-1 mobile:py-0 mobile:w-6 mobile:h-6"
+                                    :class="{'opacity-50 cursor-not-allowed': currentPage === totalPages}">
+                                    >
+                                </button>
+                                <button @click="perPage = null; currentPage = 1"
+                                    x-show="perPage"
+                                    class="laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 mobile:px-1 mobile:py-0 ml-2 border text-sm tablet:text-xs mobile:text-[10px] font-medium focus:outline-none bg-white text-gray-700 hover:bg-gray-200 bg-gray-700 text-black rounded-full transition-colors duration-200">
+                                    All
+                                </button>
+                                <button @click="perPage = 10; currentPage = 1"
+                                    x-show="!perPage"
+                                    class="laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 mobile:px-1 mobile:py-0 ml-2 border text-sm tablet:text-xs mobile:text-[10px] font-medium focus:outline-none bg-blue-500 text-white rounded-full transition-colors duration-200">
+                                    Page
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-        </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -230,25 +228,29 @@
                     fetch(`/search/rekap?namabarang=${this.namabarang}`)
                         .then(response => response.json())
                         .then(data => {
-                            this.results = data;    
+                            this.results = data;
                         });
                 }
             };
         }
-        
-        document.addEventListener("DOMContentLoaded", function () {
-            const ctx = document.getElementById("barangKeluarChart").getContext("2d");
+
+        var labels = '@if(isset($labels)){!! json_encode($labels) !!}@endif',
+        data = '@if(isset($data)){!! json_encode($data) !!}@endif',
+        labels = JSON.parse(labels);
+        data = JSON.parse(data);    
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const ctx = document.getElementById("myChart").getContext("2d");
 
             new Chart(ctx, {
-                type: "bar",
+                type: "line", // Jenis grafik (bar, line, pie, dll.)
                 data: {
-                    labels: {!! json_encode($labels) !!}, // Nama bulan
+                    labels: labels, // Label sumbu X
                     datasets: [{
                         label: "Jumlah Barang Keluar",
-                        data: {!! json_encode($data) !!}, // Jumlah barang keluar per bulan
-                        backgroundColor: "white",
-                        borderColor: "green",
-                        borderWidth: 1
+                        data: data,
+                        borderColor: "rgba(75, 192, 192, 1)", // Warna garis
+                        borderWidth: 2
                     }]
                 },
                 options: {

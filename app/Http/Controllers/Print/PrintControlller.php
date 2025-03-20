@@ -33,7 +33,6 @@ class PrintControlller extends Controller
 
         // Pastikan itemIds selalu menjadi array
         if (is_string($itemIds)) {
-            // Jika itemIds adalah string, ubah menjadi array
             $itemIds = explode(',', $itemIds); // Misalnya, "1,2,3" menjadi [1, 2, 3]
         } elseif (!is_array($itemIds)) {
             // Jika bukan string atau array, kembalikan error
@@ -41,7 +40,7 @@ class PrintControlller extends Controller
         }
 
         // Buat instance dari DNS2D untuk menghasilkan barcode
-        $dns2d = new DNS2D();
+        $dns1d = new DNS1D();
 
         // Ambil atau inisialisasi session temp_items
         $tempItems = session('temp_items', []);
@@ -53,17 +52,14 @@ class PrintControlller extends Controller
             if ($item) {
                 $jumlahBarang = max(1, intval($item->jumlah));
                 for ($i = 1; $i <= $jumlahBarang; $i++) {
-                    $uniqueIdentifier = "{$item->id}-" . Str::random(14) . time();
-                    $barcodeHtml = $dns2d->getBarcodeHTML($uniqueIdentifier, 'QRCODE', 4, 4);
+                    $uniqueIdentifier = "{$item->id}-" . mt_rand(10000, 99999) . "$i";
+                    $barcodeHtml = $dns1d->getBarcodeHTML($uniqueIdentifier, 'C128', 2, 50);
 
                     session()->push('temp_items', [
-                        'id' => $item->id,
                         'nama_barang' => $item->nama_barang,
                         'seri' => $item->seri,
-                        'lokasi' => $item->lokasi,
-                        'foto' => $item->foto,
                         'barcodeHtml' => $barcodeHtml,
-                        'barcode_no' => $i,
+                        'kode_barcode' => $uniqueIdentifier
                     ]);
                 }
             }

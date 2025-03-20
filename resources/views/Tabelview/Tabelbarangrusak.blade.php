@@ -230,9 +230,6 @@
                             <th scope="col" class="px-6 py-3">
                                 Penginput
                             </th>
-                            <th scope="col" class="px-6 py-3">
-                                Status
-                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -284,18 +281,6 @@
                                 <td class="px-6 py-3 truncate" x-text="item.penyebab"></td>
                                 <td class="px-6 py-3 truncate" x-text="item.created_at"></td>
                                 <td class="px-6 py-3 truncate" x-text="item.input_by"></td>
-                                <td class="px-6 py-3 truncate">
-                                    <template x-if="item.status === 'rusak_sebelum_penggunaan'">
-                                        <div class="flex items-center justify-center border-b pb-2">
-                                            <span class="px-4 py-1 bg-red-500 text-white rounded-full">Sebelum Penggunaan</span>
-                                        </div>
-                                    </template>
-                                    <template x-if="item.status === 'rusak_sesudah_penggunaan'">
-                                        <div class="flex items-center justify-center">
-                                            <span class="px-4 py-1 bg-orange-500 text-white rounded-full">Sesudah Penggunaan</span>
-                                        </div>
-                                    </template>
-                                </td>
                             </tr>
                         </template>
                     </tbody>

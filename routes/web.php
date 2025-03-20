@@ -5,7 +5,6 @@ use App\Http\Controllers\Auth\SettingController;
 use App\Http\Controllers\BarangKeluarController;
 use App\Http\Controllers\BarangMasukController;
 use App\Http\Controllers\BarangRusakController;
-use App\Http\Controllers\BarangRusakController2;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Print\LaporanController;
@@ -94,7 +93,6 @@ Route::middleware(['auth', 'clear.temp_items'])->group(function () {
         Route::post('/barang_keluar', [BarangKeluarController::class, 'store'])->name('barangkeluar.store');
         Route::get('/hapus_order/{id}', [BarangKeluarController::class, 'destroy_order']);
         Route::delete('/tabel_barang_keluar/{id}', [BarangKeluarController::class, 'destroy']);
-        Route::post('/input_barang_rusak2/{id}', [BarangRusakController2::class, 'store']);
 
 
         Route::get('/search/barangmasuk', [BarangMasukController::class, 'show']);

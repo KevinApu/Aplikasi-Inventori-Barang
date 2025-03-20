@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Svg\Tag\Rect;
 
 class LaporanController extends Controller
 {
@@ -97,7 +98,7 @@ class LaporanController extends Controller
         }
 
         $fileName = Auth::user()->username . now()->format('d-m-Y') . '_laporanbarangmasuk.pdf';
-        return $pdf->Output($fileName, 'I');
+        return $pdf->Output($fileName, 'D');
     }
 
 
@@ -170,10 +171,10 @@ class LaporanController extends Controller
     {
         $lokasi = Auth::user()->KLModel->lokasi;
         $pop = Auth::user()->KLModel->pop;
-        $result = PengirimanModel::where('tujuan', $pop)->get();
+        $result = RequestBarangModel::where('pop', $pop)->get();
         $alamat = Auth::user()->KLModel->alamat;
 
-        $tanggal = now(); // Ambil tanggal dan waktu saat ini
+        $tanggal = now(); 
         $month = $tanggal->format('m'); // Bulan (01-12)
         $year = $tanggal->format('Y');
 
@@ -206,7 +207,7 @@ class LaporanController extends Controller
     {
         $lokasi = Auth::user()->KLModel->lokasi;
         $pop = Auth::user()->KLModel->pop;
-        $result = PengirimanModel::where('tujuan', $pop)->get();
+        $result = RequestBarangModel::where('pop', $pop)->get();
         $alamat = Auth::user()->KLModel->alamat;
 
         $tanggal = now(); // Ambil tanggal dan waktu saat ini

@@ -10,7 +10,6 @@
             overflow-hidden relative">
         </div>
 
-
         <div x-data="searchApp()" class="relative mt-16 bottom-8">
             <div x-data="{ openFilter: false }" class="md:hidden -mt-6 mb-2 flex justify-end">
                 <button @click="openFilter = !openFilter" class="text-white py-2 px-2 rounded-md">
@@ -607,6 +606,7 @@
             isProcessing = true;
 
             try {
+                alert(decodedText)
                 // Kirim hasil barcode ke server menggunakan fetch
                 const response = await fetch(`/order/${decodedText}`, {
                     method: 'POST',
@@ -617,7 +617,6 @@
                 });
 
                 if (response.ok) {
-                    // Jika berhasil, arahkan ke route input_barang_keluar
                     location.href = "{{ route('input_barang_keluar') }}";
                 } else {
                     console.log(response);
@@ -634,24 +633,26 @@
 
         if (window.innerWidth < 640) { // Mobile
             qrboxSize = {
-                width: 130,
-                height: 130
+                width: 200,
+                height: 100 // Lebih panjang untuk barcode 1D
             };
         } else if (window.innerWidth < 1024) { // Tablet
             qrboxSize = {
-                width: 200,
-                height: 200
+                width: 300,
+                height: 120
+            };
+        } else { // Desktop
+            qrboxSize = {
+                width: 400,
+                height: 150
             };
         }
 
-        const html5QrcodeScanner = new Html5QrcodeScanner(
-            "reader", {
-                fps: 60,
-                qrbox: qrboxSize,
-                supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA, Html5QrcodeScanType.SCAN_TYPE_FILE],
-            }
-        );
-        // Render scanner dengan fungsi onScanSuccess
+        const html5QrcodeScanner = new Html5QrcodeScanner("reader", {
+            fps: 30,
+            qrbox: qrboxSize,
+            supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA, Html5QrcodeScanType.SCAN_TYPE_FILE] // Hanya kamera
+        });
         html5QrcodeScanner.render(onScanSuccess);
     </script>
 </x-sidebar-layout>

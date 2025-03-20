@@ -30,7 +30,6 @@ class BarangRusakTableSeeder extends Seeder
                 'penyebab' => 'Dibacok Polisi',
                 'pop' => 'G1',
                 'qr_code' => 'd58ff817aa32432c92a9ecfd29c6b3f6',
-                'status' => 'rusak_sesudah_penggunaan',
                 'stok_gudang_id' => 1,
                 'created_at' => '2025-03-06 16:33:26',
                 'updated_at' => '2025-03-06 16:33:26',

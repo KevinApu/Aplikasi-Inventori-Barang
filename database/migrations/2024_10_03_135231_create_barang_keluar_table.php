@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('keterangan', 50)->nullable();
             $table->string('pop', 12);
             $table->foreign('pop')->references('pop')->on('kantor_layanan')->onDelete('cascade');
-            $table->string('qr_code', 100);
             $table->foreignId('stok_gudang_id')->constrained('stok_gudang')->onDelete('restrict');
             $table->timestamps();
         });

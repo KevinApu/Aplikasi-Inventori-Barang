@@ -18,12 +18,14 @@ class DashboardController extends Controller
         $barang_keluar = BarangKeluarModel::where('pop', $pop)->sum('jumlah');
         $barang_rusak = BarangRusakModel::where('pop', $pop)->sum('jumlah');
 
-        // Data barang keluar per bulan
-        $barangKeluarPerBulan = BarangKeluarModel::selectRaw('MONTH(created_at) as bulan, SUM(jumlah) as total')
+        $tahun = date('Y');
+        $barangKeluarPerBulan = BarangKeluarModel::selectRaw('MONTH(created_at) as bulan, COUNT(*) as total')
+            ->whereYear('created_at', $tahun)
             ->where('pop', $pop)
             ->groupBy('bulan')
             ->orderBy('bulan')
             ->get();
+
 
         // Format data untuk chart
         $labels = [];

@@ -18,7 +18,6 @@ class BarangRusakModel extends Model
         'penyebab',
         'pop',
         'qr_code',
-        'status',
         'stok_gudang_id',
     ];
 

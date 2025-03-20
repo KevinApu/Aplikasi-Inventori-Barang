@@ -37,7 +37,7 @@ class BarangRusakController extends Controller
     public function store(Request $request, $id)
     {
         $input_by = Auth::user()->username;
-        $foto = $request->file('foto'); // 'jpg'
+        $foto = $request->file('foto');
         $finalFileName = time() . '-' . $foto->hashName();
         $foto->storeAs('public/img', $finalFileName);
         $StokGudangModel = StokGudangModel::find($id);
@@ -48,7 +48,6 @@ class BarangRusakController extends Controller
             'kondisi' => $request->input('kondisi'),
             'penyebab' => $request->input('penyebab'),
             'pop' => Auth::user()->KLModel->pop,
-            'status' => 'rusak_sebelum_penggunaan',
             'qr_code' => NULL,
             'stok_gudang_id' => $id,
         ]);
@@ -104,10 +103,6 @@ class BarangRusakController extends Controller
                     ->whereHas('stokGudang', function ($q) use ($id) {
                         $q->where('id', $id); // Pencarian id di stok_gudang
                     });
-            } else {
-                $query->whereHas('stokGudang', function ($q) use ($parts) {
-                    $q->where('id', $parts[0]); // Jika hanya ada id, cari di stok_gudang
-                });
             }
         }
 
@@ -123,7 +118,6 @@ class BarangRusakController extends Controller
                 'kondisi' => $barangRusak->kondisi ?? null,
                 'penyebab' => $barangRusak->penyebab ?? null,
                 'input_by' => $barangRusak->input_by ?? null,
-                'status' => $barangRusak->status ?? null,
                 'created_at' => $barangRusak->created_at->format('Y-m-d H:i:s'),
             ];
         });

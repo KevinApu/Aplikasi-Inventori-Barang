@@ -5,14 +5,7 @@
             <h1 class="text-2xl font-semibold font-heading text-gray-500">Data Barang Keluar</h1>
         </div>
 
-
-
-        <div x-data="searchApp()" x-init="search(); initializeQrScanner()" class="relative mt-12 bottom-8">
-            <div id="reader"
-                class="mx-auto hidden mobile:block tablet:block tablet:mb-2
-            bg-white border border-gray-300 rounded-lg shadow-lg 
-            overflow-hidden relative">
-            </div>
+        <div x-data="searchApp()" x-init="search()" class="relative mt-12 bottom-8">
             <div x-data="{ openFilter: false }" class="md:hidden -mt-2 mb-2 flex justify-end">
                 <button @click="openFilter = !openFilter" class="text-white py-2 px-4 rounded-md">
                     <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -103,108 +96,6 @@
                         Reset
                     </button>
                 </div>
-                <div class="relative mobile:hidden tablet:hidden">
-                    <div class="flex items-center">
-                        <div class="flex items-center ml-2 space-x-4">
-                            <!-- Toggle Button -->
-                            <button
-                                @click.prevent="toggleScanner; showNotification()"
-                                :class="scannerActive ? 'bg-green-500' : 'bg-orange-500'"
-                                class="relative inline-flex items-center justify-center w-16 h-9 rounded-full transition-all duration-300 focus:outline-none">
-
-                                <span
-                                    :class="scannerActive ? 'translate-x-8 bg-white' : 'translate-x-2 bg-gray-200'"
-                                    class="absolute left-0 w-6 h-6 rounded-full transform transition-transform duration-300 shadow-md flex items-center justify-center">
-
-                                    <!-- Ikon berdasarkan status scanner -->
-                                    <template x-if="scannerActive">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            stroke-width="2"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            class="w-4 h-4 text-gray-800">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                            <path d="M4 7v-1a2 2 0 0 1 2 -2h2" />
-                                            <path d="M4 17v1a2 2 0 0 0 2 2h2" />
-                                            <path d="M16 4h2a2 2 0 0 1 2 2v1" />
-                                            <path d="M16 20h2a2 2 0 0 0 2 -2v-1" />
-                                            <path d="M5 12l14 0" />
-                                        </svg>
-                                    </template>
-
-                                    <template x-if="!scannerActive">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            stroke-width="2"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            class="w-4 h-4 text-gray-800">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                            <path d="M4 7v-1c0 -.552 .224 -1.052 .586 -1.414" />
-                                            <path d="M4 17v1a2 2 0 0 0 2 2h2" />
-                                            <path d="M16 4h2a2 2 0 0 1 2 2v1" />
-                                            <path d="M16 20h2c.551 0 1.05 -.223 1.412 -.584" />
-                                            <path d="M5 11h1v2h-1z" />
-                                            <path d="M10 11v2" />
-                                            <path d="M15 11v.01" />
-                                            <path d="M19 11v2" />
-                                            <path d="M3 3l18 18" />
-                                        </svg>
-                                    </template>
-                                </span>
-
-                                <!-- Menghilangkan teks yang tidak diperlukan -->
-                                <span class="sr-only" x-text="scannerActive ? 'Matikan Scanner' : 'Aktifkan Scanner'"></span>
-                            </button>
-                        </div>
-                    </div>
-
-
-                    <!-- Modal Notifikasi -->
-                    <div
-                        x-show="notificationVisible"
-                        x-transition:enter="transition ease-out duration-300"
-                        x-transition:enter-start="opacity-0 scale-90"
-                        x-transition:enter-end="opacity-100 scale-100"
-                        x-transition:leave="transition ease-in duration-200"
-                        x-transition:leave-start="opacity-100 scale-100"
-                        x-transition:leave-end="opacity-0 scale-90"
-                        @click.away="notificationVisible = false"
-                        class="fixed inset-0 flex items-center justify-center z-50">
-                        <div class="bg-white border border-yellow-400 p-6 rounded-lg shadow-md w-11/12 max-w-xs text-center relative">
-                            <!-- Header -->
-                            <h2 class="text-lg font-semibold text-gray-800 mb-3">
-                                <span class="inline-flex items-center justify-center w-8 h-8 bg-yellow-400 rounded-full text-white mr-2">
-                                    ⚠️
-                                </span>
-                                Perhatian!
-                            </h2>
-                            <!-- Isi Pesan -->
-                            <p class="text-gray-700 text-sm mb-4">
-                                Pastikan Anda hanya menggunakan <span class="font-semibold text-gray-800">barcode yang dibuat melalui website ini</span>.
-                                Barcode bawaan pada kemasan barang mungkin tidak dapat diproses oleh sistem.
-                            </p>
-                            <!-- Tombol -->
-                            <button
-                                @click="notificationVisible = false"
-                                type="button"
-                                class="bg-yellow-400 text-white text-sm font-semibold px-4 py-2 rounded-md hover:bg-yellow-500 transition duration-300 focus:outline-none transform hover:scale-105">
-                                Mengerti
-                            </button>
-                        </div>
-                    </div>
-                </div>
             </div>
             <div class="overflow-x-auto shadow-md rounded-t-lg overscroll-x-none transition-shadow duration-200 ease-in-out shadow hover:shadow-2xl hover:shadow-header-2">
                 <table class="w-full text-left rtl:text-right font-roboto">
@@ -248,9 +139,6 @@
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Waktu
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Aksi
                             </th>
                         </tr>
                     </thead>
@@ -302,80 +190,6 @@
                                 <td class="px-6 py-3 truncate" x-text="item.output_by"></td>
                                 <td class="px-6 py-3 truncate" x-text="item.keterangan ? item.keterangan : '-'"></td>
                                 <td class="px-6 py-3 truncate" x-text="item.created_at"></td>
-                                <td class="px-14 py-3">
-                                    <div class="flex space-x-2">
-                                        <!-- Pop up Barang Rusak -->
-                                        <div x-data="{ open: false }">
-                                            <button x-on:click="open = ! open" x-show="item.satuan !== 'roll' && item.satuan !== 'pack'">
-                                                <svg class="h-9 w-9 text-red-500 border border-red-500 p-2 rounded" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                    <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2" />
-                                                    <line x1="12" y1="8" x2="12" y2="12" />
-                                                    <line x1="12" y1="16" x2="12.01" y2="16" />
-                                                </svg>
-                                            </button>
-
-                                            <!-- Main modal -->
-                                            <div x-show="open" @keydown.escape.window="open = false" tabindex="-1" aria-hidden="true" class="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-screen bg-black bg-opacity-70">
-                                                <div class="relative p-4 w-full max-w-md max-h-full">
-                                                    <!-- Modal content -->
-                                                    <div class="relative rounded-lg shadow bg-white"
-                                                        x-show="open"
-                                                        x-transition:enter="transition ease-out duration-300"
-                                                        x-transition:enter-start="opacity-0"
-                                                        x-transition:enter-end="opacity-100"
-                                                        x-transition:leave="transition ease-in duration-200"
-                                                        x-transition:leave-start="opacity-100"
-                                                        x-transition:leave-end="opacity-0">
-                                                        <!-- Modal header -->
-                                                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-600">
-                                                            <h3 class="text-lg font-semibold text-gray-900">
-                                                                Informasi Kerusakan
-                                                            </h3>
-                                                            <button type="button" x-on:click="open = false" class="text-gray-400 bg-transparent hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center transform transition-transform duration-300 hover:scale-125">
-                                                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                                                                </svg>
-                                                            </button>
-                                                        </div>
-                                                        <!-- Modal body -->
-                                                        <form class="p-4 md:p-5" method="POST" x-bind:action="`/input_barang_rusak2/${item.id}`" enctype="multipart/form-data">
-                                                            @csrf
-                                                            <div class="grid gap-4 mb-4 grid-cols-2">
-                                                                <div class="col-span-2">
-                                                                    <label class="block mb-2 text-sm font-medium text-gray-900">Kondisi Barang</label>
-                                                                    <textarea name="kondisi" rows="1" class="border-0 focus:ring-0 border-b bg-transparent w-full text-gray-900 min-h-[35px]" placeholder="Kondisi Barang" required=""></textarea>
-                                                                </div>
-                                                                <div class="col-span-2">
-                                                                    <label class="block mb-2 text-sm font-medium text-gray-900">Penyebab Kerusakan</label>
-                                                                    <textarea name="penyebab" rows="1" class="border-0 focus:ring-0 border-b bg-transparent w-full text-gray-900 min-h-[35px]" placeholder="Penyebab Kerusakan" required=""></textarea>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-span-2 sm:col-span-1">
-                                                                <label for="jumlah" class="block mb-2 text-sm font-medium text-gray-900">Jumlah</label>
-                                                                <input type="number"
-                                                                    name="jumlah"
-                                                                    class="border-0 focus:ring-0 border-b bg-transparent w-full text-gray-900"
-                                                                    min="0"
-                                                                    x-bind:max="item.jumlah" required="" />
-                                                            </div>
-                                                            <div class="col-span-2 sm:col-span-1">
-                                                                <label class="block mb-2 mt-4 text-sm font-medium text-gray-900">Foto</label>
-                                                                <input type="file" name="foto" class="border-0 focus:ring-0 border-b bg-transparent w-full text-gray-900 p-2" required="">
-                                                            </div>
-                                                            <button type="submit" class="mt-4 text-white inline-flex items-center font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-blue-600 hover:bg-blue-700">
-                                                                <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
-                                                                </svg>
-                                                                Add
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- End Pop up Barang Rusak -->
-                                    </div>
-                                </td>
                             </tr>
                         </template>
                     </tbody>
@@ -508,55 +322,6 @@
         </div>
     </div>
     @endif
-
-    @if (session('success_rusak'))
-    <!-- Main modal -->
-    <div x-data="{ isOpen: true }" x-init="setTimeout(() => isOpen = false, 2000)">
-        <div
-            x-show="isOpen"
-            @keydown.escape.window="isOpen = false"
-            @click.self="isOpen = false"
-            tabindex="-1"
-            aria-hidden="true"
-            class="overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0 h-screen bg-black bg-opacity-30"
-            x-transition:enter="transition-opacity duration-300 ease-out"
-            x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100"
-            x-transition:leave="transition-opacity duration-300 ease-in"
-            x-transition:leave-start="opacity-100"
-            x-transition:leave-end="opacity-0">
-            <div @click.stop
-                class="bg-white rounded-xl shadow-lg p-4 text-center w-48 transition-transform"
-                x-transition:enter="transform transition-transform duration-300 ease-out"
-                x-transition:enter-start="opacity-0 scale-95"
-                x-transition:enter-end="opacity-100 scale-100"
-                x-transition:leave="transform transition-transform duration-200 ease-in"
-                x-transition:leave-start="opacity-100 scale-100"
-                x-transition:leave-end="opacity-0 scale-95">
-                <!-- Icon Success -->
-                <div class="bg-green-100 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3 shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-green-500 animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M5 12l5 5l10-10" />
-                    </svg>
-                </div>
-
-                <!-- Pesan -->
-                <h1 class="text-base font-semibold text-green-600">Success</h1>
-                <p class="text-gray-500 text-xs mb-3 leading-tight">
-                    {{ session('success_rusak') }}
-                </p>
-
-                <!-- Tombol Continue -->
-                <button type="button" @click="isOpen = false"
-                    class="bg-green-500 text-white py-1 px-4 rounded-full text-sm hover:bg-green-600 focus:ring focus:ring-green-300 transition">
-                    Continue
-                </button>
-            </div>
-        </div>
-    </div>
-    @endif
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js" integrity="sha512-r6rDA7W6ZeQhvl8S7yRVQUKVHdexq+GAlNkNNqVC7YyIV+NwqCTJe2hDWCiffTyRNOeGEzRRJ9ifvRm/HCzGYg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         function searchApp() {
             return {
@@ -571,10 +336,7 @@
                 checkedItems: [],
                 showPrintPopup: false,
                 allChecked: false,
-                barcode: '',
-                scannerActive: JSON.parse(localStorage.getItem('scannerActive')) || false,
                 notificationVisible: false,
-                isProcessing: false, // Variabel untuk mencegah scanning berulang
 
                 get totalPages() {
                     return this.perPage ? Math.ceil(this.results.length / this.perPage) : 1;
@@ -654,121 +416,6 @@
                     this.search();
                     this.openFilter = false;
                 },
-
-                initScanner() {
-                    const savedStatus = JSON.parse(localStorage.getItem('scannerActive'));
-                    this.scannerActive = savedStatus || false;
-
-                    if (this.scannerActive) {
-                        this.activateScanner();
-                    }
-                },
-
-                toggleScanner() {
-                    if (this.scannerActive) {
-                        this.deactivateScanner();
-                    } else {
-                        this.activateScanner();
-                    }
-                },
-
-                showNotification() {
-                    if (!this.scannerActive) {
-                        this.notificationVisible = true;
-                    }
-                },
-
-                activateScanner() {
-                    this.scannerActive = true;
-                    this.barcode = '';
-                    this.captureBarcodeListener = (event) => this.captureBarcode(event);
-                    window.addEventListener('keydown', this.captureBarcodeListener);
-                    localStorage.setItem('scannerActive', JSON.stringify(this.scannerActive));
-                },
-
-                captureBarcode(event) {
-                    if (this.scannerActive === false) return;
-                    if (event.key === 'Enter') {
-                        this.handleEnterKey(event);
-                        this.barcode = '';
-                    } else {
-                        this.barcode += event.key;
-                    }
-                },
-
-                deactivateScanner() {
-                    this.scannerActive = false;
-                    if (this.captureBarcodeListener) {
-                        window.removeEventListener('keydown', this.captureBarcodeListener);
-                        this.captureBarcodeListener = null;
-                    }
-                    localStorage.setItem('scannerActive', JSON.stringify(this.scannerActive));
-                },
-
-                checkBarcode() {
-                    fetch(`/search/barangkeluar?id=${this.barcode}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            this.results = data;
-                            this.checkedItems = [];
-                            this.allChecked = false;
-                        });
-                },
-
-                handleEnterKey(event) {
-                    event.preventDefault();
-                    this.checkBarcode();
-                },
-
-                // Fungsi untuk menangani hasil scan QR
-                async onScanSuccess(decodedText) {
-                    // Cek jika sedang memproses atau barcode kosong
-                    if (this.isProcessing || decodedText.trim() === '') {
-                        return;
-                    }
-
-                    // Set status menjadi sedang memproses
-                    this.isProcessing = true;
-
-                    fetch(`/search/barangkeluar?id=${decodedText}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            this.results = data;
-                            this.checkedItems = [];
-                            this.allChecked = false;
-                        });
-
-                    // Reset status setelah beberapa detik (misalnya 3 detik)
-                    setTimeout(() => {
-                        this.isProcessing = false;
-                    }, 3000);
-                },
-
-                // Fungsi untuk menginisialisasi scanner QR
-                initializeQrScanner() {
-                    let qrboxSize;
-
-                    if (window.innerWidth < 640) { // Mobile
-                        qrboxSize = {
-                            width: 130,
-                            height: 130
-                        };
-                    } else if (window.innerWidth < 1024) { // Tablet
-                        qrboxSize = {
-                            width: 250,
-                            height: 250
-                        };
-                    }
-
-                    const html5QrcodeScanner = new Html5QrcodeScanner(
-                        "reader", {
-                            fps: 60,
-                            qrbox: qrboxSize,
-                            supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
-                        }
-                    );
-                    html5QrcodeScanner.render(this.onScanSuccess.bind(this));
-                }
             }
         }
     </script>

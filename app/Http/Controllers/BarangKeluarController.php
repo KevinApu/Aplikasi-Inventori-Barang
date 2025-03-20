@@ -36,37 +36,26 @@ class BarangKeluarController extends Controller
     public function order($id)
     {
         $barcodePart = explode('-', $id);
-        $part1 = $barcodePart[0]; // Bagian pertama dari barcode (ID)
-        $uniqueCode = $barcodePart[1];
+        $part1 = $barcodePart[0];
 
-        // Mencari barang berdasarkan 'pop' dan 'id' dari barcode
         $barangMasuk = StokGudangModel::where('pop', Auth::user()->KLModel->pop)->where('id', $part1)->first();
 
         if (!$barangMasuk) {
             return response()->json(['message' => 'Barang tidak ditemukan.', 'alert_type' => 'error']);
         }
 
-        if (($barangMasuk->satuan == 'roll' || $barangMasuk->satuan == 'pack') && BarangKeluarModel::where('stok_gudang_id', $barangMasuk->id)->exists()) {
+        if (BarangKeluarModel::where('stok_gudang_id', $barangMasuk->id)
+            ->where('output_by', Auth::user()->username)
+            ->where('status_order', 0)
+            ->exists()
+        ) {
             return response()->json(['message' => 'Barang sudah ditambahkan.', 'alert_type' => 'error']);
-        }
-
-        if (($barangMasuk->satuan == 'pcs' || $barangMasuk->satuan == 'unit') && BarangKeluarModel::where('qr_code', $uniqueCode)->exists()) {
-            return response()->json(['message' => 'Barang sudah ditambahkan.', 'alert_type' => 'error']);
-        }
-
-        $exists = BarangKeluarModel::where('qr_code', $id)
-            ->where('pop', Auth::user()->KLModel->pop)
-            ->exists();
-
-        if ($exists) {
-            return response()->json(['message' => 'Barang sudah tercatat sebagai barang yang telah dikeluarkan.', 'alert_type' => 'error']);
         }
 
         BarangKeluarModel::create([
             'stok_gudang_id' => $barangMasuk->id,
             'output_by' => Auth::user()->username,
             'pop' => Auth::user()->KLModel->pop,
-            'qr_code' => $id,
         ]);
 
         return response()->json(['message' => 'Barang berhasil ditambahkan.', 'alert_type' => 'success']);
@@ -77,6 +66,8 @@ class BarangKeluarController extends Controller
      */
     public function store(BarangKeluarRequest $request)
     {
+
+
         $jumlaharray = $request->input('jumlah');
 
         foreach ($jumlaharray as $id => $jumlah) {
@@ -84,15 +75,36 @@ class BarangKeluarController extends Controller
             $barangKeluar = BarangKeluarModel::where('id', $id)->first();
             $StokGudangModel = StokGudangModel::find($barangKeluar->stok_gudang_id);
 
-            BarangKeluarModel::where('id', $id)->update([
-                'jumlah' => $jumlah,
-                'lokasi' => $request->lokasi,
-                'nama_customer' => $nama_customer,
-                'keterangan' => $request->keterangan,
-                'status_order' => 1,
-            ]);
+            $existingData = BarangKeluarModel::where('nama_customer', $nama_customer)
+                ->where('lokasi', $request->lokasi)
+                ->where('pop', Auth::user()->KLModel->pop)
+                ->get();
+
+            if ($existingData->isNotEmpty()) {
+                foreach ($existingData as $data) {
+                    if ($data->stok_gudang_id == $barangKeluar->stok_gudang_id) {
+                        $data->update([
+                            'jumlah' => $jumlah,
+                        ]);
+                        $barangKeluar->delete();
+                        break; 
+                    }
+                }
+            } else {
+                $barangKeluar->update([
+                    'jumlah'        => $jumlah,
+                    'lokasi'        => $request->lokasi,
+                    'nama_customer' => $nama_customer,
+                    'keterangan'    => $request->keterangan,
+                    'status_order'  => 1,
+                ]);
+            }
+
+
+
 
             if ($StokGudangModel->satuan == 'pack' || $StokGudangModel->satuan == 'roll') {
+
                 $StokGudangModel->hasil = $StokGudangModel->hasil - $jumlah;
                 $roll = $StokGudangModel->hasil / $StokGudangModel->rasio;
                 $nilaiGenap = ceil($roll);
@@ -112,7 +124,7 @@ class BarangKeluarController extends Controller
 
                 $rekap = RekapModel::where('stok_gudang_id', $barangKeluar->stok_gudang_id)->first();
                 if ($rekap) {
-                    $rekap->out += $jumlah; // Update jumlah dengan penambahan
+                    $rekap->out += $jumlah;
                     $rekap->save();
                 }
             }
@@ -147,22 +159,6 @@ class BarangKeluarController extends Controller
 
         if ($request->nama_customer) {
             $query->where('nama_customer', 'like', '%' . $request->nama_customer . '%');
-        }
-
-        if ($request->id) {
-            // Memisahkan id dan qr_code
-            $parts = explode('-', $request->id);
-
-            if (count($parts) == 2) {
-                $id = $parts[0];        // ID dari inputan
-                $qr_code = $parts[1];   // QR Code dari inputan
-
-                $query->whereHas('stokGudang', function ($q) use ($id) {
-                    $q->where('id', $id);  // ID dari stok_gudang
-                })->where('qr_code', $qr_code);
-            } else {
-                return redirect()->back()->with('error', 'Format ID tidak valid');
-            }
         }
 
         $results = $query->get()->map(function ($barangKeluar) {
