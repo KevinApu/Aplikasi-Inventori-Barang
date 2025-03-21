@@ -28,14 +28,15 @@ class BarangRusakController extends Controller
      */
     public function create()
     {
-        //
+        return view('Inputview.inputbarangrusak');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, $id)
+    public function store(Request $request)
     {
+        dd($request);
         $input_by = Auth::user()->username;
         $foto = $request->file('foto');
         $finalFileName = time() . '-' . $foto->hashName();

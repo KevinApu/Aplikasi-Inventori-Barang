@@ -44,7 +44,6 @@ Route::middleware(['auth', 'clear.temp_items'])->group(function () {
             Route::get('/tabel_barang_masuk', [BarangMasukController::class, 'index'])->name('tabel_barang_masuk');
             Route::put('/update_barang_masuk/{id}', [BarangMasukController::class, 'update'])->name('update_barang_masuk');
             Route::post('/penambahan_stok/{id}', [BarangMasukController::class, 'penambahan_stok'])->name('penambahan_stok');
-            Route::post('/input_barang_rusak/{id}', [BarangRusakController::class, 'store'])->name('barang.rusak');
             Route::get('/request_barang', [RequestBarangController::class, 'create'])->name('request_barang');
             Route::post('/request_barang/post', [RequestBarangController::class, 'store'])->name('request_barang.post');
             Route::post('/terima_barang/{pop}', [RequestBarangController::class, 'update'])->name('terima_barang');
@@ -102,12 +101,13 @@ Route::middleware(['auth', 'clear.temp_items'])->group(function () {
         Route::get('/search/rekap', [RekapController::class, 'show']);
         Route::get('/search/kl', [KLController::class, 'show']);
 
-        Route::post('/order/{id}', [BarangKeluarController::class, 'order'])->name('order');
-
+        Route::post('/order/{id}', [BarangKeluarController::class, 'order'])->name('order');    
 
 
 
         Route::get('/tabel_barang_rusak', [BarangRusakController::class, 'index'])->name('tabel_barang_rusak');
+        Route::post('/input_barang_rusak/post', [BarangRusakController::class, 'store'])->name('input_barang_rusak.store');
+        Route::get('/input_barang_rusak', [BarangRusakController::class, 'create'])->name('input_barang_rusak');
 
         Route::post('/settings/notifications', [NotificationController::class, 'updateSettings'])->name('notification.update');
         Route::get('/settings/notifications/reset', [NotificationController::class, 'resetSettings'])->name('notification.reset');

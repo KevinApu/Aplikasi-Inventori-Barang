@@ -321,12 +321,7 @@
                                 <span class="text-gray-600 font-bold">{{$item->stokGudang->lokasi}}</span>
                                 <div class="mt-2 flex items-center space-x-2">
                                     <span class="text-gray-600">Jumlah:</span>
-                                    @if ($item->stokGudang->satuan === 'unit' || $item->stokGudang->satuan === 'pcs')
-                                    <span class="text-gray-800 font-semibold">1</span>
-                                    <input type="hidden" name="jumlah[{{ $item->id }}]" value="1" />
-                                    @else
-                                    <input type="number" name="jumlah[{{ $item->id }}]" value="1" min="1" max="{{ $item->stokGudang->stok }}" class="w-16 text-center border rounded-md py-1" />
-                                    @endif
+                                    <input type="number" name="jumlah[{{ $item->id }}]" min="1" max="{{ $item->stokGudang->stok }}" class="w-16 text-center border rounded-md py-1" />
                                 </div>
                             </div>
                             <a href="{{ url('/hapus_order/' . $item->id) }}" class="text-red-500 hover:text-red-700">
@@ -595,7 +590,6 @@
 
 
         let isProcessing = false;
-
         async function onScanSuccess(decodedText) {
             // Cek jika sedang memproses atau barcode kosong
             if (isProcessing || decodedText.trim() === '') {

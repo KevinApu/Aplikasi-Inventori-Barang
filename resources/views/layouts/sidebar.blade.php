@@ -389,7 +389,7 @@
                         <span :class="{'hidden': !isSidebarOpen}" class="ms-3 whitespace-nowrap">Dashboard</span>
                     </a>
                 </li>
-                <div x-data="{ openDropdown1: false, openDropdown2: false }">
+                <div x-data="{ openDropdown1: false, openDropdown2: false, openDropdown3: false }">
                     @if(auth()->user() && auth()->user()->role === 'admin' && (auth()->user()->request_access === 0 || auth()->user()->request_access === 1))
                     <li class="mb-2" title="Barang Masuk">
                         <div class="rounded-lg text-white">
@@ -439,20 +439,25 @@
                             </ul>
                         </div>
                     </li>
+
+                    <li title="Barang Rusak">
+                        <div class="rounded-lg text-white">
+                            <button @click="openDropdown3 = !openDropdown3; if (!isSidebarOpen) { isSidebarOpen = true;}" class="flex items-center w-full px-2 py-2 mt-2 rounded-lg {{ request()->routeIs('input_barang_rusak') || request()->routeIs('tabel_barang_rusak') ? 'border-l-4 border-red-700 bg-gradient-to-r from-red-500' : 'bg-[#0F0606] hover:bg-gray-600' }}">
+                                <svg class="flex-shrink-0 w-10 h-10 mobile:w-8 mobile:h-8 text-blue-800 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M14.502 7.046h-2.5v-.928a2.122 2.122 0 0 0-1.199-1.954 1.827 1.827 0 0 0-1.984.311L3.71 8.965a2.2 2.2 0 0 0 0 3.24L8.82 16.7a1.829 1.829 0 0 0 1.985.31 2.121 2.121 0 0 0 1.199-1.959v-.928h1a2.025 2.025 0 0 1 1.999 2.047V19a1 1 0 0 0 1.275.961 6.59 6.59 0 0 0 4.662-7.22 6.593 6.593 0 0 0-6.437-5.695Z" />
+                                </svg>
+                                <span :class="{'hidden': !isSidebarOpen}" class="flex-1 ms-3 whitespace-nowrap">Barang Rusak</span>
+                                <svg :class="{'rotate-180': openDropdown3}, {'hidden': !isSidebarOpen}" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ms-10 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 15l-7-7-7 7" />
+                                </svg>
+                            </button>
+                            <ul x-show="openDropdown3" @click.away="openDropdown3 = false" class="left-0 top-full mt-2 rounded-md shadow-lg w-full">
+                                <li><a href="{{ route('input_barang_rusak') }}" @click="isSidebarOpen = false" class="block px-4 py-2 text-white hover:bg-gray-600 rounded-md text-sm">Input</a></li>
+                                <li><a href="{{ route('tabel_barang_rusak') }}" @click="isSidebarOpen = false" class="block px-4 py-2 text-white hover:bg-gray-600 rounded-md text-sm">Data</a></li>
+                            </ul>
+                        </div>
+                    </li>
                 </div>
-
-                <li title="Barang Rusak">
-                    <a href="{{ route('tabel_barang_rusak') }}"
-                        class="flex items-center p-2 rounded-lg text-white 
-                        {{ request()->routeIs('tabel_barang_rusak') ? 'border-l-4 border-red-700 bg-gradient-to-r from-red-500' : 'bg-[#0F0606] hover:bg-gray-600' }}">
-                        <svg class="w-8 h-8 mobile:w-7 mobile:h-7 text-blue-800 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 512 512">
-                            <path d="M256 32c14.2 0 27.3 7.5 34.5 19.8l216 368c7.3 12.4 7.3 27.7 .2 40.1S486.3 480 472 480H40c-14.3 0-27.6-7.7-34.7-20.1s-7-27.8 .2-40.1l216-368C228.7 39.5 241.8 32 256 32zm0 128c-13.3 0-24 10.7-24 24V296c0 13.3 10.7 24 24 24s24-10.7 24-24V184c0-13.3-10.7-24-24-24zm32 224a32 32 0 1 0 -64 0 32 32 0 1 0 64 0z" />
-                            <path fill-rule="evenodd" d="M21.707 21.707a1 1 0 0 1-1.414 0l-3.5-3.5a1 1 0 0 1 1.414-1.414l3.5 3.5a1 1 0 0 1 0 1.414Z" clip-rule="evenodd" />
-                        </svg>
-
-                        <span :class="{'hidden': !isSidebarOpen}" class="flex-1 ms-3 whitespace-nowrap">Barang Rusak</span>
-                    </a>
-                </li>
                 <li title="Stok Gudang">
                     <a href="{{ route('tabel_stok_gudang') }}"
                         class="flex items-center p-2 rounded-lg text-white 
