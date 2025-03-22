@@ -421,7 +421,6 @@
                         } else {
                             this.checkedItems.push(itemValue);
                         }
-                        // Tampilkan pop-up jika ada item yang dipilih
                         this.showPrintPopup = this.checkedItems.length > 0;
                         // Update status checkbox utama
                         this.allChecked = this.checkedItems.length === this.results.length;
@@ -432,9 +431,7 @@
                     },
 
                     deleteSelectedItems() {
-                        this.checkedItems.forEach(itemValue => {
-                            // Pisahkan itemValue menjadi bagian-bagian individual
-                            const [itemId] = itemValue.split('/');
+                        this.checkedItems.forEach(itemValue => {const [itemId] = itemValue.split('/');
 
                             fetch(`/hapus_barang_rusak/${itemId}`, {
                                 method: 'DELETE',
@@ -456,6 +453,11 @@
                         this.search();
                         location.reload(); // Update hasil pencarian setelah penghapusan
                     },
+
+
+
+
+
                     resetFilter() {
                         this.kategori = '';
                         this.namabarang = '';

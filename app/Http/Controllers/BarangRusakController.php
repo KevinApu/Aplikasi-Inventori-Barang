@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BarangRusakRequest;
 use App\Models\BarangKeluarModel;
 use App\Models\BarangMasukModel;
 use App\Models\BarangRusakModel;
@@ -31,36 +32,84 @@ class BarangRusakController extends Controller
         return view('Inputview.inputbarangrusak');
     }
 
+    public function check_barcode(Request $request)
+    {
+        $barcode = $request->input('barcode');
+        if (!$barcode) {
+            return back()->with('error_rusak', 'Barcode tidak boleh kosong');
+        }
+
+        $barcodeParts = explode('-', $barcode);
+
+        if (count($barcodeParts) < 2) {
+            return back()->with('error_rusak', 'Format barcode salah, mungkin barcode ini tidak berasal dari aplikasi ini.');
+        }
+
+        // Ambil bagian pertama dari barcode
+        $part1 = $barcodeParts[0];
+
+        // Cari di database
+        $check_barcode = StokGudangModel::where('id', $part1)
+            ->where('pop', Auth::user()->KLModel->pop)
+            ->first();
+
+        if (!$check_barcode) {
+            return back()->with('error_rusak', 'Barcode tidak ditemukan di stok gudang');
+        }
+        return redirect()->route('input_barang_rusak')->with([
+            'check_barcode' => $check_barcode,
+            'barcode' => $barcode
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(BarangRusakRequest $request, $id)
     {
-        dd($request);
         $input_by = Auth::user()->username;
         $foto = $request->file('foto');
         $finalFileName = time() . '-' . $foto->hashName();
         $foto->storeAs('public/img', $finalFileName);
         $StokGudangModel = StokGudangModel::find($id);
         BarangRusakModel::create([
-            'jumlah' => $request->input('jumlah'),
+            'jumlah' => $request->jumlah_rusak,
             'foto' => 'img/' . $finalFileName,
             'input_by' => $input_by,
-            'kondisi' => $request->input('kondisi'),
-            'penyebab' => $request->input('penyebab'),
+            'kondisi' => $request->kondisi,
+            'penyebab' => $request->penyebab,
             'pop' => Auth::user()->KLModel->pop,
-            'qr_code' => NULL,
+            'qr_code' => $request->barcode,
             'stok_gudang_id' => $id,
         ]);
 
-        $StokGudangModel->jumlah -= $request->input('jumlah');
-        $StokGudangModel->save();
+        if ($StokGudangModel->satuan == 'pack' || $StokGudangModel->satuan == 'roll') {
 
-        $rekap = RekapModel::firstOrNew(['stok_gudang_id' => $StokGudangModel->id]);
-        $rekap->out += $request->input('jumlah');
-        $rekap->save();
+            $StokGudangModel->hasil = $StokGudangModel->hasil - $request->jumlah_rusak;
+            $roll = $StokGudangModel->hasil / $StokGudangModel->rasio;
+            $nilaiGenap = ceil($roll);
+            $StokGudangModel->jumlah = $nilaiGenap;
+            $StokGudangModel->detail_jumlah = $StokGudangModel->hasil % $StokGudangModel->rasio;
+            $StokGudangModel->save();
 
-        return redirect()->route('tabel_barang_masuk')->with([
+
+            $rekap = RekapModel::where('stok_gudang_id', $StokGudangModel->stok_gudang_id)->first();
+            if ($rekap) {
+                $rekap->out += $request->jumlah_rusak;
+                $rekap->save();
+            }
+        } else {
+            $StokGudangModel->jumlah -= $request->jumlah_rusak;
+            $StokGudangModel->save();
+
+            $rekap = RekapModel::where('stok_gudang_id', $StokGudangModel->stok_gudang_id)->first();
+            if ($rekap) {
+                $rekap->out += $request->jumlah_rusak;
+                $rekap->save();
+            }
+        }
+
+        return redirect()->route('input_barang_rusak')->with([
             'success_rusak' => 'Barang rusak berhasil diperbarui!',
         ]);
     }
@@ -94,18 +143,9 @@ class BarangRusakController extends Controller
 
         // Filter berdasarkan ID dan QR Code jika tersedia
         if ($request->id) {
-            $parts = explode('-', $request->id);
-
-            if (count($parts) == 2) {
-                $id = $parts[0];       // Dicari di stok_gudang
-                $qr_code = $parts[1];  // Dicari di barang_rusak
-
-                $query->where('qr_code', $qr_code) // Pencarian qr_code di barang_rusak
-                    ->whereHas('stokGudang', function ($q) use ($id) {
-                        $q->where('id', $id); // Pencarian id di stok_gudang
-                    });
-            }
+            $query->where('qr_code', $request->id); // Cari berdasarkan qr_code
         }
+
 
         $results = $query->get()->map(function ($barangRusak) {
             return [
@@ -115,7 +155,7 @@ class BarangRusakController extends Controller
                 'nama_barang' => $barangRusak->stokGudang->nama_barang ?? null,
                 'seri' => $barangRusak->stokGudang->seri ?? null,
                 'jumlah' => $barangRusak->jumlah ?? null, // Ambil dari stokGudang
-                'foto' => $barangRusak->stokGudang->foto ?? null,
+                'foto' => $barangRusak->foto ?? null,
                 'kondisi' => $barangRusak->kondisi ?? null,
                 'penyebab' => $barangRusak->penyebab ?? null,
                 'input_by' => $barangRusak->input_by ?? null,
@@ -147,9 +187,7 @@ class BarangRusakController extends Controller
      */
     public function destroy($id)
     {
-        // Cari item berdasarkan ID, nama_barang, nama_customer, dan output_by
         BarangRusakModel::where('id', $id)->delete();
-        // Periksa apakah item ditemukan sebelum menghapu
-        return redirect()->route('tabel_barang_rusak')->with(['success_hapus' => 'Data Berhasil Dihapus!']);
+        return redirect()->route('tabel_barang_rusak')->with(['success_rusak' => 'Data Berhasil Dihapus!']);
     }
 }

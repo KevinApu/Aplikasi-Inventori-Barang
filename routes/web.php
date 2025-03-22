@@ -106,7 +106,8 @@ Route::middleware(['auth', 'clear.temp_items'])->group(function () {
 
 
         Route::get('/tabel_barang_rusak', [BarangRusakController::class, 'index'])->name('tabel_barang_rusak');
-        Route::post('/input_barang_rusak/post', [BarangRusakController::class, 'store'])->name('input_barang_rusak.store');
+        Route::post('/input_barang_rusak/post/{id}', [BarangRusakController::class, 'store'])->name('input_barang_rusak.store');
+        Route::post('/input_barang_rusak/post/check/barcode', [BarangRusakController::class, 'check_barcode'])->name('input_barang_rusak.check_barcode');
         Route::get('/input_barang_rusak', [BarangRusakController::class, 'create'])->name('input_barang_rusak');
 
         Route::post('/settings/notifications', [NotificationController::class, 'updateSettings'])->name('notification.update');
