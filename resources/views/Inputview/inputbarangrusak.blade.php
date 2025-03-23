@@ -1,15 +1,16 @@
 <x-sidebar-layout>
-    <div class="max-w-2xl mx-auto mt-12 p-6 bg-gradient-to-br from-white via-gray-100 to-gray-200 shadow-2xl rounded-2xl border border-gray-300 backdrop-blur-lg animate-fade-in">
+    <div class="max-w-3xl mx-auto mt-12 p-6 bg-gradient-to-br from-white via-gray-100 to-gray-200 shadow-2xl rounded-2xl border border-gray-300 backdrop-blur-lg animate-fade-in">
         <h2 class="text-[22px] laptop:text-2xl font-bold text-gray-900 text-center mb-6">
             Laporkan Barang Rusak
         </h2>
+        <label class="block font-semibold text-gray-800 mt-2 mb-4 text-[16px] laptop:text-[18px]">🔍 Barcode</label>
 
         @php
         $check_barcode = session('check_barcode');
         $barcode = session('barcode');
         @endphp
 
-
+        
         @if(isset($check_barcode) && isset($barcode))
         <form action="{{ route('input_barang_rusak.store', $check_barcode->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
@@ -20,7 +21,7 @@
                 <div class="flex flex-col items-center mobile:block laptop:hidden">
                     <div id="reader" class="w-full max-w-sm border-2 border-gray-300 rounded-xl shadow-lg p-2 bg-white"></div>
                 </div>
-                <div class="flex items-center justify-center space-x-4 mobile:hidden tablet:hidden" title="Tombol Scanner">
+                <div class="flex -mb-12 -ml-96 pr-60 items-center justify-center mobile:hidden tablet:hidden" title="Tombol Scanner">
                     <button
                         @click.prevent="toggleScanner"
                         :class="scannerActive ? 'bg-green-500 shadow-lg scale-105' : 'bg-orange-500'"
@@ -53,18 +54,17 @@
 
                 <form action="{{ route('input_barang_rusak.check_barcode') }}" method="POST">
                     @csrf
-                    <label class="block font-semibold text-gray-800 mt-4 text-[16px] laptop:text-[18px]">🔍 Barcode</label>
                     <input
                         type="text"
                         id="barcode"
                         name="barcode"
                         x-model="barcode"
-                        class="w-full mt-2 px-4 py-3 border-2 rounded-lg shadow-md bg-white focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:scale-[1.02] text-[15px] laptop:text-[16px]"
+                        class="w-5/6 mt-2 ml-24 px-6 py-3 border-2 rounded-lg shadow-md bg-white focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:scale-[1.02] text-[15px] laptop:text-[16px]"
                         placeholder="Scan atau masukkan barcode"
                         required>
                     <button
                         type="submit"
-                        class="w-full px-4 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-xl hover:bg-red-700 hover:scale-105 transition-all duration-300 text-[16px] laptop:text-[18px]">
+                        class="w-full mt-2 px-4 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-xl hover:bg-red-700 hover:scale-105 transition-all duration-300 text-[16px] laptop:text-[18px]">
                         Lanjut ke Detail Kerusakan
                     </button>
                 </form>
