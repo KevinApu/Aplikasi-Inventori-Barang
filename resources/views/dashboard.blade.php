@@ -6,7 +6,7 @@
 
         <!-- <a href="{{ route('update_rekap_stok') }}" class="block p-4 rounded-md bg-red-600">refresh</a> -->
 
-
+        @if(isset($data)){!! json_encode($data) !!}@endif
         <div class="grid grid-cols-3 gap-4 py-4">
             <!-- Card 1: Total Expenses -->
             <div class="bg-white shadow-lg rounded-lg p-5 relative pb-10">
@@ -235,9 +235,9 @@
         }
 
         var labels = '@if(isset($labels)){!! json_encode($labels) !!}@endif',
-        data = '@if(isset($data)){!! json_encode($data) !!}@endif',
-        labels = JSON.parse(labels);
-        data = JSON.parse(data);    
+            data = '@if(isset($data)){!! json_encode($data) !!}@endif',
+            labels = JSON.parse(labels);
+        data = JSON.parse(data);
 
         document.addEventListener("DOMContentLoaded", function() {
             const ctx = document.getElementById("myChart").getContext("2d");
@@ -249,15 +249,31 @@
                     datasets: [{
                         label: "Jumlah Barang Keluar",
                         data: data,
-                        borderColor: "rgba(75, 192, 192, 1)", // Warna garis
+                        borderColor: "rgba(75, 192, 192, 1)", 
+                        backgroundColor: "rgba(75, 192, 192, 0.2)",
+                        fill: true,
                         borderWidth: 2
                     }]
                 },
                 options: {
+                    interaction: {
+      intersect: false,
+    },
                     responsive: true,
                     scales: {
                         y: {
-                            beginAtZero: true
+                            min: 0,
+                            ticks: {
+                                // Cara 1: Pakai callback
+                                callback: function(value) {
+                                    return Number.isInteger(value) ? value : '';
+                                }
+                            },
+                            ticks: {
+                                // forces step size to be 50 units
+                                stepSize: 5
+                            },
+                            precision: 0,
                         }
                     }
                 }

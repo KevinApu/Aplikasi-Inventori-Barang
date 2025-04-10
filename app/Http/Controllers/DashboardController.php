@@ -19,7 +19,7 @@ class DashboardController extends Controller
         $barang_rusak = BarangRusakModel::where('pop', $pop)->sum('jumlah');
 
         $tahun = date('Y');
-        $barangKeluarPerBulan = BarangKeluarModel::selectRaw('MONTH(created_at) as bulan, COUNT(*) as total')
+        $barangKeluarPerBulan = BarangKeluarModel::selectRaw('MONTH(created_at) as bulan, SUM(jumlah) as total')
             ->whereYear('created_at', $tahun)
             ->where('pop', $pop)
             ->groupBy('bulan')
