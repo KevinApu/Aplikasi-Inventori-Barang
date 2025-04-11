@@ -1,75 +1,93 @@
 <x-sidebar-layout>
     <div class="max-w-3xl mx-auto mt-12 p-6 bg-gradient-to-br from-white via-gray-100 to-gray-200 shadow-2xl rounded-2xl border border-gray-300 backdrop-blur-lg animate-fade-in">
-        <h2 class="text-[22px] laptop:text-2xl font-bold text-gray-900 text-center mb-6">
+        <h2 class="text-[16px] laptop:text-3xl font-bold text-gray-900 text-center mb-6">
             Laporkan Barang Rusak
         </h2>
-        <label class="block font-semibold text-gray-800 mt-2 mb-4 text-[16px] laptop:text-[18px]">🔍 Barcode</label>
 
         @php
         $check_barcode = session('check_barcode');
         $barcode = session('barcode');
         @endphp
 
-        
+
         @if(isset($check_barcode) && isset($barcode))
         <form action="{{ route('input_barang_rusak.store', $check_barcode->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @endif
 
             @if(!isset($check_barcode) && !isset($barcode))
-            <div class="block items-center relative" x-data="barcodeScannerApp()" x-init="window.innerWidth >= 1025 ? initScanner() : initCameraScanner()">
+            <div class="block items-center relative space-y-6 p-4 rounded-xl bg-gray-50 shadow-lg border border-gray-200" x-data="barcodeScannerApp()" x-init="window.innerWidth >= 1025 ? initScanner() : initCameraScanner()">
+                <!-- Area Scanner Kamera -->
                 <div class="flex flex-col items-center mobile:block laptop:hidden">
-                    <div id="reader" class="w-full max-w-sm border-2 border-gray-300 rounded-xl shadow-lg p-2 bg-white"></div>
+                    <div id="reader" class="w-full max-w-sm border-2 border-dashed border-gray-300 rounded-xl shadow-inner p-2 bg-white"></div>
                 </div>
-                <div class="flex -mb-12 -ml-96 pr-60 items-center justify-center mobile:hidden tablet:hidden" title="Tombol Scanner">
+
+                <!-- Tombol Toggle Scanner (Desktop Only) -->
+                <!-- Tombol Toggle Scanner (Desktop Only) -->
+                <div class="flex items-center justify-center mobile:hidden tablet:hidden" title="Tombol Scanner">
                     <button
                         @click.prevent="toggleScanner"
-                        :class="scannerActive ? 'bg-green-500 shadow-lg scale-105' : 'bg-orange-500'"
-                        class="relative inline-flex items-center justify-center w-14 h-8 rounded-full transition-all duration-300 focus:outline-none shadow-md hover:scale-105 hover:shadow-xl">
-                        <span
-                            :class="scannerActive ? 'translate-x-7 bg-white' : 'translate-x-1 bg-gray-200'"
-                            class="absolute left-0 w-5 h-5 rounded-full transform transition-transform duration-300 shadow-md flex items-center justify-center">
-                            <template x-if="scannerActive">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="w-4 h-4 text-gray-800">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M4 7v-1a2 2 0 0 1 2 -2h2" />
-                                    <path d="M5 12l14 0" />
-                                </svg>
-                            </template>
-                            <template x-if="!scannerActive">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" class="w-4 h-4 text-gray-800">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                    <path d="M4 7v-1c0 -.552 .224 -1.052 .586 -1.414" />
-                                    <path d="M5 11h1v2h-1z" />
-                                </svg>
-                            </template>
-                        </span>
-                        <span class="sr-only" x-text="scannerActive ? 'Matikan Scanner' : 'Aktifkan Scanner'"></span>
+                        :class="scannerActive ? 'bg-green-600 scale-105' : 'bg-orange-500'"
+                        class="relative inline-flex items-center gap-2 justify-center px-5 py-2 rounded-full transition-all duration-300 focus:outline-none hover:scale-105 shadow-lg text-white text-sm font-semibold">
+
+                        <!-- Ikon Barcode / Scanner -->
+                        <template x-if="!scannerActive">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M4 7V5a2 2 0 0 1 2-2h2M4 17v2a2 2 0 0 0 2 2h2M20 7V5a2 2 0 0 0-2-2h-2M20 17v2a2 2 0 0 1-2 2h-2M5 12h1m2 0h1m2 0h2m2 0h1m2 0h1" />
+                            </svg>
+                        </template>
+                        <template x-if="scannerActive">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 animate-pulse" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 12h6M12 3v2m0 14v2m9-9h-2M5 12H3m16.364-6.364l-1.414 1.414M6.05 17.95l-1.414 1.414M17.95 17.95l1.414 1.414M6.05 6.05L4.636 4.636" />
+                            </svg>
+                        </template>
+
+                        <span x-text="scannerActive ? 'Matikan Scanner' : 'Aktifkan Scanner'"></span>
                     </button>
                 </div>
 
-                <form action="{{ route('input_barang_rusak.check_barcode') }}" method="POST">
+
+                <!-- Form Input Barcode -->
+                <form action="{{ route('input_barang_rusak.check_barcode') }}" method="POST" class="w-full max-w-xl mx-auto space-y-4 p-6">
                     @csrf
-                    <input
-                        type="text"
-                        id="barcode"
-                        name="barcode"
-                        x-model="barcode"
-                        class="w-5/6 mt-2 ml-24 px-6 py-3 border-2 rounded-lg shadow-md bg-white focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:scale-[1.02] text-[15px] laptop:text-[16px]"
-                        placeholder="Scan atau masukkan barcode"
-                        required>
+
+                    <div class="flex flex-col space-y-2">
+                        <label for="barcode" class="text-sm font-semibold text-gray-700 tracking-wide">📄 Scan atau Masukkan Barcode</label>
+                        <input
+                            type="text"
+                            id="barcode"
+                            name="barcode"
+                            x-model="barcode"
+                            oninput="this.value = this.value.replace(/[^0-9\-]/g, '')"
+                            class="w-full px-5 py-3 border-2 border-gray-300 rounded-lg shadow-inner bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 hover:scale-[1.01] text-[15px] laptop:text-[16px] placeholder-gray-400"
+                            placeholder="Contoh: 2-800761"
+                            required>
+                    </div>
+
                     <button
                         type="submit"
-                        class="w-full mt-2 px-4 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-xl hover:bg-red-700 hover:scale-105 transition-all duration-300 text-[16px] laptop:text-[18px]">
+                        class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-lg hover:bg-red-700 hover:scale-105 transition-all duration-300 text-[13px] laptop:text-[17px]">
                         Lanjut ke Detail Kerusakan
                     </button>
                 </form>
+
             </div>
             @endif
+
+
+
+
+
+
+
+
+
+
+
 
 
             @if(isset($check_barcode) && isset($barcode))
@@ -341,7 +359,7 @@
                     document.getElementById("reader").classList.remove("hidden");
 
                     const html5QrcodeScanner = new Html5QrcodeScanner("reader", {
-                        fps: 30,
+                        fps: 50,
                         qrbox: qrboxSize,
                         supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA] // Pakai kamera saja
                     });
