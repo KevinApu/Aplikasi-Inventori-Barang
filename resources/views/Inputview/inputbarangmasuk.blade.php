@@ -6,7 +6,7 @@
 
     <form action="{{ route('input_barang_masuk') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-0 bg-zinc-100 rounded-md mx-2 items-start">
+        <div class="overflow-x-auto grid grid-cols-1 md:grid-cols-2 gap-0 bg-zinc-100 rounded-md mx-2 items-start">
             <!--  ==================================================================================================================================== -->
             <main class="grid mobile:grid-cols-1 px-6 mobile:px-1 tablet:px-3 py-4">
                 <div class="flex px-6 space-x-6">
@@ -14,7 +14,7 @@
                         <input
                             x-model="kodebarang"
                             @input="error = kode.trim() === ''"
-                            class="w-32 mobile:w-full mobile:h-[30px] border-0 focus:ring-0 border-b bg-transparent"
+                            class="w-32 mobile:w-full mobile:h-[30px] tablet:w-full border-0 focus:ring-0 border-b bg-transparent"
                             :class="{'border-red-500 placeholder-red-500': error, 'border-gray-300 placeholder-gray-500': !error}"
                             type="text"
                             name="kodebarang"
@@ -166,7 +166,7 @@
                             placeholder="Jumlah">
                     </div>
                 </div>
-                <div class="flex px-6 justify-end space-x-6 mb-2">
+                <div class="mobile:grid mobile:grid-row tablet:grid tablet:grid-row flex px-6 justify-end space-x-6 mb-2">
                     <textarea name="keterangan" x-model="keterangan" rows="8" class="block form-input w-full mobile:max-w-md tablet:max-w-lg border-0 focus:ring-0 border-b bg-transparent text-sm " placeholder="Keterangan (opsional)"></textarea>
 
                     <div x-data="{ photo: null, isDragging: false }" class="bg-transparent rounded-lg mt-6 ml-2">
@@ -194,7 +194,7 @@
                     </div>
 
                 </div>
-                <button type="submit" class="px-8 py-2 mb-2 mobile:mb-0 w-32 bg-[#4B0082] text-white rounded-md hover:bg-indigo-700 transition-colors duration-200 ease-in-out">Simpan</button>
+                <button type="submit" class="px-8 py-2 mb-2 mobile:ml-2 w-32 bg-[#4B0082] text-white rounded-md hover:bg-indigo-700 transition-colors duration-200 ease-in-out">Simpan</button>
             </main>
             <!--  ==================================================================================================================================== -->
         </div>
