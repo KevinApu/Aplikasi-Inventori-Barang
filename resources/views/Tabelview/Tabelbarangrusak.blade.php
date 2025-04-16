@@ -323,7 +323,7 @@
                             </template>
                         </span>
                     </div>
-                    <div class="flex space-x-2 mobile:space-x-1 items-center justify-center">
+                    <div class="flex overflow-x-auto space-x-2 mobile:space-x-1 items-center justify-center">
                         <button @click="currentPage = Math.max(currentPage - 1, 1)"
                             class="bg-gray-200 text-gray-600 text-xl tablet:text-lg mobile:text-sm hover:bg-blue-400 hover:text-white transition-colors duration-200 rounded-full laptop:px-3 laptop:py-1 tablet:px-2 tablet:py-0.5 tablet:w-8 tablet:h-8 mobile:px-1 mobile:py-0 mobile:w-6 mobile:h-6"
                             :class="{'opacity-50 cursor-not-allowed': currentPage === 1}">

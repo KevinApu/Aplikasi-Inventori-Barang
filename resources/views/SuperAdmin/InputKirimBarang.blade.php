@@ -96,7 +96,7 @@
     </div>
     @endif
 
-    <div class="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <div class="max-w-4xl overflow-x-auto mx-auto p-6 bg-white shadow-lg rounded-lg">
         <!-- Step Indicator -->
         <div class="flex items-center justify-around mb-8">
             <div class="flex items-center space-x-2">

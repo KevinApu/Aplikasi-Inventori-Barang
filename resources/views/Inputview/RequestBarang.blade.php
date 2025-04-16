@@ -6,7 +6,7 @@
     </header>
 
     <!-- Container -->
-    <div class="container mx-auto my-6 p-6 mobile:my-3 mobile:p-3 bg-white rounded shadow text-sm mobile:text-[10px]">
+    <div class="container overflow-x-auto mx-auto my-6 p-6 mobile:my-3 mobile:p-3 bg-white rounded shadow text-sm mobile:text-[10px]">
 
 
         <div x-data="{

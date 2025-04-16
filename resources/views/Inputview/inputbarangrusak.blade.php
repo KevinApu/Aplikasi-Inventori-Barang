@@ -1,5 +1,5 @@
 <x-sidebar-layout>
-    <div class="max-w-3xl mx-auto mt-12 p-6 bg-gradient-to-br from-white via-gray-100 to-gray-200 shadow-2xl rounded-2xl border border-gray-300 backdrop-blur-lg animate-fade-in">
+    <div class="max-w-3xl overflow-x-auto mx-auto mt-12 p-6 bg-gradient-to-br from-white via-gray-100 to-gray-200 shadow-2xl rounded-2xl border border-gray-300 backdrop-blur-lg animate-fade-in">
         <h2 class="text-[16px] laptop:text-3xl font-bold text-gray-900 text-center mb-6">
             Laporkan Barang Rusak
         </h2>
