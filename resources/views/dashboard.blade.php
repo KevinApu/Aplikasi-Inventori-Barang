@@ -59,7 +59,7 @@
 
         <div class="flex laptop:flex-row flex-col gap-6">
             <div class="overflow-x-auto w-full laptop:flex-1 bg-white rounded-lg shadow-sm p-4 md:p-6">
-                <canvas id="myChart"></canvas>
+                <canvas id="myChart" class="sm:h-full"></canvas>
             </div>
 
             <div class="w-full laptop:w-2/5 bg-white shadow-md sm:rounded-lg p-4">
@@ -259,6 +259,7 @@
                         intersect: false,
                     },
                     responsive: true,
+                    maintainAspectRatio: false,
                     scales: {
                         y: {
                             suggestedMax: 3,
