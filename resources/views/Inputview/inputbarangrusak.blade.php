@@ -118,7 +118,7 @@
 
             @if(($check_barcode->satuan === 'roll' || $check_barcode->satuan === 'pack'))
             <div>
-                <label class="block font-semibold text-gray-800 text-[16px] laptop:text-[18px]">📦 Jumlah yang Rusak</label>
+                <label class="block font-semibold text-gray-800 text-[16px] laptop:text-[18px]">Jumlah yang Rusak</label>
                 <input
                     type="number"
                     name="jumlah_rusak"

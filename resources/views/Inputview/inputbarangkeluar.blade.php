@@ -321,7 +321,7 @@
                                 <span class="text-gray-600 font-bold">{{$item->stokGudang->lokasi}}</span>
                                 <div class="mt-2 flex items-center space-x-2">
                                     <span class="text-gray-600">Jumlah:</span>
-                                    <input type="number" name="jumlah[{{ $item->id }}]" min="1" max="{{ $item->stokGudang->stok }}" class="w-16 text-center border rounded-md py-1" />
+                                    <input type="number" name="jumlah[{{ $item->id }}]" min="1" value="0" max="{{ $item->stokGudang->stok }}" class="w-16 text-center border rounded-md py-1" />
                                 </div>
                             </div>
                             <a href="{{ url('/hapus_order/' . $item->id) }}" class="text-red-500 hover:text-red-700">
