@@ -10,7 +10,15 @@
             <!-- Card 1: Total Expenses -->
             <div class="overflow-x-auto bg-white shadow-lg rounded-lg p-5 relative pb-10">
                 <h2 class="text-sm md:text-lg font-semibold">Barang Masuk</h2>
-                <p class="text-2xl font-bold">{{ $barang_masuk }}</p>
+                <p
+                    x-data="{ current: 0, end: {{ $barang_masuk }} }"
+                    x-init="let i = setInterval(() => {
+      current++;
+      if (current >= end) clearInterval(i);
+  }, 20)"
+                    x-text="current"
+                    class="text-2xl font-bold"></p>
+
                 <div class="absolute top-0 right-0 mt-5 mr-5">
                     <svg class="md:w-12 md:h-12 text-emerald-600 text-opacity-60" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
@@ -27,7 +35,15 @@
             <!-- Card 2: Total Salaries -->
             <div class="overflow-x-auto bg-white shadow-lg rounded-lg p-5 relative pb-10">
                 <h2 class="text-sm md:text-lg font-semibold">Barang Keluar</h2>
-                <p class="text-2xl font-bold">{{ $barang_keluar }}</p>
+                <p
+                    x-data="{ current: 0, end: {{ $barang_keluar }} }"
+                    x-init="let i = setInterval(() => {
+      current++;
+      if (current >= end) clearInterval(i);
+  }, 20)"
+                    x-text="current"
+                    class="text-2xl font-bold"></p>
+
                 <div class="absolute top-0 right-0 mt-5 mr-5">
                     <svg class="md:w-12 md:h-12 text-blue-600 text-opacity-60" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 24 24" stroke="currentColor">
@@ -43,7 +59,14 @@
             <!-- Card 3: Total Wage's -->
             <div class="overflow-x-auto bg-white shadow-lg rounded-lg p-5 relative pb-10">
                 <h2 class="text-sm md:text-lg font-semibold">Barang Rusak</h2>
-                <p class="text-2xl font-bold">{{ $barang_rusak }}</p>
+                <p
+                    x-data="{ current: 0, end: {{ $barang_rusak }} }"
+                    x-init="let i = setInterval(() => {current++;
+      if (current >= end) clearInterval(i);
+  }, 20)"
+                    x-text="current"
+                    class="text-2xl font-bold"></p>
+
                 <div class="absolute top-0 right-0 mt-5 mr-5">
                     <svg class="md:w-12 md:h-12 text-red-600 text-opacity-60" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                         fill="currentColor" viewBox="0 0 512 512">
@@ -57,7 +80,7 @@
             </div>
         </div>
 
-        <div class="flex laptop:flex-row flex-col gap-6">
+        <div class="flex laptop:flex-row flex-col gap-6 laptop:min-h-[40rem]">
             <div class="overflow-x-auto w-full laptop:flex-1 bg-white rounded-lg shadow-sm p-4 md:p-6">
                 <canvas id="myChart" class="sm:h-full"></canvas>
             </div>
