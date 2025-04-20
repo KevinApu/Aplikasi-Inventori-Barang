@@ -15,15 +15,12 @@
         }
 
         .kertas {
-            height: 855px;
             position: relative;
             width: 100%;
             max-width: 640px;
             margin: 0 auto;
             padding: 10px;
             margin-top: 0.5rem;
-            padding-bottom: 100px;
-            page-break-inside: avoid;
         }
 
         .header {
@@ -118,16 +115,6 @@
             /* Fokus dengan warna biru */
         }
 
-        .signature-table {
-            width: 100%;
-            position: fixed;
-            margin-top: 2rem;
-            bottom: 10px;
-            /* Posisi footer dari bawah halaman */
-            z-index: 10;
-            /* Pastikan signature-table di atas elemen lain */
-        }
-
         .signature-table td {
             width: 50%;
             text-align: center;
@@ -189,6 +176,26 @@
                     </tr>
                     @endforeach
                 </tbody>
+            </table>
+        </div>
+        <div style="width: 100%; text-align: center; margin-top: 25rem;">
+            <table style="width: 100%; text-align: center;">
+                <tr>
+                    <td style="width: 50%; text-align: center;">
+                        <p class="signature-header">Dibuat oleh</p>
+                        <br><br><br><br>
+                        <p class="signature-name" style="font-weight: bold;">{{ Auth::user()->username }}</p>
+                        <hr style="width: 70%;">
+                    </td>
+                    <td style="width: 50%; text-align: center;">
+                        <p class="signature-header">Pacitan, {{ \Carbon\Carbon::now()->format('d F Y') }}</p>
+                        <p class="signature-header">Diketahui oleh</p>
+                        <br><br><br><br>
+                        <p class="signature-name" style="font-weight: bold;">Atasan</p>
+                        <hr style="width: 70%;">
+                        <p>Kepala Kantor</p>
+                    </td>
+                </tr>
             </table>
         </div>
     </div>

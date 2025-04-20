@@ -3,17 +3,12 @@
 namespace App\Http\Controllers\Print;
 
 use App\Http\Controllers\Controller;
-use App\Models\BarangMasukModel;
-use App\Models\KLModel;
-use App\Models\PengirimanModel;
 use App\Models\RekapModel;
 use App\Models\RequestBarangModel;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Svg\Tag\Rect;
 
 class LaporanController extends Controller
 {
@@ -42,63 +37,32 @@ class LaporanController extends Controller
         $lastDate = Carbon::parse($barangmasuk->max('created_at'))->format('d F Y');
 
         $pdf = new \Mpdf\Mpdf([
-            'format' => [210, 330], // F4
-            'margin_top' => 15,
-            'margin_bottom' => 15,
-            'margin_left' => 15,
-            'margin_right' => 15,
+            'format' => 'A4', // default ukuran halaman 210 x 297 mm
         ]);
 
+
+        // Header
         $headerHTML = '
-    <div style="text-align: center;">
-        <h1>LAPORAN BARANG MASUK</h1>
-        <p>Periode: ' . ($firstDate === $lastDate ? $firstDate : "$firstDate - $lastDate") . '</p>
-    </div>';
+<div style="text-align: center;">
+    <h1>LAPORAN BARANG MASUK</h1>
+    <p>Periode: ' . ($firstDate === $lastDate ? $firstDate : "$firstDate - $lastDate") . '</p>
+</div>';
         $pdf->SetHTMLHeader($headerHTML);
+
+        // Footer halaman biasa (nomor halaman saja)
         $pdf->SetHTMLFooter('<div style="text-align: center;">{PAGENO}</div>');
 
+        // Ambil konten HTML
         $htmlContent = view('laporan', compact('barangmasuk', 'firstDate', 'lastDate'))->render();
         $pdf->WriteHTML($htmlContent);
+        // Tambahkan halaman baru khusus tanda tangan
 
-        $availableHeight = $pdf->y; // Posisi Y terakhir yang digunakan untuk konten
-        $pageHeight = 330 - 15 - 15; // Tinggi halaman dikurangi margin atas dan bawah
-        $requiredHeight = 50; // Tinggi yang dibutuhkan untuk footer dan tanda tangan
+        // Output PDF
+        $pdf->Output('laporan-barang-masuk.pdf', 'D');
 
-        $footerHTML = '
-        <div style="text-align: center; margin-top: 50px;">
-            <table style="width: 100%; text-align: center;">
-                <tr>
-                    <td style="width: 50%; text-align: center;">
-                        <p class="signature-header">Dibuat oleh</p>
-                        <br><br><br><br>
-                        <p class="signature-name" style="font-weight: bold;">' . Auth::user()->username . '</p>
-                        <hr style="width: 70%;">
-                    </td>
-                    <td style="width: 50%; text-align: center;">
-                        <p class="signature-header">Pacitan, ' . Carbon::now()->format('d F Y') . '</p>
-                        <p class="signature-header">Diketahui oleh</p>
-                        <br><br><br><br>
-                        <p class="signature-name" style="font-weight: bold;">Atasan</p>
-                        <hr style="width: 70%;">
-                        <p>Kepala Kantor</p>
-                    </td>
-                </tr>
-            </table>
-        </div>';
-
-
-        if ($availableHeight + $requiredHeight <= $pageHeight) {
-            // Jika ruang cukup, tambahkan footer pada halaman terakhir
-            $pdf->WriteHTML($footerHTML);
-        } else {
-            // Jika ruang tidak cukup, tambahkan halaman baru dan kemudian footerF
-            $pdf->AddPage();
-            $pdf->SetY($pageHeight - $requiredHeight);  // Set posisi Y footer pada halaman baru
-            $pdf->WriteHTML($footerHTML);
-        }
 
         $fileName = Auth::user()->username . now()->format('d-m-Y') . '_laporanbarangmasuk.pdf';
-        return $pdf->Output($fileName, 'D');
+        return $pdf->Output($fileName, 'D'); // 'I' untuk menampilkan di browser
     }
 
 
@@ -163,7 +127,7 @@ class LaporanController extends Controller
         $pdf->SetHTMLFooter($footerHTML);
 
         $lokasi = Auth::user()->KLModel->lokasi;
-        return $pdf->Output(Auth::user()->username . '_' . $lokasi . '_laporanrekap.pdf', 'D');
+        return $pdf->Output(Auth::user()->username . '_' . $lokasi . '_laporanrekap.pdf', 'D'); // 'I' untuk menampilkan di browser
     }
 
 
@@ -174,7 +138,7 @@ class LaporanController extends Controller
         $result = RequestBarangModel::where('pop', $pop)->get();
         $alamat = Auth::user()->KLModel->alamat;
 
-        $tanggal = now(); 
+        $tanggal = now();
         $month = $tanggal->format('m'); // Bulan (01-12)
         $year = $tanggal->format('Y');
 
