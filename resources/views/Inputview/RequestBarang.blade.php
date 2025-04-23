@@ -273,13 +273,40 @@
                             @endif
 
                             <!-- Step 3: Estimasi Sampai -->
-                            @if($riwayat->status === "Sedang Dikirim" && $riwayat->resi !== null)
+                            @if (
+                            $riwayat->status === "Sedang Dikirim" &&
+                            $riwayat->resi !== null &&
+                            !\Carbon\Carbon::now()->gt(\Carbon\Carbon::parse($riwayat->tanggal_estimasi)->addDays(2))
+                            )
                             <div class="p-4 bg-white rounded-lg shadow-md border border-gray-200">
                                 <div class="flex items-start space-x-4">
                                     <div class="w-8 h-8 mobile:w-4 mobile:h-4 p-2 bg-gray-300 text-gray-500 rounded-full flex items-center justify-center font-semibold">3</div>
                                     <div class="flex-1">
-                                        <p class="text-gray-700 font-medium">Estimasi sampai di Lokasi tujuan</p>
-                                        <p class="text-sm mobile:text-[10px] text-gray-500">{{ $riwayat->formatted_tanggal_estimasi}}</p>
+                                        <p class="text-gray-700 font-medium">Estimasi sampai di lokasi tujuan</p>
+                                        <p class="text-sm mobile:text-[10px] text-gray-500">
+                                            {{ $riwayat->formatted_tanggal_estimasi }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            @elseif (
+                            $riwayat->status === "Sedang Dikirim" &&
+                            $riwayat->resi !== null &&
+                            \Carbon\Carbon::now()->gt(\Carbon\Carbon::parse($riwayat->tanggal_estimasi)->addDays(2))
+                            )
+                            <div x-show="item.isLate" class="p-4 bg-red-100 rounded-lg shadow-md border border-red-300 mt-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-8 h-8 mobile:w-4 mobile:h-4 p-2 bg-red-500 text-white rounded-full flex items-center justify-center font-semibold">!</div>
+                                    <div class="flex-1">
+                                        <p class="text-red-700 font-semibold">Pengiriman Terlambat (Lewat Toleransi)</p>
+                                        <p class="text-sm mobile:text-[10px] text-red-600">
+                                            Barang seharusnya sampai pada
+                                            <span class="font-semibold" x-text="new Date(item.formatted_tanggal_estimasi).toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' })"></span>,
+                                            dan telah melewati batas toleransi <span class="font-semibold">2 hari</span>.
+                                        </p>
+                                        <p class="text-xs mobile:text-[9px] text-red-500 mt-2">
+                                            Sistem akan mengirimkan notifikasi kepada <span class="font-semibold">Super Admin</span> untuk segera menghubungi kurir terkait keterlambatan ini.
+                                        </p>
                                     </div>
                                 </div>
                             </div>

@@ -61,9 +61,13 @@
                 <h2 class="text-sm md:text-lg font-semibold">Barang Rusak</h2>
                 <p
                     x-data="{ current: 0, end: {{ $barang_rusak }} }"
-                    x-init="let i = setInterval(() => {current++;
-      if (current >= end) clearInterval(i);
-  }, 20)"
+                    x-init="
+    if (end > 0) {
+        let i = setInterval(() => {
+            current++;
+            if (current >= end) clearInterval(i);
+        }, 20);
+    }"
                     x-text="current"
                     class="text-2xl font-bold"></p>
 

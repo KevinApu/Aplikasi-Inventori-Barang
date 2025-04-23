@@ -488,7 +488,7 @@
                 <li x-data="{ openDropdown1: false, openDropdown2: false }" title="Pengiriman Barang">
                     <div class="relative items-center rounded-lg text-white bg-[#0F0606] group">
                         <button @click="openDropdown2 = !openDropdown2; if (!isSidebarOpen) { isSidebarOpen = true;}" class="flex items-center w-full px-2 py-2 rounded-lg {{ request()->routeIs('pengiriman_barang.superadmin') || request()->routeIs('pengiriman_barang.input.superadmin') ? 'border-l-4 border-red-700 bg-gradient-to-r from-red-500' : 'bg-[#0F0606] hover:bg-gray-600' }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 w-9 h-9 mobile:h-7 mobile:w-7 text-blue-800 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-telegram">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 w-9 h-9 mobile:h-7 mobile:w-7 text-blue-800 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                 <path d="M15 10l-4 4l6 6l4 -16l-18 7l4 2l2 6l3 -4" />
                             </svg>
@@ -496,6 +496,12 @@
                             <svg :class="{'rotate-180': openDropdown2}, {'hidden': !isSidebarOpen}" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ms-10 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 15l-7-7-7 7" />
                             </svg>
+
+                            @if($pengiriman_terlambat_count > 0)
+                            <span class="absolute top-0 left-2 transform -translate-x-1/2 -translate-y-1/2 bg-red-600 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center z-10">
+                                {{ $pengiriman_terlambat_count }}
+                            </span>
+                            @endif
                         </button>
                         <ul x-show="openDropdown2" @click.away="openDropdown2 = false" class="left-0 top-full mt-2 rounded-md shadow-lg w-full">
                             <li><a href="{{ route('pengiriman_barang.input.superadmin') }}" @click="isSidebarOpen = false" class="block px-4 py-2 text-white hover:bg-gray-600 rounded-md text-sm">Input</a></li>

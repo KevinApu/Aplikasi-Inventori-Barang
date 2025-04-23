@@ -23,10 +23,15 @@ class RequestBarangController extends Controller
     public function create()
     {
         $pop = Auth::user()->KLModel->pop;
-        $result = RequestBarangModel::where('pop', $pop)
+
+        $resultstatus = RequestBarangModel::where('pop', $pop)
             ->whereIn('status', ['Menunggu Pengiriman', 'Sedang Dikirim'])
             ->get();
-        if ($result->isNotEmpty()) {
+
+        $result = RequestBarangModel::where('pop', $pop)
+            ->get();
+
+        if ($resultstatus->isNotEmpty()) {
             $riwayat = RequestBarangModel::where('pop', $pop)->first();
 
             if ($riwayat) {

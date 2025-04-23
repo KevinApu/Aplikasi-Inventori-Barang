@@ -14,12 +14,12 @@ class DatabaseSeeder extends Seeder
     {
         
         $this->call(KantorLayananTableSeeder::class);
+        $this->call(UsersTableSeeder::class);
+        $this->call(NamaBarangTableSeeder::class);
+        $this->call(KategoriTableSeeder::class);
         $this->call(StokGudangTableSeeder::class);
         $this->call(RekapTableSeeder::class);
         $this->call(NotificationsSettingsTableSeeder::class);
-        $this->call(NamaBarangTableSeeder::class);
-        $this->call(KategoriTableSeeder::class);
-        $this->call(UsersTableSeeder::class);
         $this->call(BarangRusakTableSeeder::class);
         $this->call(BarangKeluarTableSeeder::class);
     }

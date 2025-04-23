@@ -66,19 +66,22 @@ class BarangKeluarController extends Controller
      */
     public function store(BarangKeluarRequest $request)
     {
-
-
-        $jumlaharray = $request->input('jumlah');
-
-        foreach ($jumlaharray as $id => $jumlah) {
+        // dd($request->jumlah);
+        foreach ($request->jumlah as $id => $jumlah) {
             $nama_customer = $request->input('ID') . '_' . $request->input('namacustomer');
-            $barangKeluar = BarangKeluarModel::where('id', $id)->first();
-            $StokGudangModel = StokGudangModel::find($barangKeluar->stok_gudang_id);
+
+            $barangKeluar = BarangKeluarModel::find($id);
+            if (!$barangKeluar) continue;
+
+            $stokGudang = StokGudangModel::find($barangKeluar->stok_gudang_id);
+            if (!$stokGudang) continue;
 
             $existingData = BarangKeluarModel::where('nama_customer', $nama_customer)
                 ->where('lokasi', $request->lokasi)
                 ->where('pop', Auth::user()->KLModel->pop)
                 ->get();
+
+            $isUpdated = false;
 
             if ($existingData->isNotEmpty()) {
                 foreach ($existingData as $data) {
@@ -86,10 +89,14 @@ class BarangKeluarController extends Controller
                         $data->update([
                             'jumlah' => $jumlah,
                         ]);
-                        $barangKeluar->delete();
-                        break; 
+                        $isUpdated = true;
+                        break;
                     }
                 }
+            }
+
+            if ($isUpdated) {
+                $barangKeluar->delete(); // hapus setelah update selesai
             } else {
                 $barangKeluar->update([
                     'jumlah'        => $jumlah,
@@ -100,33 +107,22 @@ class BarangKeluarController extends Controller
                 ]);
             }
 
-
-
-
-            if ($StokGudangModel->satuan == 'pack' || $StokGudangModel->satuan == 'roll') {
-
-                $StokGudangModel->hasil = $StokGudangModel->hasil - $jumlah;
-                $roll = $StokGudangModel->hasil / $StokGudangModel->rasio;
-                $nilaiGenap = ceil($roll);
-                $StokGudangModel->jumlah = $nilaiGenap;
-                $StokGudangModel->detail_jumlah = $StokGudangModel->hasil % $StokGudangModel->rasio;
-                $StokGudangModel->save();
-
-
-                $rekap = RekapModel::where('stok_gudang_id', $barangKeluar->stok_gudang_id)->first();
-                if ($rekap) {
-                    $rekap->out += $jumlah;
-                    $rekap->save();
-                }
+            // Update stok gudang
+            if (in_array($stokGudang->satuan, ['pack', 'roll'])) {
+                $stokGudang->hasil -= $jumlah;
+                $roll = $stokGudang->hasil / $stokGudang->rasio;
+                $stokGudang->jumlah = ceil($roll);
+                $stokGudang->detail_jumlah = $stokGudang->hasil % $stokGudang->rasio;
             } else {
-                $StokGudangModel->jumlah -= $jumlah;
-                $StokGudangModel->save();
+                $stokGudang->jumlah -= $jumlah;
+            }
+            $stokGudang->save();
 
-                $rekap = RekapModel::where('stok_gudang_id', $barangKeluar->stok_gudang_id)->first();
-                if ($rekap) {
-                    $rekap->out += $jumlah;
-                    $rekap->save();
-                }
+            // Update rekap
+            $rekap = RekapModel::where('stok_gudang_id', $barangKeluar->stok_gudang_id)->first();
+            if ($rekap) {
+                $rekap->out += $jumlah;
+                $rekap->save();
             }
         }
         return redirect()->route('input_barang_keluar')->with([

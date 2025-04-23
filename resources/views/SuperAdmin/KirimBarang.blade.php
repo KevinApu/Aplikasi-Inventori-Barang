@@ -121,7 +121,7 @@
                                     x-show="open"
                                     @keydown.escape.window="open = false"
                                     @click.self="open = false"
-                                    class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50"
+                                    class="fixed inset-0 bg-gray-900 h-screen bg-opacity-50 flex items-center justify-center z-50"
                                     x-cloak>
                                     <div class="bg-white rounded-lg shadow-lg p-6 w-96">
                                         <h2 class="text-xl font-semibold text-gray-700 mb-4">Input Resi & Estimasi</h2>
@@ -203,8 +203,7 @@
                             </div>
 
                             <!-- Step 3: Estimasi Sampai -->
-                            <div
-                                x-show="item.status === 'Sedang Dikirim' && item.resi !== null"
+                            <div x-show="item.status === 'Sedang Dikirim' && item.resi !== null && (item.isLate === false || item.isLate === null)"
                                 class="p-4 bg-white rounded-lg shadow-md border border-gray-200"
                                 x-cloak>
                                 <div class="flex items-start space-x-4">
@@ -212,6 +211,25 @@
                                     <div class="flex-1">
                                         <p class="text-gray-700 font-medium">Estimasi sampai di Lokasi tujuan</p>
                                         <p class="text-sm text-gray-500" x-text="item.formatted_tanggal_estimasi || 'Estimasi Belum Tersedia'"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- New Section for Late Check Below -->
+                            <div x-show="item.isLate" class="p-4 bg-red-100 rounded-lg shadow-md border border-red-300 mt-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-8 h-8 mobile:w-4 mobile:h-4 p-2 bg-red-500 text-white rounded-full flex items-center justify-center font-semibold">!</div>
+                                    <div class="flex-1">
+                                        <p class="text-red-700 font-semibold">Pengiriman Terlambat (Lewat Toleransi)</p>
+                                        <p class="text-sm mobile:text-[10px] text-red-600">
+                                            Barang seharusnya sampai pada
+                                            <span class="font-semibold" x-text="new Date(item.formatted_tanggal_estimasi).toLocaleDateString('id-ID', { year: 'numeric', month: 'short', day: 'numeric' })"></span>,
+                                            dan telah melewati batas toleransi <span class="font-semibold">2 hari</span>.
+                                        </p>
+                                        <!-- Clarified message below -->
+                                        <p class="text-xs mobile:text-[9px] text-red-500 mt-2 font-semibold">
+                                            Mohon segera hubungi pihak kurir atau penyedia layanan pengiriman untuk mendapatkan informasi lebih lanjut terkait alasan keterlambatan pengiriman barang ini.
+                                        </p>
                                     </div>
                                 </div>
                             </div>

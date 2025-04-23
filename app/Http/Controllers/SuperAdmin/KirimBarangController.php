@@ -138,6 +138,7 @@ class KirimBarangController extends Controller
                 'formatted_updated_at' => $riwayat->status == 'Sedang Dikirim' ? Carbon::parse($riwayat->updated_at)->format('d M Y, H:i') : null,
                 'formatted_tanggal_terima' => $riwayat->tanggal_terima ? Carbon::parse($riwayat->tanggal_terima)->format('d M Y, H:i') : null,
                 'formatted_tanggal_estimasi' => $riwayat->tanggal_estimasi ? Carbon::parse($riwayat->tanggal_estimasi)->format('d M Y, H:i') : null,
+                'isLate' => $riwayat->tanggal_estimasi ? Carbon::parse($riwayat->tanggal_estimasi)->addDays(2)->isPast() : false,
             ];
         });
 

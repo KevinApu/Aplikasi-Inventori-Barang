@@ -303,7 +303,7 @@
         @if ($item)
         <form id="order" action="{{ route('barangkeluar.store') }}" method="POST" enctype="multipart/form-data" class="w-full mx-auto mt-16 bg-white p-6 rounded-lg shadow-md">
             @csrf
-            <h2 class="text-3xl font-bold text-gray-800 border-b pb-4 mb-6">Order</h2>
+            <h2 class="text-3xl font-bold text-gray-800 border-b pb-4 mb-6">Pengambilan Barang</h2>
             <div class="grid lg:grid-cols-2 gap-8">
                 <!-- Ringkasan Pesanan -->
                 <div>
@@ -349,7 +349,7 @@
                     <label class="block font-medium text-sm mt-4 mb-1">Keterangan (opsional)</label>
                     <textarea name="keterangan" rows="3" class="w-full border rounded-md px-3 py-2" placeholder="Tambahkan catatan jika perlu..."></textarea>
 
-                    <button type="submit" class="mt-6 w-full bg-zinc-900 hover:bg-zinc-700 text-white font-semibold py-3 rounded-md transition">Place Order</button>
+                    <button type="submit" class="mt-6 w-full bg-zinc-900 hover:bg-zinc-700 text-white font-semibold py-3 rounded-md transition">Submit Pengambilan</button>
                 </div>
             </div>
         </form>
@@ -600,7 +600,6 @@
             isProcessing = true;
 
             try {
-                alert(decodedText)
                 // Kirim hasil barcode ke server menggunakan fetch
                 const response = await fetch(`/order/${decodedText}`, {
                     method: 'POST',
