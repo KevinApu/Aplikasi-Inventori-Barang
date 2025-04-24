@@ -503,6 +503,60 @@
             };
         }
 
+        function showAlert(message, type = 'success') {
+            const alertBox = document.createElement('div');
+            alertBox.textContent = message;
+
+            // Gaya dasar
+            alertBox.style.position = 'fixed';
+            alertBox.style.top = '20px'; // Jarak atas
+            alertBox.style.left = '50%'; // Di tengah horizontal
+            alertBox.style.transform = 'translateX(-50%) translateY(-10px)';
+            alertBox.style.padding = '12px 20px';
+            alertBox.style.borderRadius = '8px';
+            alertBox.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+            alertBox.style.zIndex = '1000';
+            alertBox.style.opacity = '0';
+            alertBox.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
+            alertBox.style.fontSize = '16px'; // Ukuran font
+            alertBox.style.fontWeight = '500'; // Lebih tebal
+
+            // Warna background berdasarkan tipe
+            if (type === 'success') {
+                alertBox.style.backgroundColor = '#4CAF50';
+                alertBox.style.color = 'white';
+            } else if (type === 'error') {
+                alertBox.style.backgroundColor = '#f44336';
+                alertBox.style.color = 'white';
+            } else {
+                alertBox.style.backgroundColor = '#2196F3';
+                alertBox.style.color = 'white';
+            }
+
+            // Lebar yang lebih baik di mobile
+            alertBox.style.maxWidth = '90%'; // Maksimal lebar 90% dari layar
+            alertBox.style.width = 'auto';
+
+            document.body.appendChild(alertBox);
+
+            // Munculkan alert
+            setTimeout(() => {
+                alertBox.style.opacity = '1';
+                alertBox.style.transform = 'translateX(-50%) translateY(0)';
+            }, 50);
+
+            // Hilangkan alert setelah 3 detik
+            setTimeout(() => {
+                alertBox.style.opacity = '0';
+                alertBox.style.transform = 'translateX(-50%) translateY(-10px)';
+                setTimeout(() => {
+                    alertBox.remove();
+                }, 500);
+            }, 3000);
+        }
+
+
+
 
         function barcodeScannerApp() {
             return {
@@ -574,14 +628,23 @@
                             }
                         });
 
+
                         if (response.ok) {
-                            location.reload();
+                            const data = await response.json();
+                            showAlert(data.message, data.alert_type); // Success alert
+                            setTimeout(() => {
+                                location.reload(); // Delay biar sempat lihat alert-nya
+                            }, 1500);
                         } else {
-                            alert('Barcode tidak terdaftar dalam sistem.');
+                            const errorData = await response.json();
+                            showAlert(data.message, data.alert_type); // Error alert
                         }
                     } catch (error) {
-                        alert('Terjadi kesalahan pada jaringan atau server.');
-                        location.href = "{{ route('input_barang_keluar') }}";
+                        // Jaringan error, bukan response dari server
+                        showAlert(error.message, 'error');
+                        setTimeout(() => {
+                            location.href = "{{ route('input_barang_keluar') }}";
+                        }, 2000);
                     }
                 }
             }
@@ -610,12 +673,21 @@
                 });
 
                 if (response.ok) {
-                    location.href = "{{ route('input_barang_keluar') }}";
+                    const data = await response.json();
+                    showAlert(data.message, data.alert_type); // Success alert
+                    setTimeout(() => {
+                        location.reload(); // Delay biar sempat lihat alert-nya
+                    }, 1500);
                 } else {
-                    console.log(response);
+                    const errorData = await response.json();
+                    showAlert(data.message, data.alert_type); // Error alert
                 }
             } catch (error) {
-                console.log(error);
+                // Jaringan error, bukan response dari server
+                showAlert(error.message, 'error');
+                setTimeout(() => {
+                    location.href = "{{ route('input_barang_keluar') }}";
+                }, 2000);
             }
             setTimeout(() => {
                 isProcessing = false;

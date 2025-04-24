@@ -15,7 +15,7 @@
                     x-init="let i = setInterval(() => {
       current++;
       if (current >= end) clearInterval(i);
-  }, 20)"
+  }, 1)"
                     x-text="current"
                     class="text-2xl font-bold"></p>
 
@@ -40,7 +40,7 @@
                     x-init="let i = setInterval(() => {
       current++;
       if (current >= end) clearInterval(i);
-  }, 20)"
+  }, 1)"
                     x-text="current"
                     class="text-2xl font-bold"></p>
 
@@ -66,7 +66,7 @@
         let i = setInterval(() => {
             current++;
             if (current >= end) clearInterval(i);
-        }, 20);
+        }, 1);
     }"
                     x-text="current"
                     class="text-2xl font-bold"></p>
@@ -85,9 +85,23 @@
         </div>
 
         <div class="flex laptop:flex-row flex-col gap-6 laptop:min-h-[40rem]">
-            <div class="overflow-x-auto w-full laptop:flex-1 bg-white rounded-lg shadow-sm p-4 md:p-6">
-                <canvas id="myChart" class="sm:h-full"></canvas>
+            <div x-data="filterChart()" x-init="init()" class="overflow-x-auto w-full laptop:flex-1 bg-white rounded-lg shadow-sm p-4 md:p-6">
+                <div class="mb-4">
+                    <label for="filterBarang" class="block text-sm font-medium text-gray-700 mb-1">Filter Barang</label>
+                    <select id="filterBarang" x-model="selectedBarang" @change="onDropdownChange" class="w-full md:w-1/3 border-gray-300 rounded-lg shadow-sm">
+                        <option value="all">Semua Barang</option>
+                        @foreach($daftarBarangKeluar as $barang)
+                        <option value="{{ $barang->stokGudang->id }}">{{ $barang->stokGudang->nama_barang }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="overflow-x-auto laptop:h-[30rem]">
+                    <canvas id="myChart"></canvas>
+                </div>
             </div>
+
+
 
             <div class="w-full laptop:w-2/5 bg-white shadow-md sm:rounded-lg p-4">
                 <div x-data="searchApp()" x-init="search()" class="relative mt-12 bottom-8">
@@ -242,6 +256,7 @@
                     </div>
                 </div>
             </div>
+        </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -260,45 +275,89 @@
             };
         }
 
-        var labels = '@if(isset($labels)){!! json_encode($labels) !!}@endif',
-            data = '@if(isset($data)){!! json_encode($data) !!}@endif',
-            labels = JSON.parse(labels);
-        data = JSON.parse(data);
+        function filterChart() {
+            return {
+                selectedBarang: 'all',
+                chart: null,
+                labels: [],
+                data: [],
 
-        document.addEventListener("DOMContentLoaded", function() {
-            const ctx = document.getElementById("myChart").getContext("2d");
-
-            new Chart(ctx, {
-                type: "line", // Jenis grafik (bar, line, pie, dll.)
-                data: {
-                    labels: labels, // Label sumbu X
-                    datasets: [{
-                        label: "Jumlah Barang Keluar",
-                        data: data,
-                        borderColor: "rgba(75, 192, 192, 1)",
-                        backgroundColor: "rgba(75, 192, 192, 0.2)",
-                        fill: true,
-                        borderWidth: 2
-                    }]
+                onDropdownChange() {
+                    localStorage.setItem('lastSelectedBarang', this.selectedBarang);
+                    localStorage.setItem('shouldReload', 'true');
+                    location.reload(); // reload halaman
                 },
-                options: {
-                    interaction: {
-                        intersect: false,
-                    },
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            suggestedMax: 3,
-                            min: 0,
-                            ticks: {
-                                stepSize: 50
-                            },
-                            precision: 0,
-                        }
+
+
+                init() {
+                    const shouldReload = localStorage.getItem('shouldReload');
+                    const lastSelected = localStorage.getItem('lastSelectedBarang');
+
+                    if (shouldReload === 'true' && lastSelected) {
+                        this.selectedBarang = lastSelected;
+                        localStorage.removeItem('shouldReload'); // supaya reload cuma sekali
+                        // lanjut fetch data setelah reload
                     }
+
+                    this.fetchData();
+                },
+
+
+                fetchData() {
+                    fetch(`/filter-barang/chart/${this.selectedBarang}`)
+                        .then(res => res.json())
+                        .then(response => {
+                            const {
+                                labels,
+                                data
+                            } = response;
+
+                            this.labels = labels;
+                            this.data = data;
+
+                            localStorage.setItem('lastSelectedBarang', this.selectedBarang); // simpan
+
+                            if (this.chart) {
+                                this.chart.data.labels = labels;
+                                this.chart.data.datasets[0].data = data;
+                                this.chart.update();
+                            } else {
+                                const ctx = document.getElementById("myChart").getContext("2d");
+                                this.chart = new Chart(ctx, {
+                                    type: "line",
+                                    data: {
+                                        labels: labels,
+                                        datasets: [{
+                                            label: "Jumlah Barang Keluar",
+                                            data: data,
+                                            borderColor: "rgba(75, 192, 192, 1)",
+                                            backgroundColor: "rgba(75, 192, 192, 0.2)",
+                                            fill: true,
+                                            borderWidth: 2
+                                        }]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        maintainAspectRatio: false,
+                                        interaction: {
+                                            intersect: false
+                                        },
+                                        scales: {
+                                            y: {
+                                                suggestedMax: 3,
+                                                min: 0,
+                                                ticks: {
+                                                    stepSize: 50
+                                                },
+                                                precision: 0,
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        });
                 }
-            });
-        });
+            }
+        }
     </script>
 </x-sidebar-layout>

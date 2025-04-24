@@ -30,7 +30,7 @@
 
                     <!-- Angka Notifikasi -->
                     @if($barangKurangCount > 0)
-                    <span class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold leading-none text-white bg-orange-400 rounded-full">
+                    <span class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold leading-none text-black bg-orange-400 rounded-full">
                         {{ $barangKurangCount }}
                     </span>
                     @endif
@@ -161,7 +161,7 @@
 
                     <!-- Angka Notifikasi -->
                     @if($data_tergabung_count > 0)
-                    <span class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold leading-none text-white bg-orange-400 rounded-full">
+                    <span class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold leading-none text-black bg-orange-400 rounded-full">
                         {{ $data_tergabung_count }}
                     </span>
                     @endif
@@ -236,7 +236,7 @@
                         </svg>
 
                         @if($request_access_count > 0)
-                        <span class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold leading-none text-white bg-orange-400 rounded-full">
+                        <span class="absolute top-0 right-0 inline-flex items-center justify-center w-4 h-4 text-xs font-bold leading-none text-black bg-orange-400 rounded-full">
                             {{ $request_access_count }}
                         </span>
                         @endif

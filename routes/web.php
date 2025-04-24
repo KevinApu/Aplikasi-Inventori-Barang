@@ -100,6 +100,7 @@ Route::middleware(['auth', 'clear.temp_items'])->group(function () {
         Route::get('/search/stokgudang', [StokGudangController::class, 'show']);
         Route::get('/search/rekap', [RekapController::class, 'show']);
         Route::get('/search/kl', [KLController::class, 'show']);
+        Route::get('/filter-barang/chart/{id}', [DashboardController::class, 'show']);
 
         Route::post('/order/{id}', [BarangKeluarController::class, 'order'])->name('order');    
 

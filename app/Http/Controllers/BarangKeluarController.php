@@ -41,7 +41,10 @@ class BarangKeluarController extends Controller
         $barangMasuk = StokGudangModel::where('pop', Auth::user()->KLModel->pop)->where('id', $part1)->first();
 
         if (!$barangMasuk) {
-            return response()->json(['message' => 'Barang tidak ditemukan.', 'alert_type' => 'error']);
+            return response()->json([
+                'message' => 'Barang tidak ditemukan.',
+                'alert_type' => 'error'
+            ], 400);
         }
 
         if (BarangKeluarModel::where('stok_gudang_id', $barangMasuk->id)
@@ -49,7 +52,10 @@ class BarangKeluarController extends Controller
             ->where('status_order', 0)
             ->exists()
         ) {
-            return response()->json(['message' => 'Barang sudah ditambahkan.', 'alert_type' => 'error']);
+            return response()->json([
+                'message' => 'Barang sudah ditambahkan.',
+                'alert_type' => 'error'
+            ], 400);
         }
 
         BarangKeluarModel::create([
@@ -58,7 +64,10 @@ class BarangKeluarController extends Controller
             'pop' => Auth::user()->KLModel->pop,
         ]);
 
-        return response()->json(['message' => 'Barang berhasil ditambahkan.', 'alert_type' => 'success']);
+        return response()->json([
+            'message' => 'Barang berhasil ditambahkan.',
+            'alert_type' => 'success'
+        ], 200); // atau bisa dihilangkan karena 200 adalah default
     }
 
     /**
