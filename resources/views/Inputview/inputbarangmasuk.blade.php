@@ -73,32 +73,61 @@
 
 
 
-                <div x-data="{ isNewItem: {{ session('isNewItem') ? 'true' : 'false' }} }">
-                    <div class="flex space-x-6 mt-2">
-                        <select class="form-input h-10 w-48 mobile:w-32 tablet:w-40 border-0 focus:ring-0 border-b bg-transparent"
-                            name="namabarang" x-model="nama_barang" x-on:change="isNewItem = ($event.target.value === 'new')">
-                            <option value="" class="bg-gray-400 hover:bg-gray-300" selected>Pilih Nama Barang...</option>
-                            @foreach ($nama_barang as $namabarang)
-                            <option value="{{ $namabarang->nama_barang }}">
-                                {{ $namabarang->nama_barang }}
-                            </option>
-                            @endforeach
-                            <option value="new" class="text-blue-700">New Item...</option>
-                        </select>
+                <div x-data="{
+                    searchQuery: '',
+                    filteredItems: @js($nama_barang),
+                    isNewItem: false,
+                    isOpen: false,
+                    namabarang_baru: ''
+                }">
+                    <div class="flex space-x-6 mt-2 relative">
+                        <!-- Input pencarian -->
+                        <input
+                            type="text"
+                            name="namabarang"
+                            class="form-input h-10 w-48 mobile:w-32 tablet:w-40 border-0 focus:ring-0 border-b bg-transparent"
+                            placeholder="Pilih Nama Barang..."
+                            x-model="searchQuery"
+                            x-on:focus="isOpen = true"
+                            x-on:blur="setTimeout(() => isOpen = false, 200)"
+                            x-on:input="filteredItems = @js($nama_barang).filter(item => item.nama_barang.toLowerCase().includes(searchQuery.toLowerCase()))" />
 
 
-                        <!-- Input untuk item baru -->
-                        <form action="{{ route('namabarang.baru') }}" method="POST">
+                        <!-- Dropdown hasil pencarian -->
+                        <div x-show="isOpen" class="absolute z-10 bg-white shadow-lg mt-12 w-48 border border-gray-300 max-h-52 overflow-y-auto" x-transition>
+                            <ul>
+                                <template x-for="namabarang in filteredItems" :key="namabarang.nama_barang">
+                                    <li>
+                                        <a
+                                            href="#"
+                                            x-text="namabarang.nama_barang"
+                                            class="block p-2 hover:bg-gray-200"
+                                            @click.prevent="searchQuery = namabarang.nama_barang; isNewItem = false; isOpen = false"></a>
+                                    </li>
+                                </template>
+                                <li>
+                                    <a href="#" class="block p-2 text-blue-700 hover:bg-gray-200"
+                                        @click.prevent="searchQuery = ''; isNewItem = true; isOpen = false">
+                                        New Item...
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Form untuk item baru -->
+                        <form action="{{ route('namabarang.baru') }}" method="POST" class="flex items-center space-x-2" x-show="isNewItem" x-transition>
                             @csrf
-                            <div x-show="isNewItem" x-transition>
-                                <input type="text" name="namabarang_baru" x-model="namabarang_baru"
-                                    class="form-input h-10 laptop:w-48 w-full border-0 focus:ring-0 border-b bg-transparent" />
+                            <input type="text" name="namabarang_baru" x-model="namabarang_baru"
+                                class="form-input h-10 laptop:w-48 w-full border-0 focus:ring-0 border-b bg-transparent"
+                                placeholder="Nama Barang Baru..." required />
 
-                                <button type="submit" x-on:click="namabarang_baru = ''; isNewItem = false">
-                                    <svg class="w-5 h-5 text-zinc-700" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                                    </svg>
-                                </button>
+                            <button type="submit">
+                                <svg class="w-5 h-5 text-zinc-700" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 4v16m8-8H4" />
+                                </svg>
+                            </button>
                         </form>
                     </div>
                 </div>

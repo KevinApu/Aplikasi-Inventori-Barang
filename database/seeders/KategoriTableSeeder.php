@@ -16,7 +16,6 @@ class KategoriTableSeeder extends Seeder
     public function run()
     {
         
-
         DB::table('kategori')->delete();
     
         DB::table('kategori')->insert(array (

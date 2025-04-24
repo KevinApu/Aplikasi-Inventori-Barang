@@ -19,9 +19,6 @@ class BarangKeluarTableSeeder extends Seeder
 
         DB::table('barang_keluar')->delete();
         
-        DB::table('barang_keluar')->insert(array (
-           //
-        ));
         
         
     }

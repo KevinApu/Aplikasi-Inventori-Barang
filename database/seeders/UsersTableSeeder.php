@@ -29,8 +29,8 @@ class UsersTableSeeder extends Seeder
                 'request_access' => 0,
                 'foto' => 'img/profile/68087de709852.jpg',
                 'created_at' => NULL,
-                'updated_at' => '2025-04-23 12:49:54',
-                'last_login' => '2025-04-23 12:49:54',
+                'updated_at' => '2025-04-24 23:40:01',
+                'last_login' => '2025-04-24 23:40:01',
                 'pop_id' => 'G1',
             ),
             1 => 
@@ -42,8 +42,8 @@ class UsersTableSeeder extends Seeder
                 'request_access' => 0,
                 'foto' => NULL,
                 'created_at' => NULL,
-                'updated_at' => '2025-04-23 12:48:02',
-                'last_login' => '2025-04-23 12:48:02',
+                'updated_at' => '2025-04-24 23:39:17',
+                'last_login' => '2025-04-24 23:39:17',
                 'pop_id' => NULL,
             ),
             2 => 

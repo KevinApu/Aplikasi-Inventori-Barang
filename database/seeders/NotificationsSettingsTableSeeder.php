@@ -23,10 +23,10 @@ class NotificationsSettingsTableSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'roll' => 10,
-                'pack' => 10,
-                'unit' => 10,
-                'pcs' => 10,
+                'roll' => 5,
+                'pack' => 5,
+                'unit' => 5,
+                'pcs' => 5,
                 'pop' => 'G1',
             ),
         ));

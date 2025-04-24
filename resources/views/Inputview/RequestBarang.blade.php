@@ -59,7 +59,7 @@
                             </div>
                             <div>
                                 <label for="jumlah" class="block text-gray-700 font-medium">Jumlah</label>
-                                <input type="number" name="jumlah[]" value="{{ $item['jumlah'] }}" placeholder="Jumlah" class="w-full border border-gray-300 p-2 rounded focus:ring focus:ring-blue-300" min="1" required>
+                                <input type="number" name="jumlah[]" placeholder="Jumlah" class="w-full border border-gray-300 p-2 rounded focus:ring focus:ring-blue-300" min="1" required>
                             </div>
                             <div>
                                 <label for="keterangan" class="block text-gray-700 font-medium">Keterangan</label>
@@ -412,6 +412,9 @@
                                     Cetak Surat
                                 </a>
                             </div>
+                            <p class="mt-4 text-sm text-gray-600 bg-gray-100 p-4 rounded-lg shadow-md border border-gray-200">
+                                Jika Anda menekan "Selesai", data yang sama akan otomatis terupdate, kecuali data yang belum ada atau yang baru. Untuk melihat data baru, Anda dapat memeriksa informasi yang akan ditampilkan setelah ini.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -466,6 +469,28 @@
         </div>
     </div>
     @endif
+
+    @if (session('info'))
+    <div
+        x-data="{ show: true }"
+        x-show="show"
+        x-transition
+        class="fixed inset-0 flex items-center justify-center h-screen bg-opacity-50 bg-gray-800 z-50"
+        role="alert">
+        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-6 rounded-lg shadow-lg max-w-lg w-full mx-auto mt-6">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="font-semibold text-lg">Informasi:</p>
+                    <p class="text-sm mt-1">{{ session('info') }}</p>
+                </div>
+                <button @click="show = false" class="text-yellow-700 text-xs ml-4 hover:underline focus:outline-none">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+    @endif
+
 
 
 
