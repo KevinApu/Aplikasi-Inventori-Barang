@@ -37,10 +37,13 @@
                 <h2 class="text-sm md:text-lg font-semibold">Barang Keluar</h2>
                 <p
                     x-data="{ current: 0, end: {{ $barang_keluar }} }"
-                    x-init="let i = setInterval(() => {
-      current++;
-      if (current >= end) clearInterval(i);
-  }, 1)"
+                    x-init="
+    if (end > 0) {
+        let i = setInterval(() => {
+            current++;
+            if (current >= end) clearInterval(i);
+        }, 1);
+    }"
                     x-text="current"
                     class="text-2xl font-bold"></p>
 
@@ -258,7 +261,6 @@
             </div>
         </div>
     </main>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         function searchApp() {
             return {
