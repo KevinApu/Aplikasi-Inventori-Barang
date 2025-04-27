@@ -27,7 +27,7 @@ class StokGudangTableSeeder extends Seeder
                 'kategori' => 'Elektronik',
                 'nama_barang' => 'Kipas Angin',
                 'seri' => '-',
-                'jumlah' => 10,
+                'jumlah' => 8,
                 'satuan' => 'pcs',
                 'rasio' => NULL,
                 'hasil' => NULL,
@@ -38,7 +38,7 @@ class StokGudangTableSeeder extends Seeder
                 'keterangan' => NULL,
                 'pop' => 'G1',
                 'created_at' => '2025-03-06 15:34:08',
-                'updated_at' => '2025-04-24 23:34:15',
+                'updated_at' => '2025-04-27 19:08:55',
             ),
             1 => 
             array (
@@ -47,7 +47,7 @@ class StokGudangTableSeeder extends Seeder
                 'kategori' => 'Alat Tulis',
                 'nama_barang' => 'Pulpen',
                 'seri' => 'joyko',
-                'jumlah' => 100,
+                'jumlah' => 90,
                 'satuan' => 'pcs',
                 'rasio' => NULL,
                 'hasil' => NULL,
@@ -58,7 +58,7 @@ class StokGudangTableSeeder extends Seeder
                 'keterangan' => NULL,
                 'pop' => 'G1',
                 'created_at' => '2025-03-06 12:36:48',
-                'updated_at' => '2025-04-23 13:19:24',
+                'updated_at' => '2025-04-27 19:08:55',
             ),
             2 => 
             array (
@@ -110,15 +110,15 @@ class StokGudangTableSeeder extends Seeder
                 'jumlah' => 25,
                 'satuan' => 'pack',
                 'rasio' => 10,
-                'hasil' => 250,
-                'detail_jumlah' => 10,
+                'hasil' => 243,
+                'detail_jumlah' => 3,
                 'lokasi' => 'Lemari Atas',
                 'foto' => 'img/1745386861-dTydiWwmiOrYLVkpLNmYZjQZI7O00OjD5pLyYSW7.jpg',
                 'input_by' => 'kevin',
                 'keterangan' => NULL,
                 'pop' => 'G1',
                 'created_at' => '2020-05-08 12:41:01',
-                'updated_at' => '2025-04-23 13:19:24',
+                'updated_at' => '2025-04-27 19:08:55',
             ),
             5 => 
             array (

@@ -25,22 +25,22 @@ class RekapTableSeeder extends Seeder
                 'id' => 1,
                 'stok_awal' => 10,
                 'in' => 0,
-                'out' => 0,
+                'out' => 2,
                 'pop' => 'G1',
                 'stok_gudang_id' => 1,
                 'created_at' => '2025-03-06 15:34:08',
-                'updated_at' => '2025-04-24 23:34:15',
+                'updated_at' => '2025-04-27 19:08:55',
             ),
             1 => 
             array (
                 'id' => 2,
                 'stok_awal' => 100,
                 'in' => 0,
-                'out' => 0,
+                'out' => 10,
                 'pop' => 'G1',
                 'stok_gudang_id' => 2,
                 'created_at' => '2025-04-23 12:36:48',
-                'updated_at' => '2025-04-23 13:19:24',
+                'updated_at' => '2025-04-27 19:08:55',
             ),
             2 => 
             array (
@@ -69,11 +69,11 @@ class RekapTableSeeder extends Seeder
                 'id' => 5,
                 'stok_awal' => 250,
                 'in' => 0,
-                'out' => 0,
+                'out' => 7,
                 'pop' => 'G1',
                 'stok_gudang_id' => 5,
                 'created_at' => '2025-04-23 12:41:01',
-                'updated_at' => '2025-04-23 13:19:24',
+                'updated_at' => '2025-04-27 19:08:55',
             ),
             5 => 
             array (

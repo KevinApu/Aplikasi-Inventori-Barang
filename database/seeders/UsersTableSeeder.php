@@ -29,8 +29,8 @@ class UsersTableSeeder extends Seeder
                 'request_access' => 0,
                 'foto' => 'img/profile/68087de709852.jpg',
                 'created_at' => NULL,
-                'updated_at' => '2025-04-24 23:40:01',
-                'last_login' => '2025-04-24 23:40:01',
+                'updated_at' => '2025-04-27 19:07:54',
+                'last_login' => '2025-04-27 19:07:54',
                 'pop_id' => 'G1',
             ),
             1 => 

@@ -13,7 +13,6 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         
-
         $this->call(KantorLayananTableSeeder::class);
         $this->call(UsersTableSeeder::class);
         $this->call(NamaBarangTableSeeder::class);
@@ -23,6 +22,5 @@ class DatabaseSeeder extends Seeder
         $this->call(NotificationsSettingsTableSeeder::class);
         $this->call(BarangRusakTableSeeder::class);
         $this->call(BarangKeluarTableSeeder::class);
-
     }
 }
