@@ -65,14 +65,14 @@ class BarangKeluarTableSeeder extends Seeder
             3 => 
             array (
                 'id' => 7,
-                'jumlah' => 2,
+                'jumlah' => 7,
                 'lokasi' => 'Bangunsari',
                 'nama_customer' => '874806_Rizky',
                 'output_by' => 'kevin',
                 'status_order' => 1,
                 'keterangan' => NULL,
                 'pop' => 'G1',
-                'stok_gudang_id' => 10,
+                'stok_gudang_id' => 1,
                 'created_at' => '2025-03-04 19:10:25',
                 'updated_at' => '2025-03-04 19:10:25',
             ),

@@ -166,6 +166,10 @@ class BarangKeluarController extends Controller
             $query->where('nama_customer', 'like', '%' . $request->nama_customer . '%');
         }
 
+        if ($request->lokasi) {
+            $query->where('lokasi', 'like', '%' . $request->lokasi . '%');
+        }
+
         $results = $query->get()->map(function ($barangKeluar) {
             return [
                 'id' => $barangKeluar->id,

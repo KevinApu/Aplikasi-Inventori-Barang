@@ -354,6 +354,7 @@
                         .then(response => response.json())
                         .then(data => {
                             this.results = data;
+                            alert(data)
                             this.checkedItems = [];
                             this.allChecked = false;
                         });
