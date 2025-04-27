@@ -113,7 +113,7 @@
         @if(isset($items) && count($items) > 0)
         <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
             <table style="border-collapse: collapse; margin: auto;">
-                @foreach(array_chunk($items, 5) as $itemChunk)
+                @foreach(array_chunk($items, 4) as $itemChunk)
                 <tr>
                     @foreach($itemChunk as $item)
                     <td style="border: 2px dashed #a8a7a9; padding: 0.5rem; text-align: center;">
