@@ -181,18 +181,26 @@
                             name="lokasi"
                             placeholder="Lokasi">
                     </div>
-                    <div x-data="{ jumlah: '{{ old('jumlah') }}', error: @error('jumlah') true @else false @enderror }">
+                    <div>
                         <input
-                            x-model="jumlah"
-                            @input="error = jumlah.trim() === ''"
-                            class="block form-input w-48 mobile:w-full tablet:w-full border-0 focus:ring-0 border-b bg-transparent"
-                            :class="{'border-red-500 placeholder-red-500': error, 'border-gray-300 placeholder-gray-500': !error}"
-                            type="number"
-                            oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-                            min="0"
-                            step="1"
+                            type="text"
                             name="jumlah"
-                            placeholder="Jumlah">
+                            id="jumlah"
+                            placeholder="Jumlah"
+                            class="block form-input w-48 mobile:w-full tablet:w-full border-0 focus:ring-0 border-b bg-transparent {{ $errors->has('jumlah') ? 'border-red-500 placeholder-red-500' : 'border-gray-300 placeholder-gray-500' }}"
+                            oninput="
+        this.value = this.value.replace(/[^0-9]/g, ''); // hanya angka 0-9
+        if (this.value.length > 4) {
+            this.value = this.value.slice(0, 4); // maksimal 4 digit
+        }
+    "
+                            maxlength="4"
+                            inputmode="numeric"
+                            value="{{ old('jumlah') }}" />
+
+                        @error('jumlah')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
                 <div class="mobile:grid mobile:grid-row tablet:grid tablet:grid-row flex px-6 justify-end space-x-6 mb-2">

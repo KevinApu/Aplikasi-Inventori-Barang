@@ -10,12 +10,14 @@
             <!-- Card 1: Total Expenses -->
             <div class="overflow-x-auto bg-white shadow-lg rounded-lg p-5 relative pb-10">
                 <h2 class="text-sm md:text-lg font-semibold">Barang Masuk</h2>
-                <p
-                    x-data="{ current: 0, end: {{ $barang_masuk }} }"
-                    x-init="let i = setInterval(() => {
-      current++;
-      if (current >= end) clearInterval(i);
-  }, 1)"
+                <p     x-data="{ current: 0, end: {{ $barang_masuk }} }"
+                    x-init="
+    if (end > 0) {
+        let i = setInterval(() => {
+            current++;
+            if (current >= end) clearInterval(i);
+        }, 1);
+    }"
                     x-text="current"
                     class="text-2xl font-bold"></p>
 

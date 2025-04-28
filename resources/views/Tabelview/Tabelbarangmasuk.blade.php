@@ -894,6 +894,7 @@
 
                 // Fungsi untuk mengaktifkan scanner
                 activateScanner() {
+                    alert('Scanner aktif');
                     this.scannerActive = true;
                     this.barcode = '';
                     this.captureBarcodeListener = (event) => this.captureBarcode(event);
@@ -905,7 +906,7 @@
                 captureBarcode(event) {
                     if (this.scannerActive === false) return; // Jika scanner tidak aktif, hentikan
                     if (event.key === 'Enter') {
-                        this.handleEnterKey(event); // Panggil fungsi handleEnterKey saat Enter ditekan
+                        this.handleEnterKey(event);
                         this.barcode = '';
                     } else {
                         // Tambahkan karakter ke barcode setiap kali tombol ditekan
